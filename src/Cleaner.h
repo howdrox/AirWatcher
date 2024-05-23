@@ -1,9 +1,8 @@
-#if ! defined ( CLEANER_H )
+#if !defined(CLEANER_H)
 #define CLEANER_H
 
-//--------------------------------------------------- Interfaces utilisées
 #include <iostream>
-#include "DateTime.h"
+#include "Time.h"
 using namespace std;
 
 typedef struct _Coord
@@ -11,41 +10,33 @@ typedef struct _Coord
     double latitude;
     double longitude;
 
-    Coord( double lat, double lng ) : latitude(lat), longitude(lng) {};
+    _Coord(double lat, double lng) : latitude(lat), longitude(lng){};
 
-    Coord ( const Coord & coord ) : latitude(coord.latitude), longitude(coord.longitude) {};
+    _Coord(const Coord &coord) : latitude(coord.latitude), longitude(coord.longitude){};
 } Coord;
 
 class Cleaner
 {
-//----------------------------------------------------------------- PUBLIC
-//----------------------------------------------------- Méthodes publiques
+public:
+    virtual void afficherTrajet(ostream &os) const = 0;
 
+    int getCleanerId() const;
 
-    public:
-    //----------------------------------------------------- Méthodes publiques
-        virtual void afficherTrajet(ostream & os) const = 0;
+    Coord getCoord() const;
 
-        int getCleanerId() const;
+    Time getStartTime() const;
 
-        Coord getCoord() const; 
+    Time getEndTime() const;
 
-        DateTime getStartTime() const;
+    Cleaner(int id, Coord coord, Time start, Time end);
 
-        DateTime getEndTime() const;
+    virtual ~Cleaner();
 
-    //-------------------------------------------- Constructeurs - destructeur
-        Cleaner (int id, Coord coord, DateTime start, DateTime end);
-
-        virtual ~Cleaner ();
-
-    protected:
-    //----------------------------------------------------- Attributs protégés
-        int cleanerID;
-        Coord location;
-        DateTime startTime;
-        DateTime endTime;
-
+protected:
+    int cleanerID;
+    Coord location;
+    Time startTime;
+    Time endTime;
 };
 
 #endif // CLEANER_H
