@@ -1,6 +1,8 @@
 #if ! defined ( SENSOR_H )
 #define SENSOR_H
 #include "Measurement.h"
+#include <vector>
+
 
 typedef struct{
     double latitude;
@@ -15,7 +17,7 @@ class Sensor{
         const int getSensorID();
         const Coord getLocation();
         const bool getStauts();
-        const Measurement * getMeasurements();
+        const vector<Measurement>& getMeasurements();
 
         void setSensorID();
         void setLocation();
@@ -31,7 +33,7 @@ class Sensor{
         int sensorID;
         Coord location;
         bool status;
-        Measurement * measurements;
+        vector<Measurement> measurements;
 
     
 }

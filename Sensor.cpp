@@ -54,9 +54,3 @@ Sensor::~Sensor ( )
         
         
     
-
-    protected:
-        int sensorID;
-        Coord location;
-        bool status;
-        Measurement * measurements;
