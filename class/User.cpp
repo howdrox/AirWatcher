@@ -1,29 +1,14 @@
-using namespace std;
-
-
-#include <iostream>
-#include <string>
-
 #include "User.h"
 
+User::User(Role userRole) : role(userRole) {} // Initialisation de l'attribut dans le constructeur
 
-Role User::get_role () const
-{
-    return role;
+Role User::getRole() const {
+    return role; // Retourne le rôle
 }
 
-
-User::User ( const User & unUser )
-{
+User::~User() {
     #ifdef MAP
-        cout << "Appel au constructeur de copie de <User>" << endl;
-    #endif
-        role=unUser.role;
-}
-
-User::~User ( )
-{
-    #ifdef MAP
-        cout << "Appel au destructeur de <User>" << endl;
+        cout << "Appel au destructeur de <user>" << endl;
     #endif 
+    // Le destructeur peut être vide s'il n'y a rien à faire spécifiquement lors de la destruction
 }
