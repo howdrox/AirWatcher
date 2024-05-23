@@ -2,7 +2,7 @@
 #define USER_H
 
 #include <string>
-enum Role {
+enum class Role {
         ADMIN,
         USER,
         GUEST
