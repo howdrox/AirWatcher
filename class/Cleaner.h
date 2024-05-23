@@ -3,6 +3,7 @@
 
 //--------------------------------------------------- Interfaces utilisées
 #include <iostream>
+#include "DateTime.h"
 using namespace std;
 
 typedef struct _Coord
@@ -14,17 +15,6 @@ typedef struct _Coord
 
     Coord ( const Coord & coord ) : latitude(coord.latitude), longitude(coord.longitude) {};
 } Coord;
-
-typedef struct _DateTime
-{
-    int year, month, day;
-    double _time; 
-
-    DateTime(int yy, int MM, int dd, double t) : year(yy), month(MM), day(dd), _time(t) {};
-
-    DateTime ( const DateTime & date ) 
-        : year(date.year), month(date.month), day(date.day), _time(date._time) {};
-} DateTime;
 
 class Cleaner
 {
