@@ -36,6 +36,18 @@ void DateTime::setTime(const string & t) {
     _time = timeInHours;
 }
 
+//------------------------------------------------- Surcharge d'opérateurs
+bool DateTime::operator< ( const DateTime &date ) const
+{
+    if (year < date.year) return true;
+    if (year > date.year) return false;
+    if (month < date.month) return true;
+    if (month > date.month) return false;
+    if (day < date.day) return true;
+    if (day > date.day) return false;
+    return _time < date._time;
+}
+
 DateTime::DateTime ( const DateTime & date ) 
         : year(date.year), month(date.month), day(date.day), _time(date._time) {};
 
