@@ -25,6 +25,10 @@ class DateTime
 
         void setTime(const string & t);
 
+    //------------------------------------------------- Surcharge d'opérateurs
+    bool operator < ( const DateTime & date ) const;
+    
+
     //-------------------------------------------- Constructeurs - destructeur
         DateTime ( const DateTime & date );
         
