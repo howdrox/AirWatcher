@@ -1,30 +1,25 @@
-//---------- Interface de la classe  <user> (fichier user.h) ----------------
-#if ! defined ( USER_H )
+#ifndef USER_H
 #define USER_H
 
-#include <iostream>
-#include  "Role.h"
+#include <string>
+enum Role {
+        ADMIN,
+        USER,
+        GUEST
+    };
 
-using namespace std;
-
-class user
-{
+class User {
     public:
-        string get_role () const;
-    
-        // Méthode virtuelle pure rendant la classe abstraite
-        virtual void printDetails() const = 0;
-    
-        user ( const user & unuser );
-    
-        user ( const Role & leRole):role(leRole){}
-    
-        virtual ~user ( );
-    
-    protected:
-    //----------------------------------------------------- Attributs protégés
-        Role role;
+        
+
+        Role getRole() const; // Getter pour récupérer le rôle
+        
+        User(Role userRole); // Constructeur prenant un rôle en paramètre
+        
+        virtual ~User ( );
+
+    private:
+        Role role; // Attribut privé de type role
 };
 
 #endif // USER_H
-
