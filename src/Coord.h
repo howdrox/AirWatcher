@@ -1,14 +1,23 @@
-#if !defined(COORD_H)
+#ifndef COORD_H
 #define COORD_H
 
-typedef struct _Coord
-{
+struct Coord {
+protected:
     double latitude;
     double longitude;
 
-    _Coord(double lat, double lng) : latitude(lat), longitude(lng){};
+public:
+    Coord(double lat, double lng) : latitude(lat), longitude(lng) {}
 
-    _Coord(const Coord &coord) : latitude(coord.latitude), longitude(coord.longitude){};
-} Coord;
+    Coord(const Coord &coord) : latitude(coord.latitude), longitude(coord.longitude) {}
+
+    double getLatitude() const {
+        return latitude;
+    }
+
+    double getLongitude() const {
+        return longitude;
+    }
+};
 
 #endif // COORD_H
