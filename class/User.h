@@ -3,9 +3,9 @@
 
 #include <string>
 enum class Role {
-        ADMIN,
-        USER,
-        GUEST
+        GOVERNMENT_AGENT,
+        PROVIDER,
+        PRIVATE_USER
     };
 
 class User {
