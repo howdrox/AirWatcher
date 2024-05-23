@@ -3,17 +3,10 @@
 
 #include <iostream>
 #include "Time.h"
+#include "Coord.h"
 using namespace std;
 
-typedef struct _Coord
-{
-    double latitude;
-    double longitude;
 
-    _Coord(double lat, double lng) : latitude(lat), longitude(lng){};
-
-    _Coord(const Coord &coord) : latitude(coord.latitude), longitude(coord.longitude){};
-} Coord;
 
 class Cleaner
 {
