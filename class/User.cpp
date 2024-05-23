@@ -21,16 +21,6 @@ User::User ( const User & unUser )
         role=unUser.role;
 }
 
-
-User::User ( Role lerole)
-{
-    #ifdef MAP
-        cout << "Appel au constructeur de <User>" << endl;
-    #endif
-  role=lerole;
-}
-
-
 User::~User ( )
 {
     #ifdef MAP
