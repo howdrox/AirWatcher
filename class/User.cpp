@@ -22,7 +22,7 @@ User::User ( const User & unUser )
 }
 
 
-User::User ( const Role lerole)
+User::User ( Role lerole)
 {
     #ifdef MAP
         cout << "Appel au constructeur de <User>" << endl;
