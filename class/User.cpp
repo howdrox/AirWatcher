@@ -1,6 +1,10 @@
 #include "User.h"
 
-User::User(Role userRole) : role(userRole) {} // Initialisation de l'attribut dans le constructeur
+User::User(Role userRole) : role(userRole) {
+    #ifdef MAP
+        cout << "Appel au constructeur de <user>" << endl;
+    #endif 
+} // Initialisation de l'attribut dans le constructeur
 
 Role User::getRole() const {
     return role; // Retourne le rôle
