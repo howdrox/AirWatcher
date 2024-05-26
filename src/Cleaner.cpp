@@ -11,15 +11,15 @@ Coord Cleaner::getCoord() const {
     return location;
 }
 
-DateTime Cleaner::getStartTime() const {
+Time Cleaner::getStartTime() const {
     return startTime;
 }
 
-DateTime Cleaner::getEndTime() const {
+Time Cleaner::getEndTime() const {
     return endTime;
 }
 
-Cleaner::Cleaner(int id, Coord coord, DateTime start, DateTime end) 
+Cleaner::Cleaner(int id, Coord coord, Time start, Time end) 
     : cleanerID(id), location(coord), startTime(start), endTime(end) {
 
 }
