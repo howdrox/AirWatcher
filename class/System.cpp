@@ -15,7 +15,7 @@ using namespace std;
 
 
         System::const map<int,Measurement> getMeasurements(){
-
+            
         }
         const vector<Cleaner> getCleaners();
         const vector <Sensor> getSensors();
