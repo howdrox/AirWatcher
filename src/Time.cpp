@@ -36,6 +36,20 @@ int Time::getSecond() const
     return second;
 }
 
+/**
+ * @brief checks if both times are on the same date and hour
+ * 
+ * @param time 
+ * @return true 
+ * @return false 
+ */
+bool Time::isSameHour(const Time &time) const {
+    return getYear() == time.getYear() &&
+           getMonth() == time.getMonth() &&
+           getDay() == time.getDay() &&
+           getHour() == time.getHour();
+}
+
 
 //------------------------------------------------- Surcharge d'opérateurs
 bool Time::operator<(const Time &date) const
