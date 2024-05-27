@@ -6,7 +6,17 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 #include "Measurement.h"
 
+int Measurement::  getSensorID(){
+    return sensorID;
+}
 
+    Time Measurement::  getTimestamp(){
+        return timestamp;
+    }
+
+    int Measurement:: getDay(){
+        //A faire
+    }
 
 //-------------------------------------------- Constructeurs - destructeur
 Measurement::Measurement ( const Measurement & unMeasurement ) 
