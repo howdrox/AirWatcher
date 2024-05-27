@@ -14,24 +14,24 @@ using namespace std;
 class Service
 {
 public:
-    double calculateQuality(Zone zone, Time start, Time end);
+    double calculateQuality(const Zone &zone, const Time &start, const Time &end);
 
-    map<int, Measurement> filterMeasurements(Time start, Time end, map<int, Measurement> measurements);
-    
-    double calculateImpactRadius(int cleanerId);
+    map<int, Measurement> filterMeasurements(const Time &start, const Time &end, map<int, Measurement> measurements); // a voir si `measurements` est en const
 
-    double distance(Coord coord1, Coord coord2);
+    double calculateImpactRadius(const int &cleanerId);
 
-    vector<Zone> getSimilarZones(int sensorID, Time start, Time end, double delta);
+    double distance(const Coord &coord1, const Coord &coord2);
 
-    double calculateQuality(map<int, Measurement> measurements);
+    vector<Zone> getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta);
 
-    map<double,Sensor> sortSensors(vector<Sensor> sensors, Coord coord);
+    double calculateQuality(const map<int, Measurement> &measurements);
+
+    map<double, Sensor> sortSensors(vector<Sensor> sensors, const Coord &coord); // a voir si `sensors` peut être en const
 
     Service();
 
-    Service(System system);
-    
+    Service(const System &system);
+
     virtual ~Service();
 
 private:
