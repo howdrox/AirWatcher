@@ -21,7 +21,7 @@ public:
 
     Time getEndTime() const;
 
-    Cleaner(int id, Coord coord, Time start, Time end);
+    Cleaner(string data);
 
     virtual ~Cleaner();
 

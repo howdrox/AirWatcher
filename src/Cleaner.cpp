@@ -1,5 +1,7 @@
 using namespace std;
 #include <iostream>
+#include <sstream>
+#include <vector>
 
 #include "Cleaner.h"
 
@@ -19,9 +21,26 @@ Time Cleaner::getEndTime() const {
     return endTime;
 }
 
-Cleaner::Cleaner(int id, Coord coord, Time start, Time end) 
-    : cleanerID(id), location(coord), startTime(start), endTime(end) {
+Cleaner::Cleaner(string data) {
+    vector<string> values;
+    stringstream ss(data);
+    string item;
+    
+    while (getline(ss, item, ';')) {
+        values.push_back(item);
+    }
 
+    // Id
+    cleanerID = stoi(values[0]);
+
+    // Location
+    double lng = stod(values[1]);
+    double lat = stod(values[2]);
+    location = Coord(lat, lng);
+
+    // Start + end Time
+    startTime = Time(); startTime.setTime(values[3]);
+    endTime = Time(); endTime.setTime(values[4]);
 }
 
 Cleaner::~Cleaner() {
