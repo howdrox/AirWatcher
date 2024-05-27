@@ -16,27 +16,20 @@ class System{
         System();
         ~System();
 
-        const map<int, vector<Measurement>>& getMeasurements();
-        const vector<Cleaner>& getCleaners();
-        const map<int ,Sensor>& getSensors();
-        const vector<User>& getUsers();
+    const map<int, vector<Measurement>> &getMeasurements();
+    const vector<Cleaner> &getCleaners();
+    const map<int, Sensor> &getSensors();
+    const vector<User> &getUsers();
 
         void addMeasurement(const Measurement &measurement);
         void addCleaner(const Cleaner &cleaner);
         void addSensor(const Sensor &sensor);
         void addUser(const User &measurement);
 
-
-        
-        
-    
-
-    protected:
-        vector<User> users;
-        map<int ,Sensor> sensors;
-        map<int,vector<Measurement>> measurements;
-        vector<Cleaner> cleaners;
-
-    
+protected:
+    vector<User> users;
+    map<int, Sensor> sensors;
+    map<int, vector<Measurement>> measurements;
+    vector<Cleaner> cleaners;
 };
 #endif

@@ -1,7 +1,9 @@
 using namespace std;
-#include <iostream>
 #include <cmath>
+#include <iterator>
+#include <iostream>
 #include <map>
+
 #include "Service.h"
 #include "Coord.h"
 #include "System.h"
@@ -85,9 +87,6 @@ multimap<double, Sensor> sortSensors(vector<Sensor> sensors, const Coord &coord)
 
 
 
-}
-
-
 double Service::calculateImpactRadius(const int &cleanerId)
 {
     const vector<Cleaner>& cleaners = system.getCleaners();
@@ -165,14 +164,25 @@ double Service::calculateImpactRadius(const int &cleanerId)
     
 }
 
-// map<int, vector<Measurement>> measurements;
 
+/**
+ * @brief Calculates the ATMO for all the measurements in the specified zone and during the specified time
+ * 
+ * @param zone 
+ * @param start 
+ * @param end 
+ * @return double 
+ */
 double Service::calculateQuality(const Zone &zone, const Time &start, const Time &end)
 {
-    map<string, vector<double>> polluantMaxValues;
-    map<string, Time> polluantLastTime;
+    map<string, vector<double>> pollutantMaxValues;
+    map<string, Time> pollutantLastTime;
+    pollutantLastTime["O3"] = Time(0,0,0,0,0,0);
+    pollutantLastTime["NO2"] = Time(0,0,0,0,0,0);
+    pollutantLastTime["SO2"] = Time(0,0,0,0,0,0);
+    pollutantLastTime["PM10"] = Time(0,0,0,0,0,0);
 
-    for (const auto &sensorData : system.measurements)
+    for (const auto &sensorData : system.getMeasurements())
     {
         for (const auto &measurement : sensorData.second)
         {
@@ -180,31 +190,42 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
             {
                 string attr = measurement.getAttributeID();
                 double val = measurement.getValue();
-                
-                pollutantMaxValues[attr].push_back(val);
+
+                if (pollutantLastTime[attr].isSameHour(measurement.getTimestamp())) {
+                    if (val > pollutantMaxValues[attr].back()) {
+                        pollutantMaxValues[attr].back() = val;
+                    }
+                } else {
+                    pollutantMaxValues[attr].push_back(val);
+                }
             }
         }
     }
 
-    // Calculate averages
-    double avgPM10 = pm10Values["PM10"] / 24.0; // Assuming 24-hour day
-
     // Get maximum values for pollutants
-    double maxO3 = !pollutantMaxValues["O3"].empty() ? *max_element(pollutantMaxValues["O3"].begin(), pollutantMaxValues["O3"].end()) : 0;
-    double maxNO2 = !pollutantMaxValues["NO2"].empty() ? *max_element(pollutantMaxValues["NO2"].begin(), pollutantMaxValues["NO2"].end()) : 0;
-    double maxSO2 = !pollutantMaxValues["SO2"].empty() ? *max_element(pollutantMaxValues["SO2"].begin(), pollutantMaxValues["SO2"].end()) : 0;
+    double avgO3 = !pollutantMaxValues["O3"].empty() ? average(pollutantMaxValues["O3"]) : 0;
+    double avgNO2 = !pollutantMaxValues["NO2"].empty() ? average(pollutantMaxValues["NO2"]) : 0;
+    double avgSO2 = !pollutantMaxValues["SO2"].empty() ? average(pollutantMaxValues["SO2"]) : 0;
+    double avgPM10 = !pollutantMaxValues["PM10"].empty() ? average(pollutantMaxValues["PM10"]) : 0;
 
     // Calculate sub-indices
-    int indexO3 = calculateSubIndex(maxO3, "O3");
-    int indexNO2 = calculateSubIndex(maxNO2, "NO2");
-    int indexSO2 = calculateSubIndex(maxSO2, "SO2");
+    int indexO3 = calculateSubIndex(avgO3, "O3");
+    int indexNO2 = calculateSubIndex(avgNO2, "NO2");
+    int indexSO2 = calculateSubIndex(avgSO2, "SO2");
     int indexPM10 = calculateSubIndex(avgPM10, "PM10");
 
     // ATMO index is the maximum of the sub-indices
     return max({indexO3, indexNO2, indexSO2, indexPM10});
 }
 
-int Service::calculateSubIndex(double value, const string &pollutant) const
+/**
+ * @brief calculates the index for a particular pollutant
+ * 
+ * @param value 
+ * @param pollutant 
+ * @return int 
+ */
+int Service::calculateSubIndex(const double &value, const string &pollutant) const
 {
     if (pollutant == "O3")
     {
@@ -295,4 +316,19 @@ int Service::calculateSubIndex(double value, const string &pollutant) const
         return 1;
     }
     return 0;
+}
+
+/**
+ * @brief calculates the average of a vector<double>
+ * 
+ * @param v 
+ * @return double 
+ */
+double Service::average(const vector<double> &v) {
+    double sum = 0;
+
+    for (const auto &i : v) {
+        sum += i;
+    }
+    return sum / v.size();
 }
