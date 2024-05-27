@@ -13,7 +13,7 @@ public:
     System();
     ~System();
 
-    const map<int, Measurement> &getMeasurements();
+    const map<int, vector<Measurement>> &getMeasurements();
     const vector<Cleaner> &getCleaners();
     const map<int, Sensor> &getSensors();
     const vector<User> &getUsers();
@@ -23,9 +23,10 @@ public:
     void addSensor(const Sensor &sensor);
     void addUser(const User &measurement);
 
+private:
     vector<User> users;
     map<int, Sensor> sensors;
-    map<int, Measurement> measurements;
+    map<int, vector<Measurement>> measurements;
     vector<Cleaner> cleaners;
 };
 #endif

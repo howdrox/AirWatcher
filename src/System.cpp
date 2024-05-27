@@ -1,7 +1,12 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
+
 #include "System.h"
+#include "Cleaner.h"
+#include "User.h"
+#include "Measurement.h"
+
 using namespace std;
 
 System::System()
@@ -21,7 +26,7 @@ System::System()
     while (getline(sensorsFile, sensorLine))
     {
         Sensor sensor(sensorLine);
-        sensors[sensor.getSensorID()]=sensor;
+        sensors[sensor.getSensorID()] = sensor;
     }
 
     sensorsFile.close();
@@ -73,43 +78,43 @@ System::System()
     }
 
     usersFile.close();
-
 }
 System::~System() {}
 
-
-
-const System::vector<Cleaner> &getCleaners()
+const vector<Cleaner> &System::getCleaners()
 {
     return cleaners;
 }
 
-const System::map<int,Sensor> &getSensors()
+const map<int, Sensor> &System::getSensors()
 {
     return sensors;
 }
-const System::map<int, Measurement> &getMeasurements()
+const map<int, vector<Measurement>> &System::getMeasurements()
 {
     return measurements;
 }
-const System::vector<User> &getUsers()
+const vector<User> &System::getUsers()
 {
     return users;
 }
 
-System::void addMeasurement(consr Measurement &measurement)
+void System::addMeasurement(const Measurement &measurement)
 {
-    measurements[measurement.getSensorID()] = measurement;
+    // To change
+    // measurements[measurement.getSensorID()] = measurement;
 }
-System::void addCleaner(const Cleaner &cleaner)
+void System::addCleaner(const Cleaner &cleaner)
 {
     cleaners.push_back(cleaner);
 }
-System::void addSensor(const Sensor &sensor)
+void System::addSensor(const Sensor &sensor)
 {
-    sensors.push_back(sensor);
+    // To change
+    // sensors.push_back(sensor);
 }
-System::void addMeasurement(const User &user)
+void System::addMeasurement(const Measurement &m)
 {
-    users.push_back(user);
+    // To change
+    // users.push_back(m);
 }
