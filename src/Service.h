@@ -9,6 +9,8 @@
 #include "Measurement.h"
 #include <map>
 #include <vector>
+#include <string>
+#include <algorithm>
 using namespace std;
 
 class Service
@@ -36,6 +38,8 @@ public:
 
 private:
     System system;
+
+    int calculateSubIndex(double value, const std::string &pollutant) const;
 };
 
 #endif // SERVICE_H
