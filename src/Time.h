@@ -14,6 +14,8 @@ public:
     double getTime() const;
     void setTime(const string &t);
 
+    bool isSameHour(const Time&time) const;
+
     bool operator<(const Time &date) const;
     bool operator>(const Time &date) const;
     bool operator<=(const Time &date) const;
