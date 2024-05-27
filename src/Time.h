@@ -15,7 +15,6 @@ public:
     int getMinute() const;
     int getSecond() const;
 
-
     bool isSameHour(const Time&time) const;
 
     bool operator<(const Time &date) const;
