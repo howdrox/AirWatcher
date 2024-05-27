@@ -4,13 +4,13 @@
 #include "System.h"
 using namespace std;
 
-System::System()
+System::System(string sensorsFilePath,string cleanersFilePath,string usersFilePath,string measurementsFilePath)
 {
 #ifdef MAP
     cout << "Appel au constructeur de <System>" << endl;
 #endif
 
-    ifstream sensorsFile("sensors.csv");
+    ifstream sensorsFile(sensorsFilePath);
     if (!sensorsFile.is_open())
     {
         cerr << "Unable to open sensorsFile sensors.csv" << endl;
@@ -26,7 +26,7 @@ System::System()
 
     sensorsFile.close();
 
-    ifstream cleanersFile("cleaners.csv");
+    ifstream cleanersFile(cleanersFilePath);
     if (!cleanersFile.is_open())
     {
         cerr << "Unable to open cleanersFile cleaners.csv" << endl;
@@ -42,7 +42,7 @@ System::System()
 
     cleanersFile.close();
 
-    ifstream usersFile("users.csv");
+    ifstream usersFile(usersFilePath);
     if (!usersFile.is_open())
     {
         cerr << "Unable to open usersFile users.csv" << endl;
@@ -58,7 +58,7 @@ System::System()
 
     usersFile.close();
 
-    ifstream measurementsFile("measurements.csv");
+    ifstream measurementsFile(measurementsFilePath);
     if (!measurementsFile.is_open())
     {
         cerr << "Unable to open measurementsFile measurements.csv" << endl;
@@ -88,7 +88,7 @@ const System::vector<Sensor> &getSensors()
 {
     return sensors;
 }
-const System::map<int, Measurement> &getMeasurements()
+const System::map<int, vector<Measurement>> &getMeasurements()
 {
     return measurements;
 }
@@ -99,7 +99,7 @@ const System::vector<User> &getUsers()
 
 void System::addMeasurement(consr Measurement &measurement)
 {
-    measurements[measurement.getSensorID()] = measurement;
+    measurements[measurement.getSensorID()].push_back(measurement);
 }
 void System::addCleaner(const Cleaner &cleaner)
 {

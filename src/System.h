@@ -7,25 +7,36 @@
 #include <vector>
 #include <map>
 
-class System
-{
-public:
-    System();
-    ~System();
 
-    const map<int, Measurement> &getMeasurements();
-    const vector<Cleaner> &getCleaners();
-    const map<int, Sensor> &getSensors();
-    const vector<User> &getUsers();
 
-    void addMeasurement(const Measurement &measurement);
-    void addCleaner(const Cleaner &cleaner);
-    void addSensor(const Sensor &sensor);
-    void addUser(const User &measurement);
 
-    vector<User> users;
-    map<int, Sensor> sensors;
-    map<int, Measurement> measurements;
-    vector<Cleaner> cleaners;
+class System{
+    public:
+        
+        System();
+        ~System();
+
+        const map<int, vector<Measurement>>& getMeasurements();
+        const vector<Cleaner>& getCleaners();
+        const map<int ,Sensor>& getSensors();
+        const vector<User>& getUsers();
+
+        void addMeasurement(const Measurement &measurement);
+        void addCleaner(const Cleaner &cleaner);
+        void addSensor(const Sensor &sensor);
+        void addUser(const User &measurement);
+
+
+        
+        
+    
+
+    protected:
+        vector<User> users;
+        map<int ,Sensor> sensors;
+        map<int,vector<Measurement>> measurements;
+        vector<Cleaner> cleaners;
+
+    
 };
 #endif

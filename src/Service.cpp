@@ -1,11 +1,10 @@
+using namespace std;
 #include <iostream>
 #include <cmath>
-
+#include <map>
 #include "Service.h"
 #include "Coord.h"
-#include "Zone.h"
-
-using namespace std;
+#include "System.h"
 
 double Service::distance(const Coord &coord1, const Coord &coord2)
 {
@@ -69,8 +68,20 @@ multimap<double,int> Service ::getSimilarZones(const int &sensorID, const Time &
             similarSensors[qualityDifference] = it->first;
         }
     }
-
     return similarSensors;
+}
+
+multimap<double, Sensor> sortSensors(vector<Sensor> sensors, const Coord &coord){
+    System system;
+    multimap<double, Sensor> sortedSensors;
+    map<int,Sensor> sensors = system.getSensors();
+    for (auto it = sensors.begin(); it != sensors.end(); ++it){
+        double distance = this.distance(it->second.getCoord(), coord);
+        sortedSensors[distance] = it->second;
+    }
+    return sortedSensors;
+}
+
 
 
 
@@ -106,7 +117,7 @@ double Service::calculateImpactRadius(const int &cleanerId)
     // Trier les capteurs par distance par rapport aux coordonnées du cleaner
     map<double, Sensor> sortedSensors = sortSensors(sensors, cleanerCoord);
 
-    Time before_start(start.getYear,start.getMonth(),start.getDay()-1,start.getHour(),start.getMinute(),start.getSecond());
+    Time before_start(start.getYear(),start.getMonth(),start.getDay()-1,start.getHour(),start.getMinute(),start.getSecond());
     Time before_end(end.getYear(),end.getMonth(),end.getDay()-1,end.getHour(),end.getMinute(),end.getSecond());;
 
     // Filtrer les mesures pour les temps avant et après l'installation du cleaner
