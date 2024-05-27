@@ -88,17 +88,6 @@ void test_getUsers() {
     }
 }
 
-void test_filterMeasurements() {
-    System system;
-    cout << "Test filterMeasurements()" << endl;
-
-    // Cas de test : une date de début avant celle de la fin et des mesures existantes
-    Time startTime = Time(2024, 5, 27, 0, 0, 0);
-    Time startTime = Time(2024, 5, 30, 0, 0, 0);
-
-    
-}
-
 int main() {
     test_getMeasurements();
     test_getCleaners();
