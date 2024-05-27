@@ -77,16 +77,18 @@ multimap<double,int> Service ::getSimilarZones(const int &sensorID, const Time &
 
 double Service::calculateImpactRadius(const int &cleanerId)
 {
-    System system=new System();
-
     const vector<Cleaner>& cleaners = system.getCleaners();
 
     // Vérifier si cleanerId est dans la liste des nettoyeurs
     Coord cleanerCoord;
+    Time start;
+    Time end;
     bool cleanerFound = false;
     for (const Cleaner& c : cleaners) {
-        if (c.getId() == cleanerId) {
+        if (c.getCleanerId() == cleanerId) {
             cleanerCoord = c.getCoord();
+            start=c.getStartTime();
+            end=c.getEndTime();
             cleanerFound = true;
             break;
         }
@@ -96,19 +98,18 @@ double Service::calculateImpactRadius(const int &cleanerId)
         throw invalid_argument("Cleaner ID not found");
     }
 
-    vector<Sensor> sensors = system.getSensors();
+    map<int ,Sensor> sensors = system.getSensors();
     map<int, Measurement> measurements = system.getMeasurements();
 
     // Trier les capteurs par distance par rapport aux coordonnées du cleaner
     map<double, Sensor> sortedSensors = sortSensors(sensors, cleanerCoord);
 
-    // Dates fictives pour démonstration
-    Time start(2023, 5, 1, 12, 0);
-    Time end(2023, 5, 1, 13, 0);
+    Time before_start(start.getYear,start.getMonth(),start.getDay()-1,start.getHour(),start.getMinute(),start.getSecond());
+    Time before_end(end.getYear(),end.getMonth(),end.getDay()-1,end.getHour(),end.getMinute(),end.getSecond());;
 
     // Filtrer les mesures pour les temps avant et après l'installation du cleaner
-    map<int, Measurement> beforeMeasurements = filterMeasurements(Time(2023, 5, 1, 11, 59), start, measurements);
-    map<int, Measurement> afterMeasurements = filterMeasurements(end, Time(2023, 5, 1, 13, 1), measurements);
+    map<int, Measurement> beforeMeasurements = filterMeasurements(before_start, start, measurements);
+    map<int, Measurement> afterMeasurements = filterMeasurements(before_end, end, measurements);
 
     double beforeQuality = calculateQuality(beforeMeasurements);
     double afterQuality = calculateQuality(afterMeasurements);
