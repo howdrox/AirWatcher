@@ -9,11 +9,11 @@ class Measurement
     //----------------------------------------------------------------- PUBLIC
 
 public:
-    Sensor getCapteurID();
+    int getCapteurID();
 
     Time getTimestamp();
 
-    int getDay(); // on va utiliser int pour représenter les jours de la semaine(0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+    int getDay(); 
 
     //-------------------------------------------- Constructeurs - destructeur
     Measurement(const Measurement &Measurement);
