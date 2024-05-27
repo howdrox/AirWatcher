@@ -63,7 +63,7 @@ Time::Time(const Time &date)
     : year(date.year), month(date.month), day(date.day), _time(date._time){};
 
 Time::Time(int yy, int MM, int dd)
-    : year(yy), month(MM), day(dd){};
+    : year(yy), month(MM), day(dd), _time(0){};
 
 Time::Time()
     : year(0), month(0), day(0), _time(0){};
