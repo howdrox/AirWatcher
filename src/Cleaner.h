@@ -11,8 +11,6 @@ using namespace std;
 class Cleaner
 {
 public:
-    virtual void afficherTrajet(ostream &os) const = 0;
-
     int getCleanerId() const;
 
     Coord getCoord() const;
