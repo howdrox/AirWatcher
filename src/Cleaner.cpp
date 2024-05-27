@@ -31,7 +31,8 @@ Cleaner::Cleaner(string data) {
     }
 
     // Id
-    cleanerID = stoi(values[0]);
+    string idStr = values[0].substr(7); // take only the number value in value[0], example: 'Cleaner0' --> '0' 
+    cleanerID = stoi(idStr);
 
     // Location
     double lng = stod(values[1]);
