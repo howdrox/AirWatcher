@@ -2,6 +2,7 @@ using namespace std;
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "Time.h"
 
@@ -20,26 +21,21 @@ int Time::getDay() const
     return day;
 }
 
-double Time::getTime() const
+int Time::getHour() const
 {
-    return _time;
+    return hour;
 }
 
-void Time::setTime(const string &t)
+int Time::getMinute() const
 {
-    // t in format "hh:mm:ss"
-    int hours, minutes, seconds;
-    char delimiter1, delimiter2;
-
-    // Use a stringstream to parse the string
-    stringstream timeStream(t);
-    timeStream >> hours >> delimiter1 >> minutes >> delimiter2 >> seconds;
-
-    // Convert to double value representing hours
-    double timeInHours = hours + minutes * 1.0 / 60 + seconds * 1.0 / 3600;
-
-    _time = timeInHours;
+    return minute;
 }
+
+int Time::getSecond() const
+{
+    return second;
+}
+
 
 //------------------------------------------------- Surcharge d'opérateurs
 bool Time::operator<(const Time &date) const
@@ -50,7 +46,11 @@ bool Time::operator<(const Time &date) const
         return month < date.month;
     if (day != date.day)
         return day < date.day;
-    return _time < date._time;
+    if (hour != date.hour)
+        return hour < date.hour;
+    if (minute != date.minute)
+        return minute < date.minute;
+    return second < date.second;
 }
 
 bool Time::operator>(const Time &date) const
@@ -69,12 +69,19 @@ bool Time::operator>=(const Time &date) const
 }
 
 Time::Time(const Time &date)
-    : year(date.year), month(date.month), day(date.day), _time(date._time){};
+    : year(date.year), month(date.month), day(date.day), 
+    hour(date.hour), minute(date.minute), second(date.second){};
 
-Time::Time(int yy, int MM, int dd)
-    : year(yy), month(MM), day(dd), _time(0){};
+Time::Time(const string &data) {
+    char delimiter1, delimiter2, delimiter3, delimiter4, delimiter5;
+    stringstream timeStream(data);
+    timeStream >> year >> delimiter1 >> month >> delimiter2 >> day >> hour >> delimiter3 >> minute >> delimiter4 >> second;
+}
+
+Time::Time(int yy, int MM, int dd, int hh, int mm, int ss) : 
+    year(yy), month(MM), day(dd), hour(hh), minute(mm), second(ss) {};
 
 Time::Time()
-    : year(0), month(0), day(0), _time(0){};
+    : year(0), month(0), day(0), hour(0), minute(0), second(0) {};
 
 Time::~Time(){};
