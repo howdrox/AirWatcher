@@ -23,7 +23,6 @@ public:
     void addSensor(const Sensor &sensor);
     void addUser(const User &measurement);
 
-protected:
     vector<User> users;
     map<int, Sensor> sensors;
     map<int, Measurement> measurements;
