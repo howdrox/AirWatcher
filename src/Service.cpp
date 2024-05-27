@@ -1,7 +1,7 @@
 using namespace std;
 #include <iostream>
 #include <cmath>
-
+#include <map>
 #include "Service.h"
 #include "Coord.h"
 
@@ -67,9 +67,13 @@ multimap<double,int> Service ::getSimilarZones(const int &sensorID, const Time &
             similarSensors[qualityDifference] = it->first;
         }
     }
-
     return similarSensors;
+}
 
-
+multimap<double, Sensor> sortSensors(vector<Sensor> sensors, const Coord &coord){
+    System system;
+    multimap<double, Sensor> sortedSensors;
+    map<int,Sensor> sensors = system.getSensors();
+    for (auto it = sensors.begin(); it != sensors.end(); ++it){
 
 }

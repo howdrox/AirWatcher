@@ -22,11 +22,11 @@ public:
 
     double distance(const Coord &coord1, const Coord &coord2);
 
-    vector<Zone> getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta);
+    multimap<double,int> getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta);
 
     double calculateQuality(const map<int, Measurement> &measurements);
 
-    map<double, Sensor> sortSensors(vector<Sensor> sensors, const Coord &coord); // a voir si `sensors` peut être en const
+    multimap<double, Sensor> sortSensors(vector<Sensor> sensors, const Coord &coord); // a voir si `sensors` peut être en const
 
     Service();
 
