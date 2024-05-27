@@ -13,9 +13,12 @@ public:
 
     Time getTimestamp();
 
+<<<<<<< HEAD
     int getDay(); 
 
     //-------------------------------------------- Constructeurs - destructeur
+=======
+>>>>>>> 51e0ec6261baa12f115c88cdb2e3a320694bf549
     Measurement(const Measurement &Measurement);
 
     Measurement(string &ligne);
@@ -25,9 +28,10 @@ public:
 protected:
     int measurementID;
     Time timestamp;
+    int sensorID;
     std::string attributeID;
     double value;
-    int sensorID;
+    bool blacklisted;
 };
 
 #endif

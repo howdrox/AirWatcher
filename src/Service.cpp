@@ -49,3 +49,27 @@ map<int, vector<Measurement> > Service::filterMeasurements(const Time &start, co
     }
     return res;
 } 
+multimap<double,int> Service ::getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta){
+    System system;
+    multimap<double,int> similarSensors;
+    map<int,Sensor> sensors = system.getSensors();
+    map<int,vector<Measurement>> measurements = system.getMeasurements();
+    map<int,vector<Measurement>> filteredMeasurements = this.filterMeasurements(start, end,  measurements);
+    double parameterQuality = this.calculateQuality( filteredMeasurements[sensorID]);
+
+    for (auto it = filteredMeasurements.begin(); it != filteredMeasurements.end(); ++it){
+        double sensorQuality = this.calculateQuality(it->second);
+        if (sensorQuality<= parameterQuality+delta && sensorQuality>= parameterQuality-delta){
+            double qualityDifference = sensorQuality - parameterQuality;
+            if (sensorQuality<parameterQuality){
+                qualityDifference = parameterQuality - sensorQuality;
+            }
+            similarSensors[qualityDifference] = it->first;
+        }
+    }
+
+    return similarSensors;
+
+
+
+}
