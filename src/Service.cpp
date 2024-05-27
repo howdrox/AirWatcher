@@ -101,7 +101,7 @@ double Service::calculateImpactRadius(const int &cleanerId)
     }
 
     map<int ,Sensor> sensors = system.getSensors();
-    map<int, Measurement> measurements = system.getMeasurements();
+    map<int, vector<Measurement>> measurements = system.getMeasurements();
 
     // Trier les capteurs par distance par rapport aux coordonnées du cleaner
     map<double, Sensor> sortedSensors = sortSensors(sensors, cleanerCoord);
@@ -109,12 +109,6 @@ double Service::calculateImpactRadius(const int &cleanerId)
     Time before_start(start.getYear(),start.getMonth(),start.getDay()-1,start.getHour(),start.getMinute(),start.getSecond());
     Time before_end(end.getYear(),end.getMonth(),end.getDay()-1,end.getHour(),end.getMinute(),end.getSecond());;
 
-    // Filtrer les mesures pour les temps avant et après l'installation du cleaner
-    map<int, Measurement> beforeMeasurements = filterMeasurements(before_start, start, measurements);
-    map<int, Measurement> afterMeasurements = filterMeasurements(before_end, end, measurements);
-
-    double beforeQuality = calculateQuality(beforeMeasurements);
-    double afterQuality = calculateQuality(afterMeasurements);
 
     double impactRadius = 0.0;
 
@@ -123,28 +117,22 @@ double Service::calculateImpactRadius(const int &cleanerId)
         Sensor sensor = pair.second;
 
         // Filtrer les mesures pour ce capteur particulier
-        map<int, Measurement> sensorBeforeMeasurements;
-        map<int, Measurement> sensorAfterMeasurements;
+        map<int, vector<Measurement>> sensorMeasurements;
 
-        for (const auto& measurement : beforeMeasurements) {
-            if (measurement.second.getSensorId() == sensor.getId()) {
-                sensorBeforeMeasurements[measurement.first] = measurement.second;
-            }
+        for (const auto& measurement : sensor.getMeasurements()) {
+                sensorMeasurements[sensor.getSensorID()].push_back(measurement);
         }
+        map<int, vector<Measurement>> beforeMeasurements = filterMeasurements(before_start, start, sensorMeasurements);
+        map<int, vector<Measurement>> afterMeasurements = filterMeasurements(before_end, end, sensorMeasurements);
 
-        for (const auto& measurement : afterMeasurements) {
-            if (measurement.second.getSensorId() == sensor.getId()) {
-                sensorAfterMeasurements[measurement.first] = measurement.second;
-            }
-        }
-
-        double sensorBeforeQuality = calculateQuality(sensorBeforeMeasurements);
-        double sensorAfterQuality = calculateQuality(sensorAfterMeasurements);
+        double sensorBeforeQuality = calculateQuality(beforeMeasurements);
+        double sensorAfterQuality = calculateQuality(afterMeasurements);
 
         if (sensorAfterQuality < sensorBeforeQuality) {
             impactRadius = distance;
             break;
         }
+
     }
 
     return impactRadius;
