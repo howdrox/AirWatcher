@@ -88,7 +88,7 @@ const System::map<int,Sensor> &getSensors()
 {
     return sensors;
 }
-const System::map<int, Measurement> &getMeasurements()
+const System::map<int, vector<Measurement>> &getMeasurements()
 {
     return measurements;
 }
@@ -99,7 +99,7 @@ const System::vector<User> &getUsers()
 
 System::void addMeasurement(consr Measurement &measurement)
 {
-    measurements[measurement.getSensorID()] = measurement;
+    measurements[measurement.getSensorID()].push_back(measurement);
 }
 System::void addCleaner(const Cleaner &cleaner)
 {

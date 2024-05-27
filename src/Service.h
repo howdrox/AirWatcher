@@ -18,7 +18,7 @@ class Service
 public:
     double calculateQuality(const Zone &zone, const Time &start, const Time &end);
 
-    map<int, Measurement> filterMeasurements(const Time &start, const Time &end, map<int, Measurement> measurements); // a voir si `measurements` est en const
+    map<int, vector<Measurement> > filterMeasurements(const Time &start, const Time &end, map<int, Measurement> measurements); // a voir si `measurements` est en const
 
     double calculateImpactRadius(const int &cleanerId);
 
