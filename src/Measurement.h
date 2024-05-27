@@ -1,43 +1,37 @@
-#include<string>
-#include "Date.h"
-
-
-#if ! defined ( MEASUREMENT_H )
+#if !defined(MEASUREMENT_H)
 #define MEASUREMENT_H
 
-
-
-class Measurement  
+#include <string>
+#include "Time.h"
+#include "Sensor.h"
+class Measurement
 {
-//----------------------------------------------------------------- PUBLIC
+    //----------------------------------------------------------------- PUBLIC
 
 public:
+    int getCapteurID();
 
-     Sensor getCapteurID();
+    Time getTimestamp();
 
-     DateTime getTimestamp();
+<<<<<<< HEAD
+    int getDay(); 
 
-     int getDay();  //on va utiliser int pour représenter les jours de la semaine(0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-     
-//-------------------------------------------- Constructeurs - destructeur
-    Measurement ( const Measurement & Measurement );
+    //-------------------------------------------- Constructeurs - destructeur
+=======
+>>>>>>> 51e0ec6261baa12f115c88cdb2e3a320694bf549
+    Measurement(const Measurement &Measurement);
 
-    Measurement ( string  & ligne);
-    
-    virtual ~Measurement ( );
-      
+    Measurement(string &ligne);
+
+    virtual ~Measurement();
+
 protected:
-    
     int measurementID;
-    DateTime timestamp;
+    Time timestamp;
+    int sensorID;
     std::string attributeID;
     double value;
-    int sensorID;
-   
-    
-
+    bool blacklisted;
 };
 
-
-#endif 
-
+#endif

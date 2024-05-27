@@ -18,8 +18,8 @@ class System{
 
         const map<int, Measurement>& getMeasurements();
         const vector<Cleaner>& getCleaners();
-        const vector<Sensor>& getSensors();
-        const  vector<User>& getUsers();
+        const map<int ,Sensor>& getSensors();
+        const vector<User>& getUsers();
 
         void addMeasurement(const Measurement &measurement);
         void addCleaner(const Cleaner &cleaner);
@@ -33,7 +33,7 @@ class System{
 
     protected:
         vector<User> users;
-        vector<Sensor> sensors;
+        map<int ,Sensor> sensors;
         map<int,Measurement> measurements;
         vector<Cleaner> cleaners;
 
