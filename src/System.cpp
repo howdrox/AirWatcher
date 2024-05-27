@@ -97,19 +97,19 @@ const System::vector<User> &getUsers()
     return users;
 }
 
-System::void addMeasurement(consr Measurement &measurement)
+void System::addMeasurement(consr Measurement &measurement)
 {
     measurements[measurement.getSensorID()] = measurement;
 }
-System::void addCleaner(const Cleaner &cleaner)
+void System::addCleaner(const Cleaner &cleaner)
 {
     cleaners.push_back(cleaner);
 }
-System::void addSensor(const Sensor &sensor)
+void System::addSensor(const Sensor &sensor)
 {
     sensors.push_back(sensor);
 }
-System::void addMeasurement(const User &user)
+void System::addUser(const User &user)
 {
     users.push_back(user);
 }
