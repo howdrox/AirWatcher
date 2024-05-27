@@ -87,9 +87,6 @@ multimap<double, Sensor> sortSensors(vector<Sensor> sensors, const Coord &coord)
 
 
 
-}
-
-
 double Service::calculateImpactRadius(const int &cleanerId)
 {
     const vector<Cleaner>& cleaners = system.getCleaners();
@@ -167,16 +164,23 @@ double Service::calculateImpactRadius(const int &cleanerId)
     
 }
 
-// map<int, vector<Measurement>> measurements;
 
+/**
+ * @brief Calculates the ATMO for all the measurements in the specified zone and during the specified time
+ * 
+ * @param zone 
+ * @param start 
+ * @param end 
+ * @return double 
+ */
 double Service::calculateQuality(const Zone &zone, const Time &start, const Time &end)
 {
     map<string, vector<double>> pollutantMaxValues;
     map<string, Time> pollutantLastTime;
-    pollutantLastTime["O3"] = Time(0,0,0);
-    pollutantLastTime["NO2"] = Time(0,0,0);
-    pollutantLastTime["SO2"] = Time(0,0,0);
-    pollutantLastTime["PM10"] = Time(0,0,0);
+    pollutantLastTime["O3"] = Time(0,0,0,0,0,0);
+    pollutantLastTime["NO2"] = Time(0,0,0,0,0,0);
+    pollutantLastTime["SO2"] = Time(0,0,0,0,0,0);
+    pollutantLastTime["PM10"] = Time(0,0,0,0,0,0);
 
     for (const auto &sensorData : system.getMeasurements())
     {
@@ -214,6 +218,13 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
     return max({indexO3, indexNO2, indexSO2, indexPM10});
 }
 
+/**
+ * @brief calculates the index for a particular pollutant
+ * 
+ * @param value 
+ * @param pollutant 
+ * @return int 
+ */
 int Service::calculateSubIndex(const double &value, const string &pollutant) const
 {
     if (pollutant == "O3")
@@ -307,6 +318,12 @@ int Service::calculateSubIndex(const double &value, const string &pollutant) con
     return 0;
 }
 
+/**
+ * @brief calculates the average of a vector<double>
+ * 
+ * @param v 
+ * @return double 
+ */
 double Service::average(const vector<double> &v) {
     double sum = 0;
 
