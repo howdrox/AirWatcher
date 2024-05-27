@@ -2,9 +2,10 @@ using namespace std;
 #include <iostream>
 #include <cmath>
 
+#include "Service.h"
 #include "Coord.h"
 
-double distance(const Coord &coord1, const Coord &coord2)
+double Service::distance(const Coord &coord1, const Coord &coord2)
 {
     const double R = 6371.0; // Radius of the Earth in kilometers
     double lat1 = coord1.getLatitude();

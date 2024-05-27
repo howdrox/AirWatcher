@@ -1,4 +1,3 @@
-//---------- Interface de la classe  <User> (fichier User.h) ----------------
 #if !defined(USER_H)
 #define USER_H
 
@@ -22,7 +21,6 @@ public:
     virtual ~User();
 
 protected:
-    //----------------------------------------------------- Attributs protégés
     Role role;
 };
 
