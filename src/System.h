@@ -1,4 +1,4 @@
-#ifdef SYSTEM_H
+#ifndef SYSTEM_H
 #define SYSTEM_H
 #include "User.h"
 #include "Sensor.h"
