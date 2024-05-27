@@ -69,7 +69,7 @@ System::System()
     while (getline(measurementsFile, measurementLine))
     {
         Measurement measurement(measurementLine);
-        measurements[measurement.getSensorID()].push_back(measurement);
+        measurements[measurement.getSensorID()]=measurement;
     }
 
     usersFile.close();
@@ -84,7 +84,7 @@ const System::vector<Cleaner> &getCleaners()
     return cleaners;
 }
 
-const System::map<int,Sensor> &getSensors()
+const System::vector<Sensor> &getSensors()
 {
     return sensors;
 }
