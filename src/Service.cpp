@@ -29,3 +29,23 @@ double Service::distance(const Coord &coord1, const Coord &coord2)
 
     return distance;
 }
+
+map<int, vector<Measurement> > Service::filterMeasurements(const Time &start, const Time &end, map<int, vector<Measurement> > measurements) {
+    map<int, vector<Measurement> > res;
+    map<int, vector<Measurement> >::iterator itr;
+    for (itr = measurements.begin(); itr != measurements.end(); ++itr) {
+        // Key : itr->first
+        // Value : itr->second
+        vector<Measurement> measurementList = itr->second;
+        vector<Measurement> filteredList;
+        for (int i = 0; i < measurementList.size(); i++) {
+            Measurement m = measurementList[i];
+            Time measureTime = m.getTimestamp();
+            if (start < measureTime && measureTime < end) {
+                filteredList.push_back(m);
+            }
+        } 
+        res[itr->first] = filteredList;
+    }
+    return res;
+} 

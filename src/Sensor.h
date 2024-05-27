@@ -1,42 +1,33 @@
-#if ! defined ( SENSOR_H )
+#ifndef SENSOR_H
 #define SENSOR_H
+
 #include "Measurement.h"
 #include <vector>
 #include <string>
 
+class Sensor
+{
+public:
+    Sensor(int sensorID, Coord location, bool status);
+    Sensor(string &sensorLine);
 
-typedef struct{
-    double latitude;
-    double longitude;
-}Coord;
+    const int getSensorID();
+    const Coord getLocation();
+    const bool getStauts();
+    const vector<Measurement> &getMeasurements();
 
-class Sensor{
-    public:
-        
-        Sensor(int sensorID, Coord location,bool status);
-        Sensor(string &sensorLine);
+    void setSensorID(const int id);
+    void setLocation(const Coord loc);
+    void setStatus(const bool stat);
+    void addMeasurement(Measurement measurement);
 
-        const int getSensorID();
-        const Coord getLocation();
-        const bool getStauts();
-        const vector<Measurement>& getMeasurements();
+    ~Sensor();
 
-        void setSensorID(const int id);
-        void setLocation(const Coord loc);
-        void setStatus(const bool stat);
-        void addMeasurement(Measurement measurement);
+protected:
+    int sensorID;
+    Coord location;
+    bool status;
+    vector<Measurement> measurements;
+};
 
-
-        ~Sensor ();
-        
-    
-
-    protected:
-        int sensorID;
-        Coord location;
-        bool status;
-        vector<Measurement> measurements;
-
-    
-}
-#endif
+#endif // SENSOR_H
