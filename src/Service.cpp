@@ -117,7 +117,7 @@ double Service::calculateImpactRadius(const int &cleanerId)
     // Trier les capteurs par distance par rapport aux coordonnées du cleaner
     map<double, Sensor> sortedSensors = sortSensors(sensors, cleanerCoord);
 
-    Time before_start(start.getYear,start.getMonth(),start.getDay()-1,start.getHour(),start.getMinute(),start.getSecond());
+    Time before_start(start.getYear(),start.getMonth(),start.getDay()-1,start.getHour(),start.getMinute(),start.getSecond());
     Time before_end(end.getYear(),end.getMonth(),end.getDay()-1,end.getHour(),end.getMinute(),end.getSecond());;
 
     // Filtrer les mesures pour les temps avant et après l'installation du cleaner
