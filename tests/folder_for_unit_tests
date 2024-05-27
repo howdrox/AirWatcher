@@ -4,7 +4,8 @@
 using namespace std;
 
 void test_getMeasurements() {
-    System system;
+
+    System system = System("../data/Sensors/test1.csv","../data/Cleaners/test1.csv","../data/Users/test1.csv","../data/Measurements/test1.csv");
     cout << "Test getMeasurements()" << endl;
 
     // Cas de test : nombre non nul de mesures
@@ -16,7 +17,7 @@ void test_getMeasurements() {
     }
 
     // Cas de test : nombre nul de mesures
-    System emptySystem;
+    System emptySystem = System("../data/Sensors/test0.csv","../data/Cleaners/test0.csv","../data/Users/test0.csv","../data/Measurements/test0.csv");
     if (emptySystem.getMeasurements().size() == 0) {
         cout << "Test getMeasurements() avec mesures nulles : Réussi" << endl;
     } else {
@@ -25,7 +26,7 @@ void test_getMeasurements() {
 }
 
 void test_getCleaners() {
-    System system;
+    System system = System("../data/Sensors/test1.csv","../data/Cleaners/test1.csv","../data/Users/test1.csv","../data/Measurements/test1.csv");
     cout << "Test getCleaners()" << endl;
 
     // Cas de test : nombre non nul de nettoyeurs
@@ -37,7 +38,7 @@ void test_getCleaners() {
     }
 
     // Cas de test : nombre nul de nettoyeurs
-    System emptySystem;
+     System emptySystem = System("../data/Sensors/test0.csv","../data/Cleaners/test0.csv","../data/Users/test0.csv","../data/Measurements/test0.csv");
     if (emptySystem.getCleaners().size() == 0) {
         cout << "Test getCleaners() avec nettoyeurs nuls : Réussi" << endl;
     } else {
@@ -46,7 +47,7 @@ void test_getCleaners() {
 }
 
 void test_getSensors() {
-    System system;
+    System system = System("../data/Sensors/test1.csv","../data/Cleaners/test1.csv","../data/Users/test1.csv","../data/Measurements/test1.csv");
     cout << "Test getSensors()" << endl;
 
     // Cas de test : nombre non nul de capteurs
@@ -58,7 +59,7 @@ void test_getSensors() {
     }
 
     // Cas de test : nombre nul de capteurs
-    System emptySystem;
+    System emptySystem = System("../data/Sensors/test0.csv","../data/Cleaners/test0.csv","../data/Users/test0.csv","../data/Measurements/test0.csv");
     if (emptySystem.getSensors().size() == 0) {
         cout << "Test getSensors() avec capteurs nuls : Réussi" << endl;
     } else {
@@ -67,7 +68,7 @@ void test_getSensors() {
 }
 
 void test_getUsers() {
-    System system;
+    System system = System("../data/Sensors/test1.csv","../data/Cleaners/test1.csv","../data/Users/test1.csv","../data/Measurements/test1.csv");
     cout << "Test getUsers()" << endl;
 
     // Cas de test : nombre non nul d'utilisateurs
@@ -79,12 +80,23 @@ void test_getUsers() {
     }
 
     // Cas de test : nombre nul d'utilisateurs
-    System emptySystem;
+    System emptySystem = System("../data/Sensors/test0.csv","../data/Cleaners/test0.csv","../data/Users/test0.csv","../data/Measurements/test0.csv");
     if (emptySystem.getUsers().size() == 0) {
         cout << "Test getUsers() avec utilisateurs nuls : Réussi" << endl;
     } else {
         cout << "Test getUsers() avec utilisateurs nuls : Échoué" << endl;
     }
+}
+
+void test_filterMeasurements() {
+    System system;
+    cout << "Test filterMeasurements()" << endl;
+
+    // Cas de test : une date de début avant celle de la fin et des mesures existantes
+    Time startTime = Time(2024, 5, 27, 0, 0, 0);
+    Time startTime = Time(2024, 5, 30, 0, 0, 0);
+
+    
 }
 
 int main() {

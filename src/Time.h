@@ -11,8 +11,10 @@ public:
     int getYear() const;
     int getMonth() const;
     int getDay() const;
-    double getTime() const;
-    void setTime(const string &t);
+    int getHour() const;
+    int getMinute() const;
+    int getSecond() const;
+
 
     bool isSameHour(const Time&time) const;
 
@@ -22,14 +24,14 @@ public:
     bool operator>=(const Time &date) const;
 
     Time(const Time &date);
-    Time(int yy, int MM, int dd);
+    Time(const string &data);
+    Time(int yy, int MM, int dd, int hh, int mm, int ss);
     Time();
 
     virtual ~Time();
 
 protected:
-    int year, month, day;
-    double _time;
+    int year, month, day, hour, minute, second;
 };
 
 #endif // Time_H

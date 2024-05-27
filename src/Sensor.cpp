@@ -3,6 +3,7 @@
 #include <cstring>
 #include <sstream>
 #include "Sensor.h"
+#include "Coord.h"
 
 using namespace std;
 
@@ -45,33 +46,31 @@ Sensor::~Sensor ( )
 #endif
     
 }
+   
 
+const Sensor:: int & getSensorID(){
+    return sensorID;
+}
+const Sensor:: Coord & getLocation(){
+    return location;
+}
+const Sensor:: bool & getStauts(){
+    return status;
+}
+const Sensor:: vector<Measurement> & getMeasurements(){
+    return measurements;
+}
 
-        
-
-        const Sensor:: int & getSensorID(){
-            return sensorID;
-        }
-        const Sensor:: Coord & getLocation(){
-            return location;
-        }
-        const Sensor:: bool & getStauts(){
-            return status;
-        }
-        const Sensor:: vector<Measurement> & getMeasurements(){
-            return measurements;
-        }
-
-        Sensor:: void setSensorID(const int &id){
-            sensorID = id;
-        }
-        Sensor:: void setLocation(const Coord &loc){
-            location = loc;
-        }
-        Sensor:: void setStatus(const bool &stat){
-            status = stat;
-        }
-       void Sensor::addMeasurement(const Measurement& measurement) {
-            measurements.push_back(measurement);
-        }
+Sensor:: void setSensorID(const int &id){
+    sensorID = id;
+}
+Sensor:: void setLocation(const Coord &loc){
+    location = loc;
+}
+Sensor:: void setStatus(const bool &stat){
+    status = stat;
+}
+void Sensor::addMeasurement(const Measurement& measurement) {
+    measurements.push_back(measurement);
+}
 

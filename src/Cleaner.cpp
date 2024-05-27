@@ -40,8 +40,8 @@ Cleaner::Cleaner(string data) {
     location = Coord(lat, lng);
 
     // Start + end Time
-    startTime = Time(); startTime.setTime(values[3]);
-    endTime = Time(); endTime.setTime(values[4]);
+    startTime = Time(values[3]);
+    endTime = Time(values[4]);
 }
 
 Cleaner::~Cleaner() {
