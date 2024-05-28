@@ -26,7 +26,7 @@ public:
 
     double calculateQuality(const map<int, vector<Measurement>> &measurements);
 
-    map<double, Sensor> sortSensors(map<int, Sensor> sensors, const Coord &coord); // a voir si `sensors` peut être en const
+    multimap<double, Sensor> sortSensors(map<int, Sensor> sensors, const Coord &coord); // a voir si `sensors` peut être en const
 
     Service();
     Service(const System &system);

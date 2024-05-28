@@ -1,5 +1,6 @@
 using namespace std;
 #include <cmath>
+#include <iomanip>
 #include <iterator>
 #include <iostream>
 #include <map>
@@ -57,29 +58,34 @@ multimap<double,int> Service ::getSimilarZones(const int &sensorID, const Time &
     multimap<double,int> similarSensors;
     map<int,Sensor> sensors = system.getSensors();
     map<int,vector<Measurement>> measurements = system.getMeasurements();
-    map<int,vector<Measurement>> filteredMeasurements = this.filterMeasurements(start, end,  measurements);
-    double parameterQuality = this.calculateQuality( filteredMeasurements[sensorID]);
+    map<int,vector<Measurement>> filteredMeasurements = this->filterMeasurements(start, end,  measurements);
+    map<int, vector<Measurement>> filteredMeasurementsSensor;
+    filteredMeasurementsSensor[sensorID] = filteredMeasurements[sensorID];
+
+    double parameterQuality = this->calculateQuality(filteredMeasurementsSensor);
 
     for (auto it = filteredMeasurements.begin(); it != filteredMeasurements.end(); ++it){
-        double sensorQuality = this.calculateQuality(it->second);
+        map<int, vector<Measurement>> filteredMeasurementsSensor;
+        filteredMeasurementsSensor[sensorID] = filteredMeasurements[it->first];
+        double sensorQuality = this->calculateQuality(filteredMeasurementsSensor);
         if (sensorQuality<= parameterQuality+delta && sensorQuality>= parameterQuality-delta){
             double qualityDifference = sensorQuality - parameterQuality;
             if (sensorQuality<parameterQuality){
                 qualityDifference = parameterQuality - sensorQuality;
             }
-            similarSensors[qualityDifference] = it->first;
+            similarSensors.insert(pair<double, int>(qualityDifference, it->first));
         }
     }
     return similarSensors;
 }
-
-multimap<double, Sensor> sortSensors(vector<Sensor> sensors, const Coord &coord){
+//(vector<Sensor> sensors, const Coord &coord) 
+multimap<double, Sensor> Service ::sortSensors(map<int, Sensor> sensors, const Coord &coord){
     System system;
     multimap<double, Sensor> sortedSensors;
     map<int,Sensor> sensors = system.getSensors();
     for (auto it = sensors.begin(); it != sensors.end(); ++it){
-        double distance = this.distance(it->second.getCoord(), coord);
-        sortedSensors[distance] = it->second;
+        double distance = this->distance(it->second.getLocation(), coord);
+        sortedSensors.insert(pair<double, Sensor>(distance, it->second));
     }
     return sortedSensors;
 }
@@ -114,7 +120,7 @@ double Service::calculateImpactRadius(const int &cleanerId)
     map<int, vector<Measurement>> measurements = system.getMeasurements();
 
     // Trier les capteurs par distance par rapport aux coordonnées du cleaner
-    map<double, Sensor> sortedSensors = sortSensors(sensors, cleanerCoord);
+    multimap<double, Sensor> sortedSensors = sortSensors(sensors, cleanerCoord);
 
     Time before_start(start.getYear(),start.getMonth(),start.getDay()-1,start.getHour(),start.getMinute(),start.getSecond());
     Time before_end(end.getYear(),end.getMonth(),end.getDay()-1,end.getHour(),end.getMinute(),end.getSecond());;
