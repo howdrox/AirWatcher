@@ -135,14 +135,14 @@ double Service::calculateImpactRadius(const int &cleanerId)
         map<int, vector<Measurement>> beforeMeasurements = filterMeasurements(before_start, start, sensorMeasurements);
         map<int, vector<Measurement>> afterMeasurements = filterMeasurements(before_end, end, sensorMeasurements);
 
-        double sensorBeforeQuality = calculateQuality(beforeMeasurements);
-        double sensorAfterQuality = calculateQuality(afterMeasurements);
+        double qualityBeforeCleaner = calculateQuality(beforeMeasurements);
+        double qualityAfterCleaner = calculateQuality(afterMeasurements);
 
-        if (sensorAfterQuality < sensorBeforeQuality) {
+        if (qualityAfterCleaner >= qualityBeforeCleaner) {
             impactRadius = distance;
-            break;
+        }else{
+             break;
         }
-
     }
 
     return impactRadius;
