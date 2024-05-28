@@ -9,14 +9,14 @@ using namespace std;
 class User
 {
 public:
-    string get_role() const;
+    Role getRole() const;
 
     // Méthode virtuelle pure rendant la classe abstraite
     virtual void printDetails() const = 0;
 
     User(const User &unuser);
 
-    User(const Role &leRole) : role(leRole) {}
+    User(const Role &leRole);
 
     virtual ~User();
 

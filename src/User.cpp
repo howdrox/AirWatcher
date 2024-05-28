@@ -1,6 +1,6 @@
 #include "User.h"
 
-User::User(Role userRole) : role(userRole) {
+User::User(const Role &leRole)  : role(leRole) {
     #ifdef MAP
         cout << "Appel au constructeur de <user>" << endl;
     #endif 
