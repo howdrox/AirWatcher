@@ -9,7 +9,7 @@ class Sensor
 {
 public:
     Sensor(int sensorID, Coord location);
-    Sensor(string &sensorLine);
+    Sensor(const string &sensorLine);
 
     const int getSensorID();
     const Coord getLocation();

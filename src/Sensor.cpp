@@ -17,7 +17,7 @@ Sensor::Sensor(const int id, const Coord loc)
     location.longitude = loc.longitude;
 }
 
-Sensor::Sensor(string &sensorLine)
+Sensor::Sensor(const string &sensorLine)
 {
 #ifdef MAP
     cout << "Appel au constructeur de <Sensor>" << endl;
