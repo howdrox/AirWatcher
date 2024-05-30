@@ -6,6 +6,10 @@ using namespace std;
 #include "Coord.h"
 #include "System.h"
 
+Service::Service(const string sensorsFilePath,const string cleanersFilePath,const string usersFilePath,const string measurementsFilePath){
+    system = System(sensorsFilePath,cleanersFilePath,usersFilePath,measurementsFilePath);
+}
+
 double Service::distance(const Coord &coord1, const Coord &coord2)
 {
     const double R = 6371.0; // Radius of the Earth in kilometers
@@ -51,7 +55,7 @@ map<int, vector<Measurement> > Service::filterMeasurements(const Time &start, co
     return res;
 } 
 multimap<double,int> Service ::getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta){
-    System system;
+
     multimap<double,int> similarSensors;
     map<int,Sensor> sensors = system.getSensors();
     map<int,vector<Measurement>> measurements = system.getMeasurements();

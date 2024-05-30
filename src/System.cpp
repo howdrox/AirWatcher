@@ -4,7 +4,7 @@
 #include "System.h"
 using namespace std;
 
-System::System(string sensorsFilePath,string cleanersFilePath,string usersFilePath,string measurementsFilePath)
+System::System(const string sensorsFilePath,const string cleanersFilePath,const string usersFilePath,const string measurementsFilePath)
 {
 #ifdef MAP
     cout << "Appel au constructeur de <System>" << endl;

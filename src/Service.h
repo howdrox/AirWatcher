@@ -34,7 +34,7 @@ public:
 
     Service();
 
-    Service(const System &system);
+    Service(const string sensorsFilePath,const string cleanersFilePath,const string usersFilePath,const string measurementsFilePath);
 
     virtual ~Service();
 
