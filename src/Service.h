@@ -23,13 +23,12 @@ public:
     double calculateImpactRadius(const int &cleanerId);
     double distance(const Coord &coord1, const Coord &coord2);
     multimap<double, int> getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta);
-
     double calculateQuality(const map<int, vector<Measurement>> &measurements);
 
     multimap<double, Sensor> sortSensors(map<int, Sensor> sensors, const Coord &coord); // a voir si `sensors` peut être en const
 
     Service();
-    Service(const System &system);
+    Service(const System &sys) : system(sys) {}
 
     virtual ~Service();
 
@@ -38,6 +37,7 @@ private:
 
     int calculateSubIndex(const double& value, const std::string &pollutant) const;
     double average(const vector<double> &v);
+    bool isInZone(const Coord c, const Zone z);
 };
 
 #endif // SERVICE_H
