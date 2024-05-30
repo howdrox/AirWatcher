@@ -4,12 +4,12 @@
 
 #include "System.h"
 #include "Cleaner.h"
-#include "User.h"
+#include "PrivateUser.h"
 #include "Measurement.h"
 
 using namespace std;
 
-System::System(string sensorsFilePath,string cleanersFilePath,string usersFilePath,string measurementsFilePath)
+System::System(string sensorsFilePath, string cleanersFilePath, string usersFilePath, string measurementsFilePath)
 {
 #ifdef MAP
     cout << "Appel au constructeur de <System>" << endl;
@@ -57,8 +57,8 @@ System::System(string sensorsFilePath,string cleanersFilePath,string usersFilePa
     string userLine;
     while (getline(usersFile, userLine))
     {
-        User user(userLine);
-        users.push_back(user);
+        PrivateUser privateUser(userLine);   // Create an instance of the derived class PrivateUser
+        privateUsers.push_back(privateUser); // Add the instance to the vector
     }
 
     usersFile.close();
@@ -74,11 +74,12 @@ System::System(string sensorsFilePath,string cleanersFilePath,string usersFilePa
     while (getline(measurementsFile, measurementLine))
     {
         Measurement measurement(measurementLine);
-        measurements[measurement.getSensorID()]=measurement;
+        measurements[measurement.getSensorID()].push_back(measurement);
     }
 
     usersFile.close();
 }
+
 System::~System() {}
 
 const vector<Cleaner> &System::getCleaners()
@@ -94,9 +95,9 @@ const map<int, vector<Measurement>> &System::getMeasurements()
 {
     return measurements;
 }
-const vector<User> &System::getUsers()
+const vector<PrivateUser> &System::getUsers()
 {
-    return users;
+    return privateUsers;
 }
 
 void System::addMeasurement(const Measurement &measurement)
@@ -105,11 +106,9 @@ void System::addMeasurement(const Measurement &measurement)
     // measurements[measurement.getSensorID()] = measurement;
 }
 void System::addCleaner(const Cleaner &cleaner)
-void System::addCleaner(const Cleaner &cleaner)
 {
     cleaners.push_back(cleaner);
 }
-void System::addSensor(const Sensor &sensor)
 void System::addSensor(const Sensor &sensor)
 {
     // To change
