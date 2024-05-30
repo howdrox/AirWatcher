@@ -1,20 +1,21 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
-#include "Measurement.h"
 #include <vector>
 #include <string>
+
+#include "Coord.h"
+#include "Measurement.h"
 
 class Sensor
 {
 public:
-    Sensor(int sensorID, Coord location);
+    Sensor(int sensorID = 0, Coord location = Coord());
     Sensor(const string &sensorLine);
 
-    const int getSensorID();
-    const Coord getLocation();
-    const bool getStauts();
-    const vector<Measurement> &getMeasurements();
+    int getSensorID() const { return sensorID; }
+    const Coord getLocation() const { return location; }
+    const vector<Measurement> &getMeasurements() const { return measurements; }
 
     void setSensorID(const int &id);
     void setLocation(const Coord &loc);

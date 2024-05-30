@@ -2,6 +2,7 @@
 #include <string>
 #include <cstring>
 #include <sstream>
+
 #include "Sensor.h"
 #include "Coord.h"
 
@@ -44,21 +45,6 @@ Sensor::~Sensor()
 #ifdef MAP
     cout << "Appel au destructeur de <Sensor>" << endl;
 #endif
-}
-
-const int Sensor::getSensorID()
-{
-    return sensorID;
-}
-
-const Coord Sensor::getLocation()
-{
-    return location;
-}
-
-const vector<Measurement> &Sensor::getMeasurements()
-{
-    return measurements;
 }
 
 void Sensor::setSensorID(const int &id)

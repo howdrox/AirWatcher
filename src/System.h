@@ -22,7 +22,7 @@ public:
     void addMeasurement(const Measurement &measurement);
     void addCleaner(const Cleaner &cleaner);
     void addSensor(const Sensor &sensor);
-    void addUser(const User &measurement);
+    void addUser(const PrivateUser &privateUser);
 
 protected:
     vector<PrivateUser> privateUsers;

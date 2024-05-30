@@ -1,8 +1,9 @@
-#if !defined(Time_H)
+#ifndef Time_H
 #define Time_H
 
 #include <iostream>
 #include <string>
+
 using namespace std;
 
 class Time
@@ -15,17 +16,18 @@ public:
     int getMinute() const;
     int getSecond() const;
 
-    bool isSameHour(const Time&time) const;
+    bool isSameHour(const Time &time) const;
 
     bool operator<(const Time &date) const;
     bool operator>(const Time &date) const;
     bool operator<=(const Time &date) const;
     bool operator>=(const Time &date) const;
 
-    Time(const Time &date);
+    Time &operator=(const Time &other);
+
+    Time(int yy = 0, int MM = 0, int dd = 0, int hh = 0, int mm = 0, int ss = 0);
     Time(const string &data);
-    Time(int yy, int MM, int dd, int hh, int mm, int ss);
-    Time();
+    Time(const Time &date);
 
     virtual ~Time();
 

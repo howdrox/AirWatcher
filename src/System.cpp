@@ -9,6 +9,8 @@
 
 using namespace std;
 
+System::System() {}
+
 System::System(const string &sensorsFilePath, const string &cleanersFilePath, const string &usersFilePath, const string &measurementsFilePath)
 {
 #ifdef MAP
@@ -100,10 +102,9 @@ const vector<PrivateUser> &System::getUsers()
     return privateUsers;
 }
 
-void System::addMeasurement(const Measurement &measurement)
+void System::addMeasurement(const Measurement &m)
 {
-    // To change
-    // measurements[measurement.getSensorID()] = measurement;
+    (void)m;
 }
 
 void System::addCleaner(const Cleaner &cleaner)
@@ -113,12 +114,10 @@ void System::addCleaner(const Cleaner &cleaner)
 
 void System::addSensor(const Sensor &sensor)
 {
-    // To change
-    // sensors.push_back(sensor);
+    (void)sensor;
 }
 
-void System::addMeasurement(const Measurement &m)
+void System::addUser(const PrivateUser &p)
 {
-    // To change
-    // users.push_back(m);
+    privateUsers.push_back(p);
 }
