@@ -8,7 +8,7 @@
 class Sensor
 {
 public:
-    Sensor(int sensorID, Coord location, bool status);
+    Sensor(int sensorID, Coord location);
     Sensor(string &sensorLine);
 
     const int getSensorID();
@@ -16,17 +16,15 @@ public:
     const bool getStauts();
     const vector<Measurement> &getMeasurements();
 
-    void setSensorID(const int id);
-    void setLocation(const Coord loc);
-    void setStatus(const bool stat);
-    void addMeasurement(Measurement measurement);
+    void setSensorID(const int &id);
+    void setLocation(const Coord &loc);
+    void addMeasurement(const Measurement &measurement);
 
     ~Sensor();
 
 protected:
     int sensorID;
     Coord location;
-    bool status;
     vector<Measurement> measurements;
 };
 
