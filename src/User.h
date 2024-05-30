@@ -10,8 +10,6 @@ class User
 public:
     Role getRole() const;
 
-    virtual void printDetails() const = 0;
-
     User(const Role &r);
     User(const User &user);
     virtual ~User();
