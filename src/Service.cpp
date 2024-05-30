@@ -326,3 +326,10 @@ double Service::average(const vector<double> &v) {
     }
     return sum / v.size();
 }
+
+/**
+ * @brief Construct a new Service:: Service object
+ * 
+ * @param system 
+ */
+Service::Service(const System &s) : system(s) {}

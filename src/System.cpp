@@ -9,7 +9,7 @@
 
 using namespace std;
 
-System::System(string sensorsFilePath,string cleanersFilePath,string usersFilePath,string measurementsFilePath)
+System::System(const string &sensorsFilePath, const string &cleanersFilePath, const string &usersFilePath, const string &measurementsFilePath)
 {
 #ifdef MAP
     cout << "Appel au constructeur de <System>" << endl;
@@ -104,12 +104,12 @@ void System::addMeasurement(const Measurement &measurement)
     // To change
     // measurements[measurement.getSensorID()] = measurement;
 }
-void System::addCleaner(const Cleaner &cleaner)
+
 void System::addCleaner(const Cleaner &cleaner)
 {
     cleaners.push_back(cleaner);
 }
-void System::addSensor(const Sensor &sensor)
+
 void System::addSensor(const Sensor &sensor)
 {
     // To change

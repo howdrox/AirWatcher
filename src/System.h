@@ -14,12 +14,13 @@ class System{
     public:
         
         System();
+        System(const string &sensorsFilePath, const string &cleanersFilePath, const string &usersFilePath, const string &measurementsFilePath);
         ~System();
 
-    const map<int, vector<Measurement>> &getMeasurements();
-    const vector<Cleaner> &getCleaners();
-    const map<int, Sensor> &getSensors();
-    const vector<User> &getUsers();
+        const map<int, vector<Measurement>> &getMeasurements();
+        const vector<Cleaner> &getCleaners();
+        const map<int, Sensor> &getSensors();
+        const vector<User> &getUsers();
 
         void addMeasurement(const Measurement &measurement);
         void addCleaner(const Cleaner &cleaner);
