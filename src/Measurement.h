@@ -7,8 +7,12 @@
 class Measurement
 {
 public:
+    Measurement(const string &);
     Measurement(int id, const Time &time, int sensor, const std::string &attrID, double val, bool black)
         : measurementID(id), timestamp(time), sensorID(sensor), attributeID(attrID), value(val), blacklisted(black) {}
+    Measurement(const Measurement &m)
+        : measurementID(m.measurementID), timestamp(m.timestamp), sensorID(m.sensorID), attributeID(m.attributeID), value(m.value), blacklisted(m.blacklisted) {}
+    virtual ~Measurement() {}
 
     int getMeasurementID() const { return measurementID; }
     Time getTimestamp() const { return timestamp; }
@@ -16,11 +20,6 @@ public:
     std::string getAttributeID() const { return attributeID; }
     double getValue() const { return value; }
     bool isBlacklisted() const { return blacklisted; }
-
-    Measurement(const Measurement &m)
-        : measurementID(m.measurementID), timestamp(m.timestamp), sensorID(m.sensorID), attributeID(m.attributeID), value(m.value), blacklisted(m.blacklisted) {}
-
-    virtual ~Measurement() {}
 
 protected:
     int measurementID;
