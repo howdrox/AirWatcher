@@ -4,34 +4,42 @@ using namespace std;
 #include <vector>
 
 #include "Cleaner.h"
+// #include "Time.h"
+// #include "Coord.h"
 
-int Cleaner::getCleanerId() const {
+int Cleaner::getCleanerId() const
+{
     return cleanerID;
 }
 
-Coord Cleaner::getCoord() const {
+Coord Cleaner::getCoord() const
+{
     return location;
 }
 
-Time Cleaner::getStartTime() const {
+Time Cleaner::getStartTime() const
+{
     return startTime;
 }
 
-Time Cleaner::getEndTime() const {
+Time Cleaner::getEndTime() const
+{
     return endTime;
 }
 
-Cleaner::Cleaner(string data) {
+Cleaner::Cleaner(string data)
+{
     vector<string> values;
     stringstream ss(data);
     string item;
-    
-    while (getline(ss, item, ';')) {
+
+    while (getline(ss, item, ';'))
+    {
         values.push_back(item);
     }
 
     // Id
-    string idStr = values[0].substr(7); // take only the number value in value[0], example: 'Cleaner0' --> '0' 
+    string idStr = values[0].substr(7); // take only the number value in value[0], example: 'Cleaner0' --> '0'
     cleanerID = stoi(idStr);
 
     // Location
@@ -44,7 +52,6 @@ Cleaner::Cleaner(string data) {
     endTime = Time(values[4]);
 }
 
-Cleaner::~Cleaner() {
-    
+Cleaner::~Cleaner()
+{
 }
-

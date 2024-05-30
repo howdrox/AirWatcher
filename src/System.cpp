@@ -1,10 +1,17 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
+
 #include "System.h"
+#include "Cleaner.h"
+#include "PrivateUser.h"
+#include "Measurement.h"
+
 using namespace std;
 
-System::System(const string sensorsFilePath,const string cleanersFilePath,const string usersFilePath,const string measurementsFilePath)
+System::System() {}
+
+System::System(const string &sensorsFilePath, const string &cleanersFilePath, const string &usersFilePath, const string &measurementsFilePath)
 {
 #ifdef MAP
     cout << "Appel au constructeur de <System>" << endl;
@@ -21,7 +28,7 @@ System::System(const string sensorsFilePath,const string cleanersFilePath,const 
     while (getline(sensorsFile, sensorLine))
     {
         Sensor sensor(sensorLine);
-        sensors[sensor.getSensorID()]=sensor;
+        sensors[sensor.getSensorID()] = sensor;
     }
 
     sensorsFile.close();
@@ -52,8 +59,8 @@ System::System(const string sensorsFilePath,const string cleanersFilePath,const 
     string userLine;
     while (getline(usersFile, userLine))
     {
-        User user(userLine);
-        users.push_back(user);
+        PrivateUser privateUser(userLine);   // Create an instance of the derived class PrivateUser
+        privateUsers.push_back(privateUser); // Add the instance to the vector
     }
 
     usersFile.close();
@@ -69,47 +76,48 @@ System::System(const string sensorsFilePath,const string cleanersFilePath,const 
     while (getline(measurementsFile, measurementLine))
     {
         Measurement measurement(measurementLine);
-        measurements[measurement.getSensorID()]=measurement;
+        measurements[measurement.getSensorID()].push_back(measurement);
     }
 
     usersFile.close();
-
 }
+
 System::~System() {}
 
-
-
-const System::vector<Cleaner> &getCleaners()
+const vector<Cleaner> &System::getCleaners()
 {
     return cleaners;
 }
 
-const System::vector<Sensor> &getSensors()
+const map<int, Sensor> &System::getSensors()
 {
     return sensors;
 }
-const System::map<int, vector<Measurement>> &getMeasurements()
+const map<int, vector<Measurement>> &System::getMeasurements()
 {
     return measurements;
 }
-const System::vector<User> &getUsers()
+const vector<PrivateUser> &System::getUsers()
 {
-    return users;
+    return privateUsers;
 }
 
-System::void addMeasurement(consr Measurement &measurement)
+void System::addMeasurement(const Measurement &m)
 {
-    measurements[measurement.getSensorID()].push_back(measurement);
+    (void)m;
 }
-System::void addCleaner(const Cleaner &cleaner)
+
+void System::addCleaner(const Cleaner &cleaner)
 {
     cleaners.push_back(cleaner);
 }
-System::void addSensor(const Sensor &sensor)
+
+void System::addSensor(const Sensor &sensor)
 {
-    sensors.push_back(sensor);
+    (void)sensor;
 }
-System::void addMeasurement(const User &user)
+
+void System::addUser(const PrivateUser &p)
 {
-    users.push_back(user);
+    privateUsers.push_back(p);
 }

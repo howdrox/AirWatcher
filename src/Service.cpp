@@ -1,7 +1,10 @@
 using namespace std;
-#include <iostream>
 #include <cmath>
+#include <iomanip>
+#include <iterator>
+#include <iostream>
 #include <map>
+
 #include "Service.h"
 #include "Coord.h"
 #include "System.h"
@@ -10,6 +13,17 @@ Service::Service(const string sensorsFilePath,const string cleanersFilePath,cons
     system = System(sensorsFilePath,cleanersFilePath,usersFilePath,measurementsFilePath);
 }
 
+Service::Service(const string sensorsFilePath,const string cleanersFilePath,const string usersFilePath,const string measurementsFilePath){
+    system = System(sensorsFilePath,cleanersFilePath,usersFilePath,measurementsFilePath);
+}
+
+/**
+ * @brief calculates the distance between two coordinates
+ *
+ * @param coord1
+ * @param coord2
+ * @return double
+ */
 double Service::distance(const Coord &coord1, const Coord &coord2)
 {
     const double R = 6371.0; // Radius of the Earth in kilometers
@@ -35,21 +49,25 @@ double Service::distance(const Coord &coord1, const Coord &coord2)
     return distance;
 }
 
-map<int, vector<Measurement> > Service::filterMeasurements(const Time &start, const Time &end, map<int, vector<Measurement> > measurements) {
-    map<int, vector<Measurement> > res;
-    map<int, vector<Measurement> >::iterator itr;
-    for (itr = measurements.begin(); itr != measurements.end(); ++itr) {
+map<int, vector<Measurement>> Service::filterMeasurements(const Time &start, const Time &end, map<int, vector<Measurement>> measurements)
+{
+    map<int, vector<Measurement>> res;
+    map<int, vector<Measurement>>::iterator itr;
+    for (itr = measurements.begin(); itr != measurements.end(); ++itr)
+    {
         // Key : itr->first
         // Value : itr->second
         vector<Measurement> measurementList = itr->second;
         vector<Measurement> filteredList;
-        for (int i = 0; i < measurementList.size(); i++) {
+        for (int i = 0; i < (int)measurementList.size(); i++)
+        {
             Measurement m = measurementList[i];
             Time measureTime = m.getTimestamp();
-            if (start < measureTime && measureTime < end) {
+            if (start < measureTime && measureTime < end)
+            {
                 filteredList.push_back(m);
             }
-        } 
+        }
         res[itr->first] = filteredList;
     }
     return res;
@@ -62,102 +80,99 @@ multimap<double,int> Service ::getSimilarZones(const int &sensorID, const Time &
     map<int,vector<Measurement>> filteredMeasurements = this.filterMeasurements(start, end,  measurements);
     double parameterQuality = this.calculateQuality( filteredMeasurements[sensorID]);
 
-    for (auto it = filteredMeasurements.begin(); it != filteredMeasurements.end(); ++it){
-        double sensorQuality = this.calculateQuality(it->second);
-        if (sensorQuality<= parameterQuality+delta && sensorQuality>= parameterQuality-delta){
+    for (auto it = filteredMeasurements.begin(); it != filteredMeasurements.end(); ++it)
+    {
+        map<int, vector<Measurement>> filteredMeasurementsSensor;
+        filteredMeasurementsSensor[sensorID] = filteredMeasurements[it->first];
+        double sensorQuality = this->calculateQuality(filteredMeasurementsSensor);
+        if (sensorQuality <= parameterQuality + delta && sensorQuality >= parameterQuality - delta)
+        {
             double qualityDifference = sensorQuality - parameterQuality;
-            if (sensorQuality<parameterQuality){
+            if (sensorQuality < parameterQuality)
+            {
                 qualityDifference = parameterQuality - sensorQuality;
             }
-            similarSensors[qualityDifference] = it->first;
+            similarSensors.insert(pair<double, int>(qualityDifference, it->first));
         }
     }
     return similarSensors;
 }
 
-multimap<double, Sensor> sortSensors(vector<Sensor> sensors, const Coord &coord){
+multimap<double, Sensor> Service::sortSensors(map<int, Sensor> sensors, const Coord &coord)
+{
     System system;
     multimap<double, Sensor> sortedSensors;
-    map<int,Sensor> sensors = system.getSensors();
-    for (auto it = sensors.begin(); it != sensors.end(); ++it){
-        double distance = this.distance(it->second.getCoord(), coord);
-        sortedSensors[distance] = it->second;
+
+    for (auto it = sensors.begin(); it != sensors.end(); ++it)
+    {
+        double distance = this->distance(it->second.getLocation(), coord);
+        sortedSensors.insert(pair<double, Sensor>(distance, it->second));
     }
     return sortedSensors;
 }
 
-
-
-
-}
-
-
 double Service::calculateImpactRadius(const int &cleanerId)
 {
-    const vector<Cleaner>& cleaners = system.getCleaners();
+    const vector<Cleaner> &cleaners = system.getCleaners();
 
     // Vérifier si cleanerId est dans la liste des nettoyeurs
     Coord cleanerCoord;
     Time start;
     Time end;
     bool cleanerFound = false;
-    for (const Cleaner& c : cleaners) {
-        if (c.getCleanerId() == cleanerId) {
+    for (const Cleaner &c : cleaners)
+    {
+        if (c.getCleanerId() == cleanerId)
+        {
             cleanerCoord = c.getCoord();
-            start=c.getStartTime();
-            end=c.getEndTime();
+            start = c.getStartTime();
+            end = c.getEndTime();
             cleanerFound = true;
             break;
         }
     }
 
-    if (!cleanerFound) {
+    if (!cleanerFound)
+    {
         throw invalid_argument("Cleaner ID not found");
     }
 
-    map<int ,Sensor> sensors = system.getSensors();
-    map<int, Measurement> measurements = system.getMeasurements();
+    map<int, Sensor> sensors = system.getSensors();
+    map<int, vector<Measurement>> measurements = system.getMeasurements();
 
     // Trier les capteurs par distance par rapport aux coordonnées du cleaner
-    map<double, Sensor> sortedSensors = sortSensors(sensors, cleanerCoord);
+    multimap<double, Sensor> sortedSensors = sortSensors(sensors, cleanerCoord);
 
-    Time before_start(start.getYear(),start.getMonth(),start.getDay()-1,start.getHour(),start.getMinute(),start.getSecond());
-    Time before_end(end.getYear(),end.getMonth(),end.getDay()-1,end.getHour(),end.getMinute(),end.getSecond());;
-
-    // Filtrer les mesures pour les temps avant et après l'installation du cleaner
-    map<int, Measurement> beforeMeasurements = filterMeasurements(before_start, start, measurements);
-    map<int, Measurement> afterMeasurements = filterMeasurements(before_end, end, measurements);
-
-    double beforeQuality = calculateQuality(beforeMeasurements);
-    double afterQuality = calculateQuality(afterMeasurements);
+    Time before_start(start.getYear(), start.getMonth(), start.getDay() - 1, start.getHour(), start.getMinute(), start.getSecond());
+    Time before_end(end.getYear(), end.getMonth(), end.getDay() - 1, end.getHour(), end.getMinute(), end.getSecond());
+    ;
 
     double impactRadius = 0.0;
 
-    for (const auto& pair : sortedSensors) {
+    for (const auto &pair : sortedSensors)
+    {
         double distance = pair.first;
         Sensor sensor = pair.second;
 
         // Filtrer les mesures pour ce capteur particulier
-        map<int, Measurement> sensorBeforeMeasurements;
-        map<int, Measurement> sensorAfterMeasurements;
+        map<int, vector<Measurement>> sensorMeasurements;
 
-        for (const auto& measurement : beforeMeasurements) {
-            if (measurement.second.getSensorId() == sensor.getId()) {
-                sensorBeforeMeasurements[measurement.first] = measurement.second;
-            }
+        for (const auto &measurement : sensor.getMeasurements())
+        {
+            sensorMeasurements[sensor.getSensorID()].push_back(measurement);
         }
+        map<int, vector<Measurement>> beforeMeasurements = filterMeasurements(before_start, start, sensorMeasurements);
+        map<int, vector<Measurement>> afterMeasurements = filterMeasurements(before_end, end, sensorMeasurements);
 
-        for (const auto& measurement : afterMeasurements) {
-            if (measurement.second.getSensorId() == sensor.getId()) {
-                sensorAfterMeasurements[measurement.first] = measurement.second;
-            }
-        }
+        double qualityBeforeCleaner = calculateQuality(beforeMeasurements);
+        double qualityAfterCleaner = calculateQuality(afterMeasurements);
 
-        double sensorBeforeQuality = calculateQuality(sensorBeforeMeasurements);
-        double sensorAfterQuality = calculateQuality(sensorAfterMeasurements);
-
-        if (sensorAfterQuality < sensorBeforeQuality) {
+        if (qualityAfterCleaner >= qualityBeforeCleaner)
+        {
             impactRadius = distance;
+        }
+        else
+        {
             break;
         }
     }
@@ -166,49 +181,129 @@ double Service::calculateImpactRadius(const int &cleanerId)
 
     // Si cleanerId n'est pas trouvé, lancer une exception
     throw invalid_argument("Cleaner ID not found");
-    
 }
 
-// map<int, vector<Measurement>> measurements;
-
+/**
+ * @brief Calculates the ATMO for all the measurements in the specified zone and during the specified time
+ *
+ * @param zone
+ * @param start
+ * @param end
+ * @return double
+ */
 double Service::calculateQuality(const Zone &zone, const Time &start, const Time &end)
 {
-    map<string, vector<double>> polluantMaxValues;
-    map<string, Time> polluantLastTime;
+    map<string, vector<double>> pollutantMaxValues;
+    map<string, Time> pollutantLastTime;
+    pollutantLastTime["O3"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["NO2"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["SO2"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["PM10"] = Time(0, 0, 0, 0, 0, 0);
 
-    for (const auto &sensorData : system.measurements)
+    for (const auto &sensorData : system.getMeasurements())
     {
         for (const auto &measurement : sensorData.second)
         {
+            // Check if measurement falls within the specified time range
             if (measurement.getTimestamp() >= start && measurement.getTimestamp() <= end && !measurement.isBlacklisted())
             {
-                string attr = measurement.getAttributeID();
-                double val = measurement.getValue();
-                
-                pollutantMaxValues[attr].push_back(val);
+                // Check if measurement falls within the specified zone
+                map<int, Sensor> s = system.getSensors();
+                if (isInZone(s[measurement.getSensorID()].getLocation(), zone))
+                {
+                    string attr = measurement.getAttributeID();
+                    double val = measurement.getValue();
+
+                    if (pollutantLastTime[attr].isSameHour(measurement.getTimestamp()))
+                    {
+                        if (val > pollutantMaxValues[attr].back())
+                        {
+                            pollutantMaxValues[attr].back() = val;
+                        }
+                    }
+                    else
+                    {
+                        pollutantMaxValues[attr].push_back(val);
+                    }
+                }
             }
         }
     }
 
-    // Calculate averages
-    double avgPM10 = pm10Values["PM10"] / 24.0; // Assuming 24-hour day
-
     // Get maximum values for pollutants
-    double maxO3 = !pollutantMaxValues["O3"].empty() ? *max_element(pollutantMaxValues["O3"].begin(), pollutantMaxValues["O3"].end()) : 0;
-    double maxNO2 = !pollutantMaxValues["NO2"].empty() ? *max_element(pollutantMaxValues["NO2"].begin(), pollutantMaxValues["NO2"].end()) : 0;
-    double maxSO2 = !pollutantMaxValues["SO2"].empty() ? *max_element(pollutantMaxValues["SO2"].begin(), pollutantMaxValues["SO2"].end()) : 0;
+    double avgO3 = !pollutantMaxValues["O3"].empty() ? average(pollutantMaxValues["O3"]) : 0;
+    double avgNO2 = !pollutantMaxValues["NO2"].empty() ? average(pollutantMaxValues["NO2"]) : 0;
+    double avgSO2 = !pollutantMaxValues["SO2"].empty() ? average(pollutantMaxValues["SO2"]) : 0;
+    double avgPM10 = !pollutantMaxValues["PM10"].empty() ? average(pollutantMaxValues["PM10"]) : 0;
 
     // Calculate sub-indices
-    int indexO3 = calculateSubIndex(maxO3, "O3");
-    int indexNO2 = calculateSubIndex(maxNO2, "NO2");
-    int indexSO2 = calculateSubIndex(maxSO2, "SO2");
+    int indexO3 = calculateSubIndex(avgO3, "O3");
+    int indexNO2 = calculateSubIndex(avgNO2, "NO2");
+    int indexSO2 = calculateSubIndex(avgSO2, "SO2");
     int indexPM10 = calculateSubIndex(avgPM10, "PM10");
 
     // ATMO index is the maximum of the sub-indices
     return max({indexO3, indexNO2, indexSO2, indexPM10});
 }
 
-int Service::calculateSubIndex(double value, const string &pollutant) const
+double Service::calculateQuality(const map<int, vector<Measurement>> &measurements)
+{
+    map<string, vector<double>> pollutantMaxValues;
+    map<string, Time> pollutantLastTime;
+    pollutantLastTime["O3"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["NO2"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["SO2"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["PM10"] = Time(0, 0, 0, 0, 0, 0);
+
+    for (const auto &sensorData : measurements)
+    {
+        for (const auto &measurement : sensorData.second)
+        {
+            // Only consider non-blacklisted measurements
+            if (!measurement.isBlacklisted())
+            {
+                string attr = measurement.getAttributeID();
+                double val = measurement.getValue();
+
+                if (pollutantLastTime[attr].isSameHour(measurement.getTimestamp()))
+                {
+                    if (val > pollutantMaxValues[attr].back())
+                    {
+                        pollutantMaxValues[attr].back() = val;
+                    }
+                }
+                else
+                {
+                    pollutantMaxValues[attr].push_back(val);
+                }
+            }
+        }
+    }
+
+    // Get maximum values for pollutants
+    double avgO3 = !pollutantMaxValues["O3"].empty() ? average(pollutantMaxValues["O3"]) : 0;
+    double avgNO2 = !pollutantMaxValues["NO2"].empty() ? average(pollutantMaxValues["NO2"]) : 0;
+    double avgSO2 = !pollutantMaxValues["SO2"].empty() ? average(pollutantMaxValues["SO2"]) : 0;
+    double avgPM10 = !pollutantMaxValues["PM10"].empty() ? average(pollutantMaxValues["PM10"]) : 0;
+
+    // Calculate sub-indices
+    int indexO3 = calculateSubIndex(avgO3, "O3");
+    int indexNO2 = calculateSubIndex(avgNO2, "NO2");
+    int indexSO2 = calculateSubIndex(avgSO2, "SO2");
+    int indexPM10 = calculateSubIndex(avgPM10, "PM10");
+
+    // ATMO index is the maximum of the sub-indices
+    return max({indexO3, indexNO2, indexSO2, indexPM10});
+}
+
+/**
+ * @brief calculates the index for a particular pollutant
+ *
+ * @param value
+ * @param pollutant
+ * @return int
+ */
+int Service::calculateSubIndex(const double &value, const string &pollutant) const
 {
     if (pollutant == "O3")
     {
@@ -300,3 +395,41 @@ int Service::calculateSubIndex(double value, const string &pollutant) const
     }
     return 0;
 }
+
+/**
+ * @brief calculates the average of a vector<double>
+ *
+ * @param v
+ * @return double
+ */
+double Service::average(const vector<double> &v)
+{
+    double sum = 0;
+
+    for (const auto &i : v)
+    {
+        sum += i;
+    }
+    return sum / v.size();
+}
+
+/**
+ * @brief checks if the coord is inside the zone
+ *
+ * @param c
+ * @param z
+ * @return true
+ * @return false
+ */
+bool Service::isInZone(const Coord c, const Zone z)
+{
+    double d = distance(c, z);
+    return d < z.radius;
+}
+
+// /**
+//  * @brief Construct a new Service:: Service object
+//  *
+//  * @param system
+//  */
+// Service::Service(const System &s) : system(s) {}
