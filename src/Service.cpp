@@ -156,11 +156,8 @@ double Service::calculateImpactRadius(const int &cleanerId)
 
         // Filtrer les mesures pour ce capteur particulier
         map<int, vector<Measurement>> sensorMeasurements;
-
-        for (const auto &measurement : sensor.getMeasurements())
-        {
-            sensorMeasurements[sensor.getSensorID()].push_back(measurement);
-        }
+        sensorMeasurements[sensor.getSensorID()]=sensor.getMeasurements();
+        
         map<int, vector<Measurement>> beforeMeasurements = filterMeasurements(before_start, start, sensorMeasurements);
         map<int, vector<Measurement>> afterMeasurements = filterMeasurements(before_end, end, sensorMeasurements);
 
