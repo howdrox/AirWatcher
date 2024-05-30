@@ -105,10 +105,12 @@ void System::addMeasurement(const Measurement &measurement)
     // To change
     // measurements[measurement.getSensorID()] = measurement;
 }
+
 void System::addCleaner(const Cleaner &cleaner)
 {
     cleaners.push_back(cleaner);
 }
+
 void System::addSensor(const Sensor &sensor)
 {
     // To change
