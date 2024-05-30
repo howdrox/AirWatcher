@@ -6,7 +6,10 @@
 #include <fstream>
 #include <regex>
 #include "Zone.h"
+#include <cstring>
+
 using namespace std;
+
 //Doxygen
 void showMenu() {
     cout << "Menu Options:" << endl;
@@ -35,18 +38,19 @@ int main(){
         cin.ignore(); // To consume the newline character after the choice input
 
         switch (choice) {
-            case 1:
+            case 1:{
                 cout<<"Please enter the cleaner id!"<<endl;
                 int cleanerID;
                 cin>> cleanerID;
                 cin.ignore();
-                long radius = service.calculateImpactRadius(cleanerID);
-                cout<<"The impact radius of the chosen cleaner is "<<radius<<"."<<endl;
+                long cleanedAreaRadius = service.calculateImpactRadius(cleanerID);
+                cout<<"The impact radius of the chosen cleaner is "<<cleanedAreaRadius<<"."<<endl;
                 break;
-            case 2:
+            }
+            case 2:{
                 cout<<"Please enter the cleaner id!"<<endl;
-                int cleanerID;
-                cin>> cleanerID;
+                int sensorID;
+                cin>> sensorID;
                 cin.ignore();
 
                 cout<<"Period selection :(You need to enter two valid timestamps for this)"<<endl;
@@ -76,14 +80,15 @@ int main(){
                 cin.ignore();
                 
                 
-                multimap<double,int> sensors = service.getSimilarZones(cleanerID,start,end,delta);
+                multimap<double,int> sensors = service.getSimilarZones(sensorID,start,end,delta);
                 cout<<"List of similar sensors sorted by the the level of smilarity : "<<endl;
                 for (auto it = sensors.rbegin(); it != sensors.rend(); ++it){
                     cout<<"Sensor id : "<<it->second <<" Air quality difference : "<<it->first<<" ."<<endl;
                     
                 }
                 break;
-            case 3:
+            }
+            case 3:{
                 cout<<"Zone selection :(You need to enter a valid latitude , longitude and radius for this)"<<endl;
                 cout<<"Please enter a latitude :"<<endl;
                 double  latitude,longitude,radius;
@@ -120,6 +125,7 @@ int main(){
                 double quality = service.calculateQuality( zone, start, end);
                 cout<<"The quality of the selected zone and period is : "<<quality<<endl;
                 break;
+            }
             case 4:
                 break;
 
@@ -129,6 +135,8 @@ int main(){
 
         cout << endl;
     } while (choice != 4);
+
+
 
     return 0;
 }
