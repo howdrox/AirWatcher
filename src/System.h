@@ -1,11 +1,13 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
+
+#include <vector>
+#include <map>
+
 #include "PrivateUser.h"
 #include "Sensor.h"
 #include "Measurement.h"
 #include "Cleaner.h"
-#include <vector>
-#include <map>
 
 class System
 {

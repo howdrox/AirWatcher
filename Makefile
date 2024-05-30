@@ -5,7 +5,7 @@ TARGET_DIR := target
 
 # Define compiler and flags
 CXX := g++
-CXXFLAGS := -Wall -Wextra
+CXXFLAGS := -Wall -Wextra -I$(SRC_DIR) # Include the src directory for header files
 LDFLAGS := -lcppunit
 
 # Define target executable

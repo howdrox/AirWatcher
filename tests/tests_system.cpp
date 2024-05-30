@@ -284,6 +284,7 @@ void test_impactPurificateur()
     try
     {
         double result = service.calculateImpactRadius(1);
+        cout << "Result is: " << result << endl;
         cout << "Test with valid cleaner ID: Passed" << endl;
     }
     catch (const exception &e)
@@ -295,6 +296,7 @@ void test_impactPurificateur()
     try
     {
         double result = service.calculateImpactRadius(-1);
+        cout << "Result is: " << result << endl;
         cout << "Test with invalid cleaner ID: Failed (no exception thrown)" << endl;
     }
     catch (const exception &e)

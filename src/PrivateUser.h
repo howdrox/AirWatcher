@@ -1,9 +1,10 @@
 #ifndef PRIVATEUSER_H
 #define PRIVATEUSER_H
 
-#include "User.h" // Pour hériter de la classe User
 #include <string>
 #include <vector>
+
+#include "User.h" // Pour hériter de la classe User
 
 class PrivateUser : public User
 {
