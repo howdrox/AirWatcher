@@ -32,10 +32,10 @@ $(TEST_TARGET): $(TEST_OBJ_FILES)
 
 # Rule to build object files
 $(TARGET_DIR)/%.o: $(SRC_DIR)/%.cpp | $(TARGET_DIR)
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -std=c++11 -fpermissive -o $@ $<
 
 $(TARGET_DIR)/%.o: $(TEST_DIR)/%.cpp | $(TARGET_DIR)
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -std=c++11 -fpermissive -o $@ $<
 
 # Create the build directory if it does not exist
 $(TARGET_DIR):
