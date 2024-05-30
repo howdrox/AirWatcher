@@ -9,6 +9,14 @@ using namespace std;
 #include "Coord.h"
 #include "System.h"
 
+Service::Service(const string sensorsFilePath,const string cleanersFilePath,const string usersFilePath,const string measurementsFilePath){
+    system = System(sensorsFilePath,cleanersFilePath,usersFilePath,measurementsFilePath);
+}
+
+Service::Service(const string sensorsFilePath,const string cleanersFilePath,const string usersFilePath,const string measurementsFilePath){
+    system = System(sensorsFilePath,cleanersFilePath,usersFilePath,measurementsFilePath);
+}
+
 /**
  * @brief calculates the distance between two coordinates
  *
@@ -63,18 +71,14 @@ map<int, vector<Measurement>> Service::filterMeasurements(const Time &start, con
         res[itr->first] = filteredList;
     }
     return res;
-}
-multimap<double, int> Service::getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta)
-{
-    // System system;
-    multimap<double, int> similarSensors;
-    map<int, Sensor> sensors = system.getSensors();
-    map<int, vector<Measurement>> measurements = system.getMeasurements();
-    map<int, vector<Measurement>> filteredMeasurements = this->filterMeasurements(start, end, measurements);
-    map<int, vector<Measurement>> filteredMeasurementsSensor;
-    filteredMeasurementsSensor[sensorID] = filteredMeasurements[sensorID];
+} 
+multimap<double,int> Service ::getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta){
 
-    double parameterQuality = this->calculateQuality(filteredMeasurementsSensor);
+    multimap<double,int> similarSensors;
+    map<int,Sensor> sensors = system.getSensors();
+    map<int,vector<Measurement>> measurements = system.getMeasurements();
+    map<int,vector<Measurement>> filteredMeasurements = this.filterMeasurements(start, end,  measurements);
+    double parameterQuality = this.calculateQuality( filteredMeasurements[sensorID]);
 
     for (auto it = filteredMeasurements.begin(); it != filteredMeasurements.end(); ++it)
     {
