@@ -8,7 +8,7 @@
 class PrivateUser : public User
 {
 public:
-    PrivateUser(const std::string userInfo); // Constructeur prenant une chaîne de caractères en entrée
+    PrivateUser(const std::string& userInfo); // Constructeur prenant une chaîne de caractères en entrée
     ~PrivateUser();                           // Destructeur
 
     int getUserID() const;                        // Getter pour récupérer l'ID de l'utilisateur privé

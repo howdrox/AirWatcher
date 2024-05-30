@@ -11,7 +11,7 @@ class System
 {
 public:
     System();
-    System(string sensorsFilePath, string cleanersFilePath, string usersFilePath, string measurementsFilePath);
+    System(const string &sensorsFilePath, const string &cleanersFilePath, const string &usersFilePath, const string &measurementsFilePath);
     ~System();
 
     const map<int, vector<Measurement>> &getMeasurements();
