@@ -43,6 +43,7 @@ $(TARGET_DIR):
 
 # Clean up build artifacts
 clean:
-	rm -rf $(TARGET_DIR)
+	rm -rf $(TARGET_DIR) $(OBJ_FILES) $(TEST_OBJ_FILES)
 
 .PHONY: all clean
+
