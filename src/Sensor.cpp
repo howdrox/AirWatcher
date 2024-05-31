@@ -64,3 +64,14 @@ void Sensor::addMeasurement(const Measurement &measurement)
 {
     measurements.push_back(measurement);
 }
+
+std::ostream& operator<<(std::ostream& os, const Sensor& sensor) {
+        os << "Sensor ID: " << sensor.sensorID << endl;
+        os << "Latitude: " << sensor.location.latitude << endl;
+        os << "Longitude: " << sensor.location.longitude << endl;;
+        os << "Measurements: ";
+        /*for (const auto& measurement : sensor.measurements) {
+            os << measurement << " ";
+        }*/
+        return os;
+}

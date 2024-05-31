@@ -20,7 +20,7 @@ public:
     void setSensorID(const int &id);
     void setLocation(const Coord &loc);
     void addMeasurement(const Measurement &measurement);
-
+    friend std::ostream& operator<<(std::ostream& os, const Sensor& sensor);
     ~Sensor();
 
 protected:

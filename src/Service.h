@@ -36,6 +36,8 @@ public:
 
     virtual ~Service();
 
+    System &getSystem() {return system;}
+
 private:
     System system;
 

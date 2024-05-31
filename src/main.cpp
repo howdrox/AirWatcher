@@ -8,6 +8,7 @@
 #include "Zone.h"
 #include <cstring>
 
+
 using namespace std;
 
 //Doxygen
@@ -20,15 +21,21 @@ void showMenu() {
     cout << "Enter your choice: ";
 }
 bool isValidDateFormat(const string& date) {
-    // Regex pattern for 'dd/mm/yyyy'
-    const regex pattern("\\d{2}/\\d{2}/\\d{4}");
+    // Regex pattern for 'dd/mm/yyyy hh:mm:ss'
+    const regex pattern(R"(\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}:\d{2})");
     return regex_match(date, pattern);
 }
 
 int main(){
    
     
-    Service service = Service("../data/sensors.csv","../data/cleaners.csv","../data/users.csv","../data/measurements.csv"); // 
+    Service service = Service("data/sensors.csv","data/cleaners.csv","data/users.csv","data/measurements.csv"); 
+    /*map<int,Sensor> sensors= service.getSystem().getSensors();
+     for (auto it = sensors.rbegin(); it != sensors.rend(); ++it){
+                    cout<< it->second <<endl;
+                    
+                }*/
+
     int choice;
     string sensorLine;
 
@@ -48,7 +55,7 @@ int main(){
                 break;
             }
             case 2:{
-                cout<<"Please enter the cleaner id!"<<endl;
+                cout<<"Please enter the sensor id!"<<endl;
                 int sensorID;
                 cin>> sensorID;
                 cin.ignore();
@@ -56,20 +63,30 @@ int main(){
                 cout<<"Period selection :(You need to enter two valid timestamps for this)"<<endl;
                 cout<<"Starting date :(please respect this format : 'dd/mm/yyyy hh:mm:ss'))"<<endl;
                 string startDate,endDate;
-                cin>> startDate;
-                cin.ignore();
-                while (!isValidDateFormat(startDate)){
-                    cout<<"Invalid date format! Please try again"<<endl;
-                    cin>> startDate;
-                    cin.ignore();
+                
+                
+                while (true) {
+                    cout << "Enter a valid date format (dd/mm/yyyy hh:mm:ss):" << endl;
+                    getline(cin, startDate);
+
+                    if (isValidDateFormat(startDate)) {
+                        break; // Exit loop if the date format is valid
+                    } else {
+                        
+                        cout << "Invalid date format! Please try again" << endl;
+                    }
                 }
-                cout<<"Ending date :(please respect this format : 'dd/mm/yyyy dd/mm/yyyy hh:mm:ss'))"<<endl;
-                cin>> endDate;
-                cin.ignore();
-                while (!isValidDateFormat(endDate)){
-                    cout<<"Invalid date format! Please try again"<<endl;
-                    cin>> endDate;
-                    cin.ignore();
+                cout<<"Ending date :(please respect this format : '/dd/mm/yyyy hh:mm:ss'))"<<endl;
+                while (true) {
+                    cout << "Enter a valid date format (dd/mm/yyyy hh:mm:ss):" << endl;
+                    getline(cin, endDate);
+
+                    if (isValidDateFormat(endDate)) {
+                        break; // Exit loop if the date format is valid
+                    } else {
+                        
+                        cout << "Invalid date format! Please try again" << endl;
+                    }
                 }
                 Time start = Time(startDate);
                 Time end = Time(endDate);
@@ -104,21 +121,28 @@ int main(){
 
                 cout<<"Period selection :(You need to enter two valid timestamps for this)"<<endl;
                 cout<<"Starting date :(please respect this format : 'dd/mm/yyyy hh:mm:ss'))"<<endl;
-                string startDate,endDate;
-                cin>> startDate;
-                cin.ignore();
-                while (!isValidDateFormat(startDate)){
-                    cout<<"Invalid date format! Please try again"<<endl;
-                    cin>> startDate;
-                    cin.ignore();
+                while (true) {
+                    cout << "Enter a valid date format (dd/mm/yyyy hh:mm:ss):" << endl;
+                    getline(cin, startDate);
+
+                    if (isValidDateFormat(startDate)) {
+                        break; // Exit loop if the date format is valid
+                    } else {
+                        
+                        cout << "Invalid date format! Please try again" << endl;
+                    }
                 }
-                cout<<"Ending date :(please respect this format : 'dd/mm/yyyy dd/mm/yyyy hh:mm:ss'))"<<endl;
-                cin>> endDate;
-                cin.ignore();
-                while (!isValidDateFormat(endDate)){
-                    cout<<"Invalid date format! Please try again"<<endl;
-                    cin>> endDate;
-                    cin.ignore();
+                cout<<"Ending date :(please respect this format : '/dd/mm/yyyy hh:mm:ss'))"<<endl;
+                while (true) {
+                    cout << "Enter a valid date format (dd/mm/yyyy hh:mm:ss):" << endl;
+                    getline(cin, endDate);
+
+                    if (isValidDateFormat(endDate)) {
+                        break; // Exit loop if the date format is valid
+                    } else {
+                        
+                        cout << "Invalid date format! Please try again" << endl;
+                    }
                 }
                 Time start = Time(startDate);
                 Time end = Time(endDate);
@@ -136,7 +160,7 @@ int main(){
         cout << endl;
     } while (choice != 4);
 
-
+    
 
     return 0;
 }

@@ -1,5 +1,4 @@
-#include <iostream>
-#include "../src/System.h"
+
 #include "../src/Service.h"
 
 using namespace std;
@@ -122,16 +121,16 @@ void test_calculateQuality()
     System system("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
     Service service(system);
 
-    Coord center(44.8, 2.3);
+    Coord center(44.1, -1);
     Time start(2019, 1, 1, 0, 0, 0);
     Time end(2019, 1, 4, 0, 0, 0);
 
     cout << "Test calculateQuality()" << endl;
 
     // Test with valid measurements in the specified zone and time range
-    Zone zone(center.latitude, center.longitude, 10.0);
+    Zone zone(center.latitude, center.longitude, 20);
     double result = service.calculateQuality(zone, start, end);
-    if (result > 0)
+    if (result ==7.5)
     {
         cout << "Test with valid measurements: Passed" << endl;
     }
@@ -180,7 +179,7 @@ void test_calculateQuality()
     // Test with very large radius
     Zone largeZone(center.latitude, center.longitude, 10000.0);
     result = service.calculateQuality(largeZone, start, end);
-    if (result > 0)
+    if (result ==7.5 )
     {
         cout << "Test with very large radius: Passed" << endl;
     }
