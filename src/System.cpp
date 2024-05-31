@@ -20,7 +20,7 @@ System::System(const string &sensorsFilePath, const string &cleanersFilePath, co
     ifstream sensorsFile(sensorsFilePath);
     if (!sensorsFile.is_open())
     {
-        cerr << "Unable to open sensorsFile sensors.csv" << endl;
+        cerr << "Unable to open sensorsFile: " << sensorsFilePath << endl;
         return;
     }
 
@@ -36,7 +36,7 @@ System::System(const string &sensorsFilePath, const string &cleanersFilePath, co
     ifstream cleanersFile(cleanersFilePath);
     if (!cleanersFile.is_open())
     {
-        cerr << "Unable to open cleanersFile cleaners.csv" << endl;
+        cerr << "Unable to open cleanersFile: " << cleanersFilePath << endl;
         return;
     }
 
@@ -52,7 +52,7 @@ System::System(const string &sensorsFilePath, const string &cleanersFilePath, co
     ifstream usersFile(usersFilePath);
     if (!usersFile.is_open())
     {
-        cerr << "Unable to open usersFile users.csv" << endl;
+        cerr << "Unable to open usersFile: " << usersFilePath << endl;
         return;
     }
 
@@ -68,7 +68,7 @@ System::System(const string &sensorsFilePath, const string &cleanersFilePath, co
     ifstream measurementsFile(measurementsFilePath);
     if (!measurementsFile.is_open())
     {
-        cerr << "Unable to open measurementsFile measurements.csv" << endl;
+        cerr << "Unable to open measurementsFile: " << measurementsFilePath << endl;
         return;
     }
 

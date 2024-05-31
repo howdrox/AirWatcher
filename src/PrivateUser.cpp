@@ -30,6 +30,19 @@ PrivateUser::PrivateUser(const std::string &userInfo) : User(Role::PRIVATE_USER)
     }
 }
 
+PrivateUser& PrivateUser::operator=(const PrivateUser& p)
+{
+    if (this != &p)
+    {
+        User::operator=(p);
+        userID = p.userID;
+        sensorsID = p.sensorsID;
+        points = p.points;
+        blacklisted = p.blacklisted;
+    }
+    return *this;
+}
+
 PrivateUser::~PrivateUser()
 {
 #ifdef MAP
@@ -37,6 +50,7 @@ PrivateUser::~PrivateUser()
 #endif
     // Le destructeur peut être vide s'il n'y a rien à faire spécifiquement lors de la destruction
 }
+
 
 int PrivateUser::getUserID() const
 {

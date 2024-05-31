@@ -121,8 +121,8 @@ void test_calculateQuality()
     Service service(system);
 
     Coord center(44.1, -1);
-    Timestamp start(2019, 1, 1, 0, 0, 0);
-    Timestamp end(2019, 1, 4, 0, 0, 0);
+    Time start(2019, 1, 1, 0, 0, 0);
+    Time end(2019, 1, 4, 0, 0, 0);
 
     cout << "Test calculateQuality()" << endl;
 
@@ -151,8 +151,8 @@ void test_calculateQuality()
     }
 
     // Test with measurements outside the specified time range
-    Timestamp start1(2024, 1, 1, 0, 0, 0);
-    Timestamp end1(2024, 1, 4, 0, 0, 0);
+    Time start1(2024, 1, 1, 0, 0, 0);
+    Time end1(2024, 1, 4, 0, 0, 0);
     result = service.calculateQuality(zone, start1, end1);
     if (result == 0)
     {
@@ -204,8 +204,8 @@ void test_filterMeasurements()
     System system("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
     Service service(system);
 
-    Timestamp start(2019, 1, 1, 0, 0, 0);
-    Timestamp end(2019, 1, 4, 0, 0, 0);
+    Time start(2019, 1, 1, 0, 0, 0);
+    Time end(2019, 1, 4, 0, 0, 0);
     map<int, vector<Measurement>> measurements = system.getMeasurements();
 
     cout << "Test filterMeasurements()" << endl;
@@ -222,8 +222,8 @@ void test_filterMeasurements()
     }
 
     // Test with valid date range containing no measurements
-    Timestamp start1(2024, 1, 1, 0, 0, 0);
-    Timestamp end1(2024, 1, 4, 0, 0, 0);
+    Time start1(2024, 1, 1, 0, 0, 0);
+    Time end1(2024, 1, 4, 0, 0, 0);
     filtered = service.filterMeasurements(start1, end1, measurements);
     if (filtered.empty())
     {
@@ -235,8 +235,8 @@ void test_filterMeasurements()
     }
 
     // Test with start date equal to end date
-    Timestamp start2(2019, 1, 1, 0, 0, 0);
-    Timestamp end2(2019, 1, 1, 23, 59, 59);
+    Time start2(2019, 1, 1, 0, 0, 0);
+    Time end2(2019, 1, 1, 23, 59, 59);
     filtered = service.filterMeasurements(start2, end2, measurements);
     if (!filtered.empty())
     {
@@ -399,8 +399,8 @@ void test_chercherZones()
     System system("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
     Service service(system);
 
-    Timestamp start(2023, 1, 1, 0, 0, 0);
-    Timestamp end(2023, 12, 31, 23, 59, 59);
+    Time start(2023, 1, 1, 0, 0, 0);
+    Time end(2023, 12, 31, 23, 59, 59);
 
     cout << "Test chercherZones()" << endl;
 

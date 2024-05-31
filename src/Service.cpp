@@ -9,6 +9,8 @@ using namespace std;
 #include "Coord.h"
 #include "System.h"
 
+Service::Service() {}
+
 Service::Service(const string &sensorsFilePath, const string &cleanersFilePath, const string &usersFilePath, const string &measurementsFilePath)
 {
     system = System(sensorsFilePath, cleanersFilePath, usersFilePath, measurementsFilePath);
@@ -46,7 +48,7 @@ double Service::distance(const Coord &coord1, const Coord &coord2)
     return distance;
 }
 
-map<int, vector<Measurement>> Service::filterMeasurements(const Timestamp &start, const Timestamp &end, map<int, vector<Measurement>> measurements)
+map<int, vector<Measurement>> Service::filterMeasurements(const Time &start, const Time &end, map<int, vector<Measurement>> measurements)
 {
     map<int, vector<Measurement>> res;
     map<int, vector<Measurement>>::iterator itr;
@@ -59,7 +61,7 @@ map<int, vector<Measurement>> Service::filterMeasurements(const Timestamp &start
         for (int i = 0; i < (int)measurementList.size(); i++)
         {
             Measurement m = measurementList[i];
-            Timestamp measureTime = m.getTimestamp();
+            Time measureTime = m.getTimestamp();
             if (start < measureTime && measureTime < end)
             {
                 filteredList.push_back(m);
@@ -69,7 +71,7 @@ map<int, vector<Measurement>> Service::filterMeasurements(const Timestamp &start
     }
     return res;
 }
-multimap<double, int> Service ::getSimilarZones(const int &sensorID, const Timestamp &start, const Timestamp &end, const double &delta)
+multimap<double, int> Service ::getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta)
 {
 
     multimap<double, int> similarSensors;
@@ -117,8 +119,8 @@ double Service::calculateImpactRadius(const int &cleanerId)
 
     // Vérifier si cleanerId est dans la liste des nettoyeurs
     Coord cleanerCoord;
-    Timestamp start;
-    Timestamp end;
+    Time start;
+    Time end;
     bool cleanerFound = false;
     for (const Cleaner &c : cleaners)
     {
@@ -143,8 +145,8 @@ double Service::calculateImpactRadius(const int &cleanerId)
     // Trier les capteurs par distance par rapport aux coordonnées du cleaner
     multimap<double, Sensor> sortedSensors = sortSensors(sensors, cleanerCoord);
 
-    Timestamp before_start(start.getYear(), start.getMonth(), start.getDay() - 1, start.getHour(), start.getMinute(), start.getSecond());
-    Timestamp before_end(end.getYear(), end.getMonth(), end.getDay() - 1, end.getHour(), end.getMinute(), end.getSecond());
+    Time before_start(start.getYear(), start.getMonth(), start.getDay() - 1, start.getHour(), start.getMinute(), start.getSecond());
+    Time before_end(end.getYear(), end.getMonth(), end.getDay() - 1, end.getHour(), end.getMinute(), end.getSecond());
     ;
 
     double impactRadius = 0.0;
@@ -188,14 +190,14 @@ double Service::calculateImpactRadius(const int &cleanerId)
  * @param end
  * @return double
  */
-double Service::calculateQuality(const Zone &zone, const Timestamp &start, const Timestamp &end)
+double Service::calculateQuality(const Zone &zone, const Time &start, const Time &end)
 {
     map<string, vector<double>> pollutantMaxValues;
-    map<string, Timestamp> pollutantLastTime;
-    pollutantLastTime["O3"] = Timestamp(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["NO2"] = Timestamp(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["SO2"] = Timestamp(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["PM10"] = Timestamp(0, 0, 0, 0, 0, 0);
+    map<string, Time> pollutantLastTime;
+    pollutantLastTime["O3"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["NO2"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["SO2"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["PM10"] = Time(0, 0, 0, 0, 0, 0);
 
     for (const auto &sensorData : system.getMeasurements())
     {
@@ -246,11 +248,11 @@ double Service::calculateQuality(const Zone &zone, const Timestamp &start, const
 double Service::calculateQuality(const map<int, vector<Measurement>> &measurements)
 {
     map<string, vector<double>> pollutantMaxValues;
-    map<string, Timestamp> pollutantLastTime;
-    pollutantLastTime["O3"] = Timestamp(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["NO2"] = Timestamp(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["SO2"] = Timestamp(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["PM10"] = Timestamp(0, 0, 0, 0, 0, 0);
+    map<string, Time> pollutantLastTime;
+    pollutantLastTime["O3"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["NO2"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["SO2"] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime["PM10"] = Time(0, 0, 0, 0, 0, 0);
 
     for (const auto &sensorData : measurements)
     {

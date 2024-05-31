@@ -12,6 +12,7 @@ public:
     PrivateUser();
     PrivateUser(const std::string &userInfo); // Constructeur prenant une chaîne de caractères en entrée
     PrivateUser(const PrivateUser& p);
+    PrivateUser& operator=(const PrivateUser& p);
     ~PrivateUser();                           // Destructeur
 
     int getUserID() const;                        // Getter pour récupérer l'ID de l'utilisateur privé

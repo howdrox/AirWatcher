@@ -17,6 +17,15 @@ User::User(const User &user) : role(user.role)
 #endif
 }
 
+User& User::operator=(const User &user)
+{
+    if (this != &user)
+    {
+        role = user.role;
+    }
+    return *this;
+}
+
 User::~User()
 {
 #ifdef MAP

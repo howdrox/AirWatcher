@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class Timestamp {
+class Time {
 public:
     // Getters
     int getYear() const;
@@ -16,25 +16,24 @@ public:
     int getSecond() const;
 
     // Méthode pour vérifier si deux objets Time ont la même heure et date
-    bool isSameHour(const Timestamp &time) const;
+    bool isSameHour(const Time &time) const;
 
     // Surcharge des opérateurs de comparaison
-    bool operator<(const Timestamp &date) const;
-    bool operator>(const Timestamp &date) const;
-    bool operator<=(const Timestamp &date) const;
-    bool operator>=(const Timestamp &date) const;
+    bool operator<(const Time &date) const;
+    bool operator>(const Time &date) const;
+    bool operator<=(const Time &date) const;
+    bool operator>=(const Time &date) const;
 
     // Surcharge de l'opérateur d'affectation
-    Timestamp &operator=(const Timestamp &other);
+    Time &operator=(const Time &other);
 
     // Constructeurs
-    // Timestamp();
-    Timestamp(int yy = 0, int MM = 0, int dd = 0, int hh = 0, int mm = 0, int ss = 0);
-    Timestamp(const string &data);
-    Timestamp(const Timestamp &date);
+    Time(int yy = 0, int MM = 0, int dd = 0, int hh = 0, int mm = 0, int ss = 0);
+    Time(const string &data);
+    Time(const Time &date);
 
     // Destructeur
-    virtual ~Timestamp();
+    virtual ~Time();
 
 private:
     int year, month, day, hour, minute, second;

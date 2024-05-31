@@ -2,7 +2,7 @@
 #define MEASUREMENT_H
 
 #include <string>
-#include "Timestamp.h"
+#include "Time.h"
 
 using namespace std;
 
@@ -11,14 +11,14 @@ class Measurement
 {
 public:
     Measurement(const string &);
-    Measurement(int id, const Timestamp &time, int sensor, const std::string &attrID, double val, bool black)
+    Measurement(int id, const Time &time, int sensor, const std::string &attrID, double val, bool black)
         : measurementID(id), timestamp(time), sensorID(sensor), attributeID(attrID), value(val), blacklisted(black) {}
     Measurement(const Measurement &m)
         : measurementID(m.measurementID), timestamp(m.timestamp), sensorID(m.sensorID), attributeID(m.attributeID), value(m.value), blacklisted(m.blacklisted) {}
     virtual ~Measurement() {}
 
     int getMeasurementID() const { return measurementID; }
-    Timestamp getTimestamp() const { return timestamp; }
+    Time getTimestamp() const { return timestamp; }
     int getSensorID() const { return sensorID; }
     std::string getAttributeID() const { return attributeID; }
     double getValue() const { return value; }
@@ -26,7 +26,7 @@ public:
 
 protected:
     int measurementID;
-    Timestamp timestamp;
+    Time timestamp;
     int sensorID;
     std::string attributeID;
     double value;

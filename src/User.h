@@ -12,6 +12,7 @@ public:
 
     User(const Role &r);
     User(const User &user);
+    User &operator=(const User &user);
     virtual ~User();
 
 protected:
