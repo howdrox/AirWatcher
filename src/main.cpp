@@ -21,15 +21,15 @@ void showMenu() {
     cout << "Enter your choice: ";
 }
 bool isValidDateFormat(const string& date) {
-    // Regex pattern for 'dd/mm/yyyy hh:mm:ss'
-    const regex pattern(R"(\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}:\d{2})");
+    // Regex pattern for 'yyyy-mm-dd hh:mm:ss'
+    const regex pattern(R"(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})");
     return regex_match(date, pattern);
 }
 
 int main(){
    
     
-    Service service = Service("data/sensors.csv","data/cleaners.csv","data/users.csv","data/measurements.csv"); 
+    Service service = Service("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     /*map<int,Sensor> sensors= service.getSystem().getSensors();
      for (auto it = sensors.rbegin(); it != sensors.rend(); ++it){
                     cout<< it->second <<endl;
@@ -61,12 +61,12 @@ int main(){
                 cin.ignore();
 
                 cout<<"Period selection :(You need to enter two valid timestamps for this)"<<endl;
-                cout<<"Starting date :(please respect this format : 'dd/mm/yyyy hh:mm:ss'))"<<endl;
+                cout<<"Starting date :(please respect this format : 'yyyy-mm-dd hh:mm:ss'))"<<endl;
                 string startDate,endDate;
                 
                 
                 while (true) {
-                    cout << "Enter a valid date format (dd/mm/yyyy hh:mm:ss):" << endl;
+                    cout << "Enter a valid date format (yyyy-mm-dd hh:mm:ss):" << endl;
                     getline(cin, startDate);
 
                     if (isValidDateFormat(startDate)) {
@@ -76,9 +76,9 @@ int main(){
                         cout << "Invalid date format! Please try again" << endl;
                     }
                 }
-                cout<<"Ending date :(please respect this format : '/dd/mm/yyyy hh:mm:ss'))"<<endl;
+                cout<<"Ending date :(please respect this format : '/yyyy-mm-dd hh:mm:ss'))"<<endl;
                 while (true) {
-                    cout << "Enter a valid date format (dd/mm/yyyy hh:mm:ss):" << endl;
+                    cout << "Enter a valid date format (yyyy-mm-dd hh:mm:ss):" << endl;
                     getline(cin, endDate);
 
                     if (isValidDateFormat(endDate)) {
@@ -118,11 +118,11 @@ int main(){
                 cin>> radius;
                 cin.ignore();
                 Zone zone =Zone(latitude,longitude,radius);
-
+                string startDate,endDate;
                 cout<<"Period selection :(You need to enter two valid timestamps for this)"<<endl;
-                cout<<"Starting date :(please respect this format : 'dd/mm/yyyy hh:mm:ss'))"<<endl;
+                cout<<"Starting date :(please respect this format : 'yyyy-mm-dd hh:mm:ss'))"<<endl;
                 while (true) {
-                    cout << "Enter a valid date format (dd/mm/yyyy hh:mm:ss):" << endl;
+                    cout << "Enter a valid date format (yyyy-mm-dd hh:mm:ss):" << endl;
                     getline(cin, startDate);
 
                     if (isValidDateFormat(startDate)) {
@@ -132,9 +132,9 @@ int main(){
                         cout << "Invalid date format! Please try again" << endl;
                     }
                 }
-                cout<<"Ending date :(please respect this format : '/dd/mm/yyyy hh:mm:ss'))"<<endl;
+                cout<<"Ending date :(please respect this format : '/yyyy-mm-dd hh:mm:ss'))"<<endl;
                 while (true) {
-                    cout << "Enter a valid date format (dd/mm/yyyy hh:mm:ss):" << endl;
+                    cout << "Enter a valid date format (yyyy-mm-dd hh:mm:ss):" << endl;
                     getline(cin, endDate);
 
                     if (isValidDateFormat(endDate)) {
