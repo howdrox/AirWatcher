@@ -88,8 +88,8 @@ int main(){
                         cout << "Invalid date format! Please try again" << endl;
                     }
                 }
-                Time start = Time(startDate);
-                Time end = Time(endDate);
+                Timestamp start = Timestamp(startDate);
+                Timestamp end = Timestamp(endDate);
                 
                 cout<<"Please enter the tolerance level (delta) :"<<endl;
                 double delta;
@@ -144,8 +144,8 @@ int main(){
                         cout << "Invalid date format! Please try again" << endl;
                     }
                 }
-                Time start = Time(startDate);
-                Time end = Time(endDate);
+                Timestamp start = Timestamp(startDate);
+                Timestamp end = Timestamp(endDate);
                 double quality = service.calculateQuality( zone, start, end);
                 cout<<"The quality of the selected zone and period is : "<<quality<<endl;
                 break;

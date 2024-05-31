@@ -1,36 +1,44 @@
-#include "Time.h"
 #include <sstream>
 #include <iomanip>
+
+#include "Timestamp.h"
 
 using namespace std;
 
 // Getters
-int Time::getYear() const {
+int Timestamp::getYear() const
+{
     return year;
 }
 
-int Time::getMonth() const {
+int Timestamp::getMonth() const
+{
     return month;
 }
 
-int Time::getDay() const {
+int Timestamp::getDay() const
+{
     return day;
 }
 
-int Time::getHour() const {
+int Timestamp::getHour() const
+{
     return hour;
 }
 
-int Time::getMinute() const {
+int Timestamp::getMinute() const
+{
     return minute;
 }
 
-int Time::getSecond() const {
+int Timestamp::getSecond() const
+{
     return second;
 }
 
 // Méthode pour vérifier si deux objets Time ont la même heure et date
-bool Time::isSameHour(const Time &time) const {
+bool Timestamp::isSameHour(const Timestamp &time) const
+{
     return getYear() == time.getYear() &&
            getMonth() == time.getMonth() &&
            getDay() == time.getDay() &&
@@ -38,29 +46,40 @@ bool Time::isSameHour(const Time &time) const {
 }
 
 // Surcharge des opérateurs de comparaison
-bool Time::operator<(const Time &date) const {
-    if (year != date.year) return year < date.year;
-    if (month != date.month) return month < date.month;
-    if (day != date.day) return day < date.day;
-    if (hour != date.hour) return hour < date.hour;
-    if (minute != date.minute) return minute < date.minute;
+bool Timestamp::operator<(const Timestamp &date) const
+{
+    if (year != date.year)
+        return year < date.year;
+    if (month != date.month)
+        return month < date.month;
+    if (day != date.day)
+        return day < date.day;
+    if (hour != date.hour)
+        return hour < date.hour;
+    if (minute != date.minute)
+        return minute < date.minute;
     return second < date.second;
 }
 
-bool Time::operator>(const Time &date) const {
+bool Timestamp::operator>(const Timestamp &date) const
+{
     return date < *this;
 }
 
-bool Time::operator<=(const Time &date) const {
+bool Timestamp::operator<=(const Timestamp &date) const
+{
     return !(*this > date);
 }
 
-bool Time::operator>=(const Time &date) const {
+bool Timestamp::operator>=(const Timestamp &date) const
+{
     return !(*this < date);
 }
 
-Time &Time::operator=(const Time &other) {
-    if (this != &other) {
+Timestamp &Timestamp::operator=(const Timestamp &other)
+{
+    if (this != &other)
+    {
         year = other.year;
         month = other.month;
         day = other.day;
@@ -71,20 +90,24 @@ Time &Time::operator=(const Time &other) {
     return *this;
 }
 
+// Timestamp::Time()
+//     : year(0), month(0), day(0), hour(0), minute(0), second(0) {}
+
 // Constructeur avec paramètres
-Time::Time(int yy, int MM, int dd, int hh, int mm, int ss)
+Timestamp::Timestamp(int yy, int MM, int dd, int hh, int mm, int ss)
     : year(yy), month(MM), day(dd), hour(hh), minute(mm), second(ss) {}
 
 // Constructeur à partir d'une chaîne de caractères
-Time::Time(const string &data) {
+Timestamp::Timestamp(const string &data)
+{
     char delim;
     stringstream ss(data);
     ss >> year >> delim >> month >> delim >> day >> hour >> delim >> minute >> delim >> second;
 }
 
 // Constructeur de copie
-Time::Time(const Time &date)
+Timestamp::Timestamp(const Timestamp &date)
     : year(date.year), month(date.month), day(date.day), hour(date.hour), minute(date.minute), second(date.second) {}
 
 // Destructeur
-Time::~Time() {}
+Timestamp::~Timestamp() {}

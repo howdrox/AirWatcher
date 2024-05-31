@@ -1,4 +1,8 @@
+#include <iostream>
+
 #include "GovernmentAgent.h"
+
+using namespace std;
 
 GovernmentAgent::GovernmentAgent() : User(Role::GOVERNMENT_AGENT) {
     #ifdef MAP

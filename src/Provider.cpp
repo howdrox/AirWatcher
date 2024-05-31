@@ -1,5 +1,9 @@
-#include "Provider.h"
 #include <sstream>
+
+#include "Provider.h"
+
+
+Provider::Provider() : User(Role::PROVIDER) {}
 
 Provider::Provider(const std::string& providerInfo) : User(Role::PROVIDER), providerID(-1) {
 

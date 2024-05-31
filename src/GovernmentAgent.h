@@ -3,9 +3,10 @@
 
 #include "User.h" // Pour hériter de la classe User
 
-class GovernmentAgent : public User {
+class GovernmentAgent : public User
+{
 public:
-    GovernmentAgent(); // Constructeur par défaut
+    GovernmentAgent();  // Constructeur par défaut
     ~GovernmentAgent(); // Destructeur
 };
 

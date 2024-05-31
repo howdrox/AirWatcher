@@ -1,5 +1,10 @@
-#include "PrivateUser.h"
 #include <sstream>
+
+#include "PrivateUser.h"
+
+PrivateUser::PrivateUser() : User(Role::PRIVATE_USER), points(0), blacklisted(false) {}
+
+PrivateUser::PrivateUser(const PrivateUser &p) : User(Role::PRIVATE_USER), userID(p.userID), sensorsID(p.sensorsID), points(p.points), blacklisted(p.blacklisted) {}
 
 PrivateUser::PrivateUser(const std::string &userInfo) : User(Role::PRIVATE_USER), points(0), blacklisted(false)
 {

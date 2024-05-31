@@ -10,11 +10,11 @@ Coord Cleaner::getCoord() const {
     return location;
 }
 
-const Time& Cleaner::getStartTime() const {
+const Timestamp& Cleaner::getStartTime() const {
     return startTime;
 }
 
-const Time& Cleaner::getEndTime() const {
+const Timestamp& Cleaner::getEndTime() const {
     return endTime;
 }
 
@@ -36,9 +36,9 @@ Cleaner::Cleaner(const std::string& data) {
     double lat = std::stod(values[2]);
     location = Coord(lat, lng);
 
-    // Start + end Time
-    startTime = Time(values[3]);
-    endTime = Time(values[4]);
+    // Start + end Timestamp
+    startTime = Timestamp(values[3]);
+    endTime = Timestamp(values[4]);
 }
 
 Cleaner::~Cleaner() {}

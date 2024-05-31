@@ -3,7 +3,6 @@
 
 #include "User.h"
 
-
 User::User(const Role &userRole) : role(userRole)
 {
 #ifdef MAP
@@ -13,6 +12,9 @@ User::User(const Role &userRole) : role(userRole)
 
 User::User(const User &user) : role(user.role)
 {
+#ifdef MAP
+    cout << "Appel au constructeur de copie de <user>" << endl;
+#endif
 }
 
 User::~User()

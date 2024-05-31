@@ -9,7 +9,9 @@
 class PrivateUser : public User
 {
 public:
-    PrivateUser(const std::string& userInfo); // Constructeur prenant une chaîne de caractères en entrée
+    PrivateUser();
+    PrivateUser(const std::string &userInfo); // Constructeur prenant une chaîne de caractères en entrée
+    PrivateUser(const PrivateUser& p);
     ~PrivateUser();                           // Destructeur
 
     int getUserID() const;                        // Getter pour récupérer l'ID de l'utilisateur privé
@@ -18,7 +20,7 @@ public:
     bool isBlacklisted() const;                   // Getter pour vérifier si l'utilisateur est sur liste noire
 
     void setBlacklisted(bool isBlacklisted); // Méthode pour blacklister ou déblacklister
-    void addPoints(int nbPoints); // Méthode pour incrémenter le nombre de points
+    void addPoints(int nbPoints);            // Méthode pour incrémenter le nombre de points
 
 private:
     int userID;                 // Attribut privé pour l'ID de l'utilisateur privé
