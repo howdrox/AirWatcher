@@ -1,4 +1,6 @@
 using namespace std;
+
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <iomanip>
 #include <iterator>
@@ -10,12 +12,6 @@ using namespace std;
 #include "Service.h"
 #include "Coord.h"
 #include "System.h"
-
-typedef struct{
-    double sum = 0; //sum of measurements
-    int count = 0; //number o measurements
-}measurements_stats;
-
 
 
 Service::Service() {}
@@ -218,8 +214,7 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
         for (const auto &measurement : sensorData.second)
         {
             // Check if measurement falls within the specified time range
-            if (measurement.getTimestamp() >= start && measurement.getTimestamp() <= end && !measurement.isBlacklisted())
-            {
+            if (measurement.getTimestamp() >= start && measurement.getTimestamp() <= end && !measurement.isBlacklisted()) {
                 // Check if measurement falls within the specified zone
                 map<int, Sensor> s = system.getSensors();
                 if (isInZone(s[measurement.getSensorID()].getLocation(), zone))
@@ -287,8 +282,8 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
     int indexSO2 = calculateSubIndex(avgSO2, SO2);
     int indexPM10 = calculateSubIndex(avgPM10, PM10);
 
-    // ATMO index is the maximum of the sub-indices
-    return max({indexO3, indexNO2, indexSO2, indexPM10});
+    // Calculate the Atmo index as the maximum of sub-indices
+    return max({avgO3, avgNO2, avgSO2, avgPM10});
 }
 
 /**

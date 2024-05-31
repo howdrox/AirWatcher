@@ -28,6 +28,7 @@ Measurement::Measurement(const string &ligne)
         else if (elements[2] == "PM10") attributeID = PM10;
         
         value = stod(elements[3]);
+        blacklisted = false;
     }
     else
     {

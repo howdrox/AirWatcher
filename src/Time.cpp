@@ -90,6 +90,17 @@ Time &Time::operator=(const Time &other)
     return *this;
 }
 
+// Surcharge de l'opérateur d'insertion
+ostream& operator<<(ostream &out, const Time &time) {
+    out << setw(4) << setfill('0') << time.year << "-"
+        << setw(2) << setfill('0') << time.month << "-"
+        << setw(2) << setfill('0') << time.day << " "
+        << setw(2) << setfill('0') << time.hour << ":"
+        << setw(2) << setfill('0') << time.minute << ":"
+        << setw(2) << setfill('0') << time.second;
+    return out;
+}
+
 // Constructeur avec paramètres
 Time::Time(int yy, int MM, int dd, int hh, int mm, int ss)
     : year(yy), month(MM), day(dd), hour(hh), minute(mm), second(ss) {}
