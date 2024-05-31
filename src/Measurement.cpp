@@ -22,7 +22,11 @@ Measurement::Measurement(const string &ligne)
     {
         timestamp = elements[0];
         sensorID = stoi(elements[1].substr(6));
-        attributeID = elements[2];
+        if (elements[2] == "O3") attributeID = O3;
+        else if (elements[2] == "NO2") attributeID = NO2;
+        else if (elements[2] == "SO2") attributeID = SO2;
+        else if (elements[2] == "PM10") attributeID = PM10;
+        
         value = stod(elements[3]);
     }
     else

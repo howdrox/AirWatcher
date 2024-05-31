@@ -40,7 +40,7 @@ public:
 private:
     System system;
 
-    int calculateSubIndex(const double& value, const std::string &pollutant) const;
+    int calculateSubIndex(const double& value, const PollutantType &pollutant) const;
     double average(const vector<double> &v);
     bool isInZone(const Coord c, const Zone z);
 };

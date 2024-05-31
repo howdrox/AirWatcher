@@ -4,10 +4,19 @@ using namespace std;
 #include <iterator>
 #include <iostream>
 #include <map>
-
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 #include "Service.h"
 #include "Coord.h"
 #include "System.h"
+
+typedef struct{
+    double sum = 0; //sum of measurements
+    int count = 0; //number o measurements
+}measurements_stats;
+
+
 
 Service::Service() {}
 
@@ -192,12 +201,17 @@ double Service::calculateImpactRadius(const int &cleanerId)
  */
 double Service::calculateQuality(const Zone &zone, const Time &start, const Time &end)
 {
-    map<string, vector<double>> pollutantMaxValues;
-    map<string, Time> pollutantLastTime;
-    pollutantLastTime["O3"] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["NO2"] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["SO2"] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["PM10"] = Time(0, 0, 0, 0, 0, 0);
+    vector<vector<double>> pollutantMaxValues;
+    vector<Time> pollutantLastTime;
+    pollutantLastTime[O3] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime[NO2] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime[SO2] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime[PM10] = Time(0, 0, 0, 0, 0, 0);
+    
+    // A map where:
+    // - Key: Represents the day
+    // - Value: map of measurements done during the day corresponding to the key
+    map<int, map<int,vector<Measurement>>> filteredMeasurements;
 
     for (const auto &sensorData : system.getMeasurements())
     {
@@ -210,49 +224,31 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
                 map<int, Sensor> s = system.getSensors();
                 if (isInZone(s[measurement.getSensorID()].getLocation(), zone))
                 {
-                    string attr = measurement.getAttributeID();
-                    double val = measurement.getValue();
-
-                    if (pollutantLastTime[attr].isSameHour(measurement.getTimestamp()))
-                    {
-                        if (val > pollutantMaxValues[attr].back())
-                        {
-                            pollutantMaxValues[attr].back() = val;
-                        }
-                    }
-                    else
-                    {
-                        pollutantMaxValues[attr].push_back(val);
-                    }
+                    filteredMeasurements[measurement.getTimestamp().getDay()][sensorData.first].push_back(measurement);
                 }
             }
         }
     }
+    double sum_indexes = 0.0;
+    int count_days = 0;
+    for(const auto &measurementsPerDay : filteredMeasurements){
+       
+            sum_indexes += calculateQuality(measurementsPerDay.second);
+            count_days += 1;
+    }
+    double average_indexes = sum_indexes/count_days;
 
-    // Get maximum values for pollutants
-    double avgO3 = !pollutantMaxValues["O3"].empty() ? average(pollutantMaxValues["O3"]) : 0;
-    double avgNO2 = !pollutantMaxValues["NO2"].empty() ? average(pollutantMaxValues["NO2"]) : 0;
-    double avgSO2 = !pollutantMaxValues["SO2"].empty() ? average(pollutantMaxValues["SO2"]) : 0;
-    double avgPM10 = !pollutantMaxValues["PM10"].empty() ? average(pollutantMaxValues["PM10"]) : 0;
-
-    // Calculate sub-indices
-    int indexO3 = calculateSubIndex(avgO3, "O3");
-    int indexNO2 = calculateSubIndex(avgNO2, "NO2");
-    int indexSO2 = calculateSubIndex(avgSO2, "SO2");
-    int indexPM10 = calculateSubIndex(avgPM10, "PM10");
-
-    // ATMO index is the maximum of the sub-indices
-    return max({indexO3, indexNO2, indexSO2, indexPM10});
+    return average_indexes;
 }
 
 double Service::calculateQuality(const map<int, vector<Measurement>> &measurements)
 {
-    map<string, vector<double>> pollutantMaxValues;
-    map<string, Time> pollutantLastTime;
-    pollutantLastTime["O3"] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["NO2"] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["SO2"] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime["PM10"] = Time(0, 0, 0, 0, 0, 0);
+    vector<vector<double>> pollutantMaxValues;
+    vector< Time> pollutantLastTime;
+    pollutantLastTime[O3] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime[NO2] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime[SO2] = Time(0, 0, 0, 0, 0, 0);
+    pollutantLastTime[PM10] = Time(0, 0, 0, 0, 0, 0);
 
     for (const auto &sensorData : measurements)
     {
@@ -261,7 +257,7 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
             // Only consider non-blacklisted measurements
             if (!measurement.isBlacklisted())
             {
-                string attr = measurement.getAttributeID();
+                PollutantType  attr = measurement.getAttributeID();
                 double val = measurement.getValue();
 
                 if (pollutantLastTime[attr].isSameHour(measurement.getTimestamp()))
@@ -280,16 +276,16 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
     }
 
     // Get maximum values for pollutants
-    double avgO3 = !pollutantMaxValues["O3"].empty() ? average(pollutantMaxValues["O3"]) : 0;
-    double avgNO2 = !pollutantMaxValues["NO2"].empty() ? average(pollutantMaxValues["NO2"]) : 0;
-    double avgSO2 = !pollutantMaxValues["SO2"].empty() ? average(pollutantMaxValues["SO2"]) : 0;
-    double avgPM10 = !pollutantMaxValues["PM10"].empty() ? average(pollutantMaxValues["PM10"]) : 0;
+    double avgO3 = !pollutantMaxValues[O3].empty() ? average(pollutantMaxValues[O3]) : 0;
+    double avgNO2 = !pollutantMaxValues[NO2].empty() ? average(pollutantMaxValues[NO2]) : 0;
+    double avgSO2 = !pollutantMaxValues[SO2].empty() ? average(pollutantMaxValues[SO2]) : 0;
+    double avgPM10 = !pollutantMaxValues[PM10].empty() ? average(pollutantMaxValues[PM10]) : 0;
 
     // Calculate sub-indices
-    int indexO3 = calculateSubIndex(avgO3, "O3");
-    int indexNO2 = calculateSubIndex(avgNO2, "NO2");
-    int indexSO2 = calculateSubIndex(avgSO2, "SO2");
-    int indexPM10 = calculateSubIndex(avgPM10, "PM10");
+    int indexO3 = calculateSubIndex(avgO3, O3);
+    int indexNO2 = calculateSubIndex(avgNO2, NO2);
+    int indexSO2 = calculateSubIndex(avgSO2, SO2);
+    int indexPM10 = calculateSubIndex(avgPM10, PM10);
 
     // ATMO index is the maximum of the sub-indices
     return max({indexO3, indexNO2, indexSO2, indexPM10});
@@ -302,9 +298,9 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
  * @param pollutant
  * @return int
  */
-int Service::calculateSubIndex(const double &value, const string &pollutant) const
+int Service::calculateSubIndex(const double &value, const PollutantType &pollutant) const
 {
-    if (pollutant == "O3")
+    if (pollutant == O3)
     {
         if (value >= 240)
             return 10;
@@ -326,7 +322,7 @@ int Service::calculateSubIndex(const double &value, const string &pollutant) con
             return 2;
         return 1;
     }
-    else if (pollutant == "NO2")
+    else if (pollutant == NO2)
     {
         if (value >= 400)
             return 10;
@@ -348,7 +344,7 @@ int Service::calculateSubIndex(const double &value, const string &pollutant) con
             return 2;
         return 1;
     }
-    else if (pollutant == "SO2")
+    else if (pollutant == SO2)
     {
         if (value >= 500)
             return 10;
@@ -370,7 +366,7 @@ int Service::calculateSubIndex(const double &value, const string &pollutant) con
             return 2;
         return 1;
     }
-    else if (pollutant == "PM10")
+    else if (pollutant == PM10)
     {
         if (value >= 80)
             return 10;

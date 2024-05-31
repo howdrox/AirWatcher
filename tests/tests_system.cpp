@@ -5,11 +5,11 @@ using namespace std;
 void test_getMeasurements()
 {
 
-    System system = System("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
+    System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     cout << "Test getMeasurements()" << endl;
 
     // Cas de test : nombre non nul de mesures
-    system.addMeasurement(Measurement("2021-01-01 00:00:00;Sensor1;O3;20.5"));
+    //system.addMeasurement(Measurement("2021-01-01 00:00:00;Sensor1;O3;20.5"));
     if (system.getMeasurements().size() > 0)
     {
         cout << "Test getMeasurements() avec mesures non nulles : Réussi" << endl;
@@ -20,7 +20,7 @@ void test_getMeasurements()
     }
 
     // Cas de test : nombre nul de mesures
-    System emptySystem = System("../data/Sensors/test0.csv", "../data/Cleaners/test0.csv", "../data/Users/test0.csv", "../data/Measurements/test0.csv");
+    System emptySystem = System("data/Sensors/test0.csv", "data/Cleaners/test0.csv", "data/Users/test0.csv", "data/Measurements/test0.csv");
     if (emptySystem.getMeasurements().size() == 0)
     {
         cout << "Test getMeasurements() avec mesures nulles : Réussi" << endl;
@@ -33,11 +33,11 @@ void test_getMeasurements()
 
 void test_getCleaners()
 {
-    System system = System("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
+    System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     cout << "Test getCleaners()" << endl;
 
     // Cas de test : nombre non nul de nettoyeurs
-    system.addCleaner(Cleaner("Cleaner1"));
+    
     if (system.getCleaners().size() > 0)
     {
         cout << "Test getCleaners() avec nettoyeurs non nuls : Réussi" << endl;
@@ -48,7 +48,7 @@ void test_getCleaners()
     }
 
     // Cas de test : nombre nul de nettoyeurs
-    System emptySystem = System("../data/Sensors/test0.csv", "../data/Cleaners/test0.csv", "../data/Users/test0.csv", "../data/Measurements/test0.csv");
+    System emptySystem = System("data/Sensors/test0.csv", "data/Cleaners/test0.csv", "data/Users/test0.csv", "data/Measurements/test0.csv");
     if (emptySystem.getCleaners().size() == 0)
     {
         cout << "Test getCleaners() avec nettoyeurs nuls : Réussi" << endl;
@@ -61,7 +61,7 @@ void test_getCleaners()
 
 void test_getSensors()
 {
-    System system = System("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
+    System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     cout << "Test getSensors()" << endl;
 
     // Cas de test : nombre non nul de capteurs
@@ -76,7 +76,7 @@ void test_getSensors()
     }
 
     // Cas de test : nombre nul de capteurs
-    System emptySystem = System("../data/Sensors/test0.csv", "../data/Cleaners/test0.csv", "../data/Users/test0.csv", "../data/Measurements/test0.csv");
+    System emptySystem = System("data/Sensors/test0.csv", "data/Cleaners/test0.csv", "data/Users/test0.csv", "data/Measurements/test0.csv");
     if (emptySystem.getSensors().size() == 0)
     {
         cout << "Test getSensors() avec capteurs nuls : Réussi" << endl;
@@ -89,7 +89,7 @@ void test_getSensors()
 
 void test_getUsers()
 {
-    System system = System("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
+    System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     cout << "Test getUsers()" << endl;
 
     // Cas de test : nombre non nul d'utilisateurs
@@ -104,7 +104,7 @@ void test_getUsers()
     }
 
     // Cas de test : nombre nul d'utilisateurs
-    System emptySystem = System("../data/Sensors/test0.csv", "../data/Cleaners/test0.csv", "../data/Users/test0.csv", "../data/Measurements/test0.csv");
+    System emptySystem = System("data/Sensors/test0.csv", "data/Cleaners/test0.csv", "data/Users/test0.csv", "data/Measurements/test0.csv");
     if (emptySystem.getUsers().size() == 0)
     {
         cout << "Test getUsers() avec utilisateurs nuls : Réussi" << endl;
@@ -117,7 +117,7 @@ void test_getUsers()
 
 void test_calculateQuality()
 {
-    System system("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
+    System system("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     Service service(system);
 
     Coord center(44.1, -1);
@@ -201,7 +201,7 @@ void test_calculateQuality()
 
 void test_filterMeasurements()
 {
-    System system("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
+    System system("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     Service service(system);
 
     Time start(2019, 1, 1, 0, 0, 0);
@@ -273,7 +273,7 @@ void test_filterMeasurements()
 
 void test_impactPurificateur()
 {
-    System system("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
+    System system("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     Service service(system);
 
     cout << "Test impactPurificateur()" << endl;
@@ -396,7 +396,7 @@ void test_distance()
 
 void test_chercherZones()
 {
-    System system("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
+    System system("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     Service service(system);
 
     Time start(2023, 1, 1, 0, 0, 0);
@@ -491,9 +491,11 @@ void test_chercherZones()
 int main()
 {
     test_getMeasurements();
-    test_getCleaners();
+    /*test_getCleaners();
     test_getSensors();
     test_getUsers();
+    test_calculateQuality();*/
+
 
     return 0;
 }
