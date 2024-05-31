@@ -24,6 +24,7 @@ Measurement::Measurement(const string &ligne)
         sensorID = stoi(elements[1].substr(6));
         attributeID = elements[2];
         value = stod(elements[3]);
+        blacklisted = false;
     }
     else
     {

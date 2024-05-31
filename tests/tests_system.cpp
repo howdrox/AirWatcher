@@ -12,22 +12,22 @@ void test_getMeasurements()
     system.addMeasurement(Measurement("2021-01-01 00:00:00;Sensor1;O3;20.5"));
     if (system.getMeasurements().size() > 0)
     {
-        cout << "Test getMeasurements() avec mesures non nulles : Réussi" << endl;
+        cout << "----> Test getMeasurements() avec mesures non nulles : Réussi" << endl;
     }
     else
     {
-        cout << "Test getMeasurements() avec mesures non nulles : Échoué" << endl;
+        cout << "----> Test getMeasurements() avec mesures non nulles : Échoué" << endl;
     }
 
     // Cas de test : nombre nul de mesures
     System emptySystem = System("../data/Sensors/test0.csv", "../data/Cleaners/test0.csv", "../data/Users/test0.csv", "../data/Measurements/test0.csv");
     if (emptySystem.getMeasurements().size() == 0)
     {
-        cout << "Test getMeasurements() avec mesures nulles : Réussi" << endl;
+        cout << "----> Test getMeasurements() avec mesures nulles : Réussi" << endl;
     }
     else
     {
-        cout << "Test getMeasurements() avec mesures nulles : Échoué" << endl;
+        cout << "----> Test getMeasurements() avec mesures nulles : Échoué" << endl;
     }
 }
 
@@ -37,25 +37,27 @@ void test_getCleaners()
     cout << "Test getCleaners()" << endl;
 
     // Cas de test : nombre non nul de nettoyeurs
-    system.addCleaner(Cleaner("Cleaner1"));
+    Cleaner cleaner("Cleaner1;48.888887;3.888887;2019-02-02 12:00:00;2019-03-02 00:00:00;");
+    
+    system.addCleaner(cleaner);
     if (system.getCleaners().size() > 0)
     {
-        cout << "Test getCleaners() avec nettoyeurs non nuls : Réussi" << endl;
+        cout << "----> Test getCleaners() avec nettoyeurs non nuls : Réussi" << endl;
     }
     else
     {
-        cout << "Test getCleaners() avec nettoyeurs non nuls : Échoué" << endl;
+        cout << "----> Test getCleaners() avec nettoyeurs non nuls : Échoué" << endl;
     }
 
     // Cas de test : nombre nul de nettoyeurs
     System emptySystem = System("../data/Sensors/test0.csv", "../data/Cleaners/test0.csv", "../data/Users/test0.csv", "../data/Measurements/test0.csv");
     if (emptySystem.getCleaners().size() == 0)
     {
-        cout << "Test getCleaners() avec nettoyeurs nuls : Réussi" << endl;
+        cout << "----> Test getCleaners() avec nettoyeurs nuls : Réussi" << endl;
     }
     else
     {
-        cout << "Test getCleaners() avec nettoyeurs nuls : Échoué" << endl;
+        cout << "----> Test getCleaners() avec nettoyeurs nuls : Échoué" << endl;
     }
 }
 
@@ -65,25 +67,25 @@ void test_getSensors()
     cout << "Test getSensors()" << endl;
 
     // Cas de test : nombre non nul de capteurs
-    system.addSensor(Sensor("Sensor1"));
+    system.addSensor(Sensor("Sensor0;45;-2.0;"));
     if (system.getSensors().size() > 0)
     {
-        cout << "Test getSensors() avec capteurs non nuls : Réussi" << endl;
+        cout << "----> Test getSensors() avec capteurs non nuls : Réussi" << endl;
     }
     else
     {
-        cout << "Test getSensors() avec capteurs non nuls : Échoué" << endl;
+        cout << "----> Test getSensors() avec capteurs non nuls : Échoué" << endl;
     }
 
     // Cas de test : nombre nul de capteurs
     System emptySystem = System("../data/Sensors/test0.csv", "../data/Cleaners/test0.csv", "../data/Users/test0.csv", "../data/Measurements/test0.csv");
     if (emptySystem.getSensors().size() == 0)
     {
-        cout << "Test getSensors() avec capteurs nuls : Réussi" << endl;
+        cout << "----> Test getSensors() avec capteurs nuls : Réussi" << endl;
     }
     else
     {
-        cout << "Test getSensors() avec capteurs nuls : Échoué" << endl;
+        cout << "----> Test getSensors() avec capteurs nuls : Échoué" << endl;
     }
 }
 
@@ -96,22 +98,22 @@ void test_getUsers()
     system.addUser(PrivateUser("User1"));
     if (system.getUsers().size() > 0)
     {
-        cout << "Test getUsers() avec utilisateurs non nuls : Réussi" << endl;
+        cout << "----> Test getUsers() avec utilisateurs non nuls : Réussi" << endl;
     }
     else
     {
-        cout << "Test getUsers() avec utilisateurs non nuls : Échoué" << endl;
+        cout << "----> Test getUsers() avec utilisateurs non nuls : Échoué" << endl;
     }
 
     // Cas de test : nombre nul d'utilisateurs
     System emptySystem = System("../data/Sensors/test0.csv", "../data/Cleaners/test0.csv", "../data/Users/test0.csv", "../data/Measurements/test0.csv");
     if (emptySystem.getUsers().size() == 0)
     {
-        cout << "Test getUsers() avec utilisateurs nuls : Réussi" << endl;
+        cout << "----> Test getUsers() avec utilisateurs nuls : Réussi" << endl;
     }
     else
     {
-        cout << "Test getUsers() avec utilisateurs nuls : Échoué" << endl;
+        cout << "----> Test getUsers() avec utilisateurs nuls : Échoué" << endl;
     }
 }
 
@@ -129,13 +131,13 @@ void test_calculateQuality()
     // Test with valid measurements in the specified zone and time range
     Zone zone(center.latitude, center.longitude, 20);
     double result = service.calculateQuality(zone, start, end);
-    if (result ==7.5)
+    if (result == 7.5)
     {
-        cout << "Test with valid measurements: Passed" << endl;
+        cout << "----> Test with valid measurements: Passed" << endl;
     }
     else
     {
-        cout << "Test with valid measurements: Failed" << endl;
+        cout << "----> Test with valid measurements: Failed" << endl;
     }
 
     // Test with no measurements in the specified zone
@@ -143,11 +145,11 @@ void test_calculateQuality()
     result = service.calculateQuality(smallZone, start, end);
     if (result == 0)
     {
-        cout << "Test with no measurements in the zone: Passed" << endl;
+        cout << "----> Test with no measurements in the zone: Passed" << endl;
     }
     else
     {
-        cout << "Test with no measurements in the zone: Failed" << endl;
+        cout << "----> Test with no measurements in the zone: Failed" << endl;
     }
 
     // Test with measurements outside the specified time range
@@ -156,11 +158,11 @@ void test_calculateQuality()
     result = service.calculateQuality(zone, start1, end1);
     if (result == 0)
     {
-        cout << "Test with measurements outside time range: Passed" << endl;
+        cout << "----> Test with measurements outside time range: Passed" << endl;
     }
     else
     {
-        cout << "Test with measurements outside time range: Failed" << endl;
+        cout << "----> Test with measurements outside time range: Failed" << endl;
     }
 
     // Test with zero radius
@@ -168,11 +170,11 @@ void test_calculateQuality()
     {
         Zone zeroRadiusZone(center.latitude, center.longitude, 0.0);
         result = service.calculateQuality(zeroRadiusZone, start, end);
-        cout << "Test with zero radius: Failed (no exception thrown)" << endl;
+        cout << "----> Test with zero radius: Failed (no exception thrown)" << endl;
     }
     catch (const exception &e)
     {
-        cout << "Test with zero radius: Passed (exception thrown)" << endl;
+        cout << "----> Test with zero radius: Passed (exception thrown)" << endl;
     }
 
     // Test with very large radius
@@ -180,22 +182,22 @@ void test_calculateQuality()
     result = service.calculateQuality(largeZone, start, end);
     if (result ==7.5 )
     {
-        cout << "Test with very large radius: Passed" << endl;
+        cout << "----> Test with very large radius: Passed" << endl;
     }
     else
     {
-        cout << "Test with very large radius: Failed" << endl;
+        cout << "----> Test with very large radius: Failed" << endl;
     }
 
     // Test with start date later than end date
     try
     {
         result = service.calculateQuality(zone, end, start);
-        cout << "Test with start date later than end date: Failed (no exception thrown)" << endl;
+        cout << "----> Test with start date later than end date: Failed (no exception thrown)" << endl;
     }
     catch (const exception &e)
     {
-        cout << "Test with start date later than end date: Passed (exception thrown)" << endl;
+        cout << "----> Test with start date later than end date: Passed (exception thrown)" << endl;
     }
 }
 
@@ -214,11 +216,11 @@ void test_filterMeasurements()
     auto filtered = service.filterMeasurements(start, end, measurements);
     if (!filtered.empty())
     {
-        cout << "Test with valid date range and existing measurements: Passed" << endl;
+        cout << "----> Test with valid date range and existing measurements: Passed" << endl;
     }
     else
     {
-        cout << "Test with valid date range and existing measurements: Failed" << endl;
+        cout << "----> Test with valid date range and existing measurements: Failed" << endl;
     }
 
     // Test with valid date range containing no measurements
@@ -227,11 +229,11 @@ void test_filterMeasurements()
     filtered = service.filterMeasurements(start1, end1, measurements);
     if (filtered.empty())
     {
-        cout << "Test with valid date range containing no measurements: Passed" << endl;
+        cout << "----> Test with valid date range containing no measurements: Passed" << endl;
     }
     else
     {
-        cout << "Test with valid date range containing no measurements: Failed" << endl;
+        cout << "----> Test with valid date range containing no measurements: Failed" << endl;
     }
 
     // Test with start date equal to end date
@@ -240,22 +242,22 @@ void test_filterMeasurements()
     filtered = service.filterMeasurements(start2, end2, measurements);
     if (!filtered.empty())
     {
-        cout << "Test with start date equal to end date: Passed" << endl;
+        cout << "----> Test with start date equal to end date: Passed" << endl;
     }
     else
     {
-        cout << "Test with start date equal to end date: Failed" << endl;
+        cout << "----> Test with start date equal to end date: Failed" << endl;
     }
 
     // Test with end date before start date
     filtered = service.filterMeasurements(end, start, measurements);
     if (filtered.empty())
     {
-        cout << "Test with end date before start date: Passed" << endl;
+        cout << "----> Test with end date before start date: Passed" << endl;
     }
     else
     {
-        cout << "Test with end date before start date: Failed" << endl;
+        cout << "----> Test with end date before start date: Failed" << endl;
     }
 
     // Test with valid date range but empty measurements
@@ -263,11 +265,11 @@ void test_filterMeasurements()
     filtered = service.filterMeasurements(start, end, emptyMeasurements);
     if (filtered.empty())
     {
-        cout << "Test with valid date range but empty measurements: Passed" << endl;
+        cout << "----> Test with valid date range but empty measurements: Passed" << endl;
     }
     else
     {
-        cout << "Test with valid date range but empty measurements: Failed" << endl;
+        cout << "----> Test with valid date range but empty measurements: Failed" << endl;
     }
 }
 
@@ -283,11 +285,11 @@ void test_impactPurificateur()
     {
         double result = service.calculateImpactRadius(1);
         cout << "Result is: " << result << endl;
-        cout << "Test with valid cleaner ID: Passed" << endl;
+        cout << "----> Test with valid cleaner ID: Passed" << endl;
     }
     catch (const exception &e)
     {
-        cout << "Test with valid cleaner ID: Failed" << endl;
+        cout << "----> Test with valid cleaner ID: Failed" << endl;
     }
 
     // Test with an invalid cleaner ID
@@ -295,11 +297,11 @@ void test_impactPurificateur()
     {
         double result = service.calculateImpactRadius(-1);
         cout << "Result is: " << result << endl;
-        cout << "Test with invalid cleaner ID: Failed (no exception thrown)" << endl;
+        cout << "----> Test with invalid cleaner ID: Failed (no exception thrown)" << endl;
     }
     catch (const exception &e)
     {
-        cout << "Test with invalid cleaner ID: Passed (exception thrown)" << endl;
+        cout << "----> Test with invalid cleaner ID: Passed (exception thrown)" << endl;
     }
 
     // Test with insufficient improvement in air quality
@@ -308,16 +310,16 @@ void test_impactPurificateur()
         double result = service.calculateImpactRadius(2); // Assume ID 2 has insufficient improvement
         if (result == 0)
         {
-            cout << "Test with insufficient improvement in air quality: Passed" << endl;
+            cout << "----> Test with insufficient improvement in air quality: Passed" << endl;
         }
         else
         {
-            cout << "Test with insufficient improvement in air quality: Failed" << endl;
+            cout << "----> Test with insufficient improvement in air quality: Failed" << endl;
         }
     }
     catch (const exception &e)
     {
-        cout << "Test with insufficient improvement in air quality: Failed (exception thrown)" << endl;
+        cout << "----> Test with insufficient improvement in air quality: Failed (exception thrown)" << endl;
     }
 
     // Test with significant improvement in air quality
@@ -326,16 +328,16 @@ void test_impactPurificateur()
         double result = service.calculateImpactRadius(3); // Assume ID 3 has significant improvement
         if (result > 0)
         {
-            cout << "Test with significant improvement in air quality: Passed" << endl;
+            cout << "----> Test with significant improvement in air quality: Passed" << endl;
         }
         else
         {
-            cout << "Test with significant improvement in air quality: Failed" << endl;
+            cout << "----> Test with significant improvement in air quality: Failed" << endl;
         }
     }
     catch (const exception &e)
     {
-        cout << "Test with significant improvement in air quality: Failed (exception thrown)" << endl;
+        cout << "----> Test with significant improvement in air quality: Failed (exception thrown)" << endl;
     }
 }
 
@@ -351,22 +353,22 @@ void test_distance()
     double result = service.distance(coord1, coord2);
     if (result > 0)
     {
-        cout << "Test with different coordinates: Passed" << endl;
+        cout << "----> Test with different coordinates: Passed" << endl;
     }
     else
     {
-        cout << "Test with different coordinates: Failed" << endl;
+        cout << "----> Test with different coordinates: Failed" << endl;
     }
 
     // Test with the same coordinates
     result = service.distance(coord1, coord1);
     if (result == 0)
     {
-        cout << "Test with the same coordinates: Passed" << endl;
+        cout << "----> Test with the same coordinates: Passed" << endl;
     }
     else
     {
-        cout << "Test with the same coordinates: Failed" << endl;
+        cout << "----> Test with the same coordinates: Failed" << endl;
     }
 
     // Test with null coordinates (assuming null check should return -1)
@@ -374,11 +376,11 @@ void test_distance()
     {
         Coord *nullCoord = nullptr;
         result = service.distance(*nullCoord, coord2);
-        cout << "Test with null coordinates: Failed (no exception thrown)" << endl;
+        cout << "----> Test with null coordinates: Failed (no exception thrown)" << endl;
     }
     catch (const exception &e)
     {
-        cout << "Test with null coordinates: Passed (exception thrown)" << endl;
+        cout << "----> Test with null coordinates: Passed (exception thrown)" << endl;
     }
 
     // Test with very distant coordinates
@@ -386,11 +388,11 @@ void test_distance()
     result = service.distance(coord1, coord3);
     if (result > 0)
     {
-        cout << "Test with very distant coordinates: Passed" << endl;
+        cout << "----> Test with very distant coordinates: Passed" << endl;
     }
     else
     {
-        cout << "Test with very distant coordinates: Failed" << endl;
+        cout << "----> Test with very distant coordinates: Failed" << endl;
     }
 }
 
@@ -410,16 +412,16 @@ void test_chercherZones()
         auto zones = service.getSimilarZones(1, start, end, 0.1);
         if (!zones.empty())
         {
-            cout << "Test with existing sensor ID and valid time range: Passed" << endl;
+            cout << "----> Test with existing sensor ID and valid time range: Passed" << endl;
         }
         else
         {
-            cout << "Test with existing sensor ID and valid time range: Failed" << endl;
+            cout << "----> Test with existing sensor ID and valid time range: Failed" << endl;
         }
     }
     catch (const exception &e)
     {
-        cout << "Test with existing sensor ID and valid time range: Failed (exception thrown)" << endl;
+        cout << "----> Test with existing sensor ID and valid time range: Failed (exception thrown)" << endl;
     }
 
     // Test with non-existent sensor ID
@@ -428,16 +430,16 @@ void test_chercherZones()
         auto zones = service.getSimilarZones(-1, start, end, 0.1);
         if (zones.empty())
         {
-            cout << "Test with non-existent sensor ID: Passed" << endl;
+            cout << "----> Test with non-existent sensor ID: Passed" << endl;
         }
         else
         {
-            cout << "Test with non-existent sensor ID: Failed" << endl;
+            cout << "----> Test with non-existent sensor ID: Failed" << endl;
         }
     }
     catch (const exception &e)
     {
-        cout << "Test with non-existent sensor ID: Failed (exception thrown)" << endl;
+        cout << "----> Test with non-existent sensor ID: Failed (exception thrown)" << endl;
     }
 
     // Test with end date before start date
@@ -446,16 +448,16 @@ void test_chercherZones()
         auto zones = service.getSimilarZones(1, end, start, 0.1);
         if (zones.empty())
         {
-            cout << "Test with end date before start date: Passed" << endl;
+            cout << "----> Test with end date before start date: Passed" << endl;
         }
         else
         {
-            cout << "Test with end date before start date: Failed" << endl;
+            cout << "----> Test with end date before start date: Failed" << endl;
         }
     }
     catch (const exception &e)
     {
-        cout << "Test with end date before start date: Failed (exception thrown)" << endl;
+        cout << "----> Test with end date before start date: Failed (exception thrown)" << endl;
     }
 
     // Test with start date equal to end date
@@ -464,27 +466,27 @@ void test_chercherZones()
         auto zones = service.getSimilarZones(1, start, start, 0.1);
         if (!zones.empty())
         {
-            cout << "Test with start date equal to end date: Passed" << endl;
+            cout << "----> Test with start date equal to end date: Passed" << endl;
         }
         else
         {
-            cout << "Test with start date equal to end date: Failed" << endl;
+            cout << "----> Test with start date equal to end date: Failed" << endl;
         }
     }
     catch (const exception &e)
     {
-        cout << "Test with start date equal to end date: Failed (exception thrown)" << endl;
+        cout << "----> Test with start date equal to end date: Failed (exception thrown)" << endl;
     }
 
     // Test with invalid delta (<= 0)
     try
     {
         auto zones = service.getSimilarZones(1, start, end, -0.1);
-        cout << "Test with invalid delta: Failed (no exception thrown)" << endl;
+        cout << "----> Test with invalid delta: Failed (no exception thrown)" << endl;
     }
     catch (const exception &e)
     {
-        cout << "Test with invalid delta: Passed (exception thrown)" << endl;
+        cout << "----> Test with invalid delta: Passed (exception thrown)" << endl;
     }
 }
 
@@ -494,6 +496,11 @@ int main()
     test_getCleaners();
     test_getSensors();
     test_getUsers();
+    test_calculateQuality();
+    test_filterMeasurements();
+    test_impactPurificateur();
+    test_distance();
+    test_chercherZones();
 
     return 0;
 }
