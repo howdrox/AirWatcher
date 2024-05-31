@@ -48,7 +48,7 @@ LDFLAGS := -lcppunit
 # .PHONY: all clean
 
 CXX = g++
-CXXFLAGS = #-Wall -Wextra -std=c++11
+CXXFLAGS = -Wall #-Wextra -std=c++11
 TARGET = my_program
 OBJECTS = src/Time.o src/Cleaner.o src/User.o \
 		src/PrivateUser.o src/Provider.o src/GovernmentAgent.o src/Measurement.o \
