@@ -342,8 +342,7 @@ void test_impactPurificateur()
 
 void test_distance()
 {
-    System system("../data/Sensors/test1.csv", "../data/Cleaners/test1.csv", "../data/Users/test1.csv", "../data/Measurements/test1.csv");
-    Service service(system);
+    Service service;
 
     cout << "Test distance()" << endl;
 
