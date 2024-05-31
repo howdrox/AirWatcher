@@ -29,7 +29,7 @@ public:
 
     multimap<double, Sensor> sortSensors(map<int, Sensor> sensors, const Coord &coord); // a voir si `sensors` peut être en const
 
-    Service();
+    Service() {};
 
     Service(const string &sensorsFilePath,const string &cleanersFilePath,const string &usersFilePath,const string &measurementsFilePath);
     Service(const System &sys) : system(sys) {}
