@@ -4,6 +4,9 @@
 #include <string>
 #include "Time.h"
 
+using namespace std;
+
+
 class Measurement
 {
 public:

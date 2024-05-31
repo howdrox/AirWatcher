@@ -1,14 +1,12 @@
-#ifndef Time_H
-#define Time_H
+#ifndef TIME_H
+#define TIME_H
 
 #include <iostream>
 #include <string>
 
-using namespace std;
-
-class Time
-{
+class Time {
 public:
+    // Getters
     int getYear() const;
     int getMonth() const;
     int getDay() const;
@@ -16,23 +14,28 @@ public:
     int getMinute() const;
     int getSecond() const;
 
+    // Méthode pour vérifier si deux objets Time ont la même heure et date
     bool isSameHour(const Time &time) const;
 
+    // Surcharge des opérateurs de comparaison
     bool operator<(const Time &date) const;
     bool operator>(const Time &date) const;
     bool operator<=(const Time &date) const;
     bool operator>=(const Time &date) const;
 
+    // Surcharge de l'opérateur d'affectation
     Time &operator=(const Time &other);
 
+    // Constructeurs
     Time(int yy = 0, int MM = 0, int dd = 0, int hh = 0, int mm = 0, int ss = 0);
-    Time(const string &data);
+    Time(const std::string &data);
     Time(const Time &date);
 
+    // Destructeur
     virtual ~Time();
 
-protected:
+private:
     int year, month, day, hour, minute, second;
 };
 
-#endif // Time_H
+#endif // TIME_H

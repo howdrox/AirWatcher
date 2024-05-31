@@ -1,28 +1,18 @@
-#if !defined(CLEANER_H)
+#ifndef CLEANER_H
 #define CLEANER_H
 
 #include <iostream>
-
 #include "Time.h"
 #include "Coord.h"
 
-using namespace std;
-
-
-
-class Cleaner
-{
+class Cleaner {
 public:
     int getCleanerId() const;
-
     Coord getCoord() const;
+    const Time& getStartTime() const; // Use const reference
+    const Time& getEndTime() const;   // Use const reference
 
-    Time getStartTime() const;
-
-    Time getEndTime() const;
-
-    Cleaner(string data);
-
+    Cleaner(const std::string& data);
     virtual ~Cleaner();
 
 protected:

@@ -1,50 +1,39 @@
-using namespace std;
-#include <iostream>
+#include "Cleaner.h"
 #include <sstream>
 #include <vector>
 
-#include "Cleaner.h"
-// #include "Time.h"
-// #include "Coord.h"
-
-int Cleaner::getCleanerId() const
-{
+int Cleaner::getCleanerId() const {
     return cleanerID;
 }
 
-Coord Cleaner::getCoord() const
-{
+Coord Cleaner::getCoord() const {
     return location;
 }
 
-Time Cleaner::getStartTime() const
-{
+const Time& Cleaner::getStartTime() const {
     return startTime;
 }
 
-Time Cleaner::getEndTime() const
-{
+const Time& Cleaner::getEndTime() const {
     return endTime;
 }
 
-Cleaner::Cleaner(string data)
-{
-    vector<string> values;
-    stringstream ss(data);
-    string item;
+Cleaner::Cleaner(const std::string& data) {
+    std::vector<std::string> values;
+    std::stringstream ss(data);
+    std::string item;
 
-    while (getline(ss, item, ';'))
-    {
+    while (std::getline(ss, item, ';')) {
         values.push_back(item);
     }
 
     // Id
-    string idStr = values[0].substr(7); // take only the number value in value[0], example: 'Cleaner0' --> '0'
-    cleanerID = stoi(idStr);
+    std::string idStr = values[0].substr(7); // take only the number value in value[0], example: 'Cleaner0' --> '0'
+    cleanerID = std::stoi(idStr);
 
     // Location
-    double lng = stod(values[1]);
-    double lat = stod(values[2]);
+    double lng = std::stod(values[1]);
+    double lat = std::stod(values[2]);
     location = Coord(lat, lng);
 
     // Start + end Time
@@ -52,6 +41,4 @@ Cleaner::Cleaner(string data)
     endTime = Time(values[4]);
 }
 
-Cleaner::~Cleaner()
-{
-}
+Cleaner::~Cleaner() {}
