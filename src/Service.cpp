@@ -430,3 +430,5 @@ bool Service::isInZone(const Coord c, const Zone z)
 //  * @param system
 //  */
 // Service::Service(const System &s) : system(s) {}
+
+Service::~Service(){};
