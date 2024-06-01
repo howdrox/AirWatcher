@@ -8,9 +8,16 @@ void test_getMeasurements()
 
     // Cas de test : nombre non nul de mesures
     System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
+    
     if (system.getMeasurements().size() > 0)
     {
         cout << "----> Test getMeasurements() avec fichier et mesures non nulles : Réussi" << endl;
+        for (const auto& pair : system.getMeasurements()) {
+            for (const auto& measurement : pair.second) {
+                std::cout << measurement << "\n";
+            }
+        }
+
     }
     else
     {
@@ -555,16 +562,16 @@ void test_chercherZones()
 int main()
 {
     test_getMeasurements();
-    test_getCleaners();
-    test_getSensors();
-    test_getUsers();
-    test_isInZone();
-    test_calculateQuality1();
-    test_calculateQuality2();
-    test_filterMeasurements();
-    test_impactPurificateur();
-    test_distance();
-    test_chercherZones();
+    //test_getCleaners();
+    //test_getSensors();
+    //test_getUsers();
+    //test_isInZone();
+    //test_calculateQuality1();
+    //test_calculateQuality2();
+    //test_filterMeasurements();
+    //test_impactPurificateur();
+    //test_distance();
+    //test_chercherZones();
 
     return 0;
 }
