@@ -190,6 +190,8 @@ double Service::calculateImpactRadius(const int &cleanerId)
 /**
  * @brief Calculates the ATMO for all the measurements in the specified zone and during the specified time
  *
+ * @details Calculates the ATMO index per day and then averages it for the total number of days
+ *
  * @param zone
  * @param start
  * @param end
@@ -197,24 +199,18 @@ double Service::calculateImpactRadius(const int &cleanerId)
  */
 double Service::calculateQuality(const Zone &zone, const Time &start, const Time &end)
 {
-    map<PollutantType,vector<double>> pollutantMaxValues;
-    map<PollutantType,Time> pollutantLastTime;
-    pollutantLastTime[O3] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime[NO2] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime[SO2] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime[PM10] = Time(0, 0, 0, 0, 0, 0);
-    
     // A map where:
     // - Key: Represents the day
     // - Value: map of measurements done during the day corresponding to the key
-    map<int, map<int,vector<Measurement>>> filteredMeasurements;
+    map<int, map<int, vector<Measurement>>> filteredMeasurements;
 
     for (const auto &sensorData : system.getMeasurements())
     {
         for (const auto &measurement : sensorData.second)
         {
             // Check if measurement falls within the specified time range
-            if (measurement.getTimestamp() >= start && measurement.getTimestamp() <= end && !measurement.isBlacklisted()) {
+            if (measurement.getTimestamp() >= start && measurement.getTimestamp() <= end && !measurement.isBlacklisted())
+            {
                 // Check if measurement falls within the specified zone
                 map<int, Sensor> s = system.getSensors();
                 if (isInZone(s[measurement.getSensorID()].getLocation(), zone))
@@ -226,20 +222,29 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
     }
     double sum_indexes = 0.0;
     int count_days = 0;
-    for(const auto &measurementsPerDay : filteredMeasurements){
-       
-            sum_indexes += calculateQuality(measurementsPerDay.second);
-            count_days += 1;
+    for (const auto &measurementsPerDay : filteredMeasurements)
+    {
+        sum_indexes += calculateQuality(measurementsPerDay.second);
+        count_days += 1;
     }
-    double average_indexes = sum_indexes/count_days;
+    double average_indexes = sum_indexes / count_days;
 
     return average_indexes;
 }
 
+/**
+ * @brief Calculates the ATMO index for all the measurements
+ *
+ * @details For each pollutant, stores the maximum value for each hour, then caculates the average to get the sub index
+ * The ATMO index is the maximum of all the sub indexes
+ *
+ * @param measurements
+ * @return double
+ */
 double Service::calculateQuality(const map<int, vector<Measurement>> &measurements)
 {
-    map<PollutantType,vector<double>> pollutantMaxValues;
-    map<PollutantType,Time> pollutantLastTime;
+    map<PollutantType, vector<double>> pollutantMaxValues;
+    map<PollutantType, Time> pollutantLastTime;
     pollutantLastTime[O3] = Time(0, 0, 0, 0, 0, 0);
     pollutantLastTime[NO2] = Time(0, 0, 0, 0, 0, 0);
     pollutantLastTime[SO2] = Time(0, 0, 0, 0, 0, 0);
@@ -252,7 +257,7 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
             // Only consider non-blacklisted measurements
             if (!measurement.isBlacklisted())
             {
-                PollutantType  attr = measurement.getAttributeID();
+                PollutantType attr = measurement.getAttributeID();
                 double val = measurement.getValue();
 
                 if (pollutantLastTime[attr].isSameHour(measurement.getTimestamp()))
@@ -287,7 +292,7 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
 }
 
 /**
- * @brief calculates the index for a particular pollutant
+ * @brief Calculates the sub index for a particular pollutant
  *
  * @param value
  * @param pollutant
@@ -387,7 +392,7 @@ int Service::calculateSubIndex(const double &value, const PollutantType &polluta
 }
 
 /**
- * @brief calculates the average of a vector<double>
+ * @brief Calculates the average of a vector<double>
  *
  * @param v
  * @return double
@@ -404,7 +409,7 @@ double Service::average(const vector<double> &v)
 }
 
 /**
- * @brief checks if the coord is inside the zone
+ * @brief Checks if the coord is inside the zone
  *
  * @param c
  * @param z
@@ -416,12 +421,5 @@ bool Service::isInZone(const Coord c, const Zone z)
     double d = distance(c, z);
     return d < z.radius;
 }
-
-// /**
-//  * @brief Construct a new Service:: Service object
-//  *
-//  * @param system
-//  */
-// Service::Service(const System &s) : system(s) {}
 
 Service::~Service(){};
