@@ -104,7 +104,7 @@ const vector<PrivateUser> &System::getUsers()
 
 void System::addMeasurement(const Measurement &m)
 {
-    (void)m;
+    measurements[m.getSensorID()].push_back(m);
 }
 
 void System::addCleaner(const Cleaner &cleaner)

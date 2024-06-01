@@ -13,7 +13,6 @@ using namespace std;
 #include "Coord.h"
 #include "System.h"
 
-
 Service::Service() {}
 
 Service::Service(const string &sensorsFilePath, const string &cleanersFilePath, const string &usersFilePath, const string &measurementsFilePath)
@@ -227,7 +226,7 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
         sum_indexes += calculateQuality(measurementsPerDay.second);
         count_days += 1;
     }
-    double average_indexes = sum_indexes / count_days;
+    double average_indexes = (count_days > 0) ? (sum_indexes / count_days) : 0;
 
     return average_indexes;
 }
@@ -243,6 +242,11 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
  */
 double Service::calculateQuality(const map<int, vector<Measurement>> &measurements)
 {
+    if (measurements.empty())
+    {
+        return 0; // Return a default value, such as 0, when there are no measurements
+    }
+
     map<PollutantType, vector<double>> pollutantMaxValues;
     map<PollutantType, Time> pollutantLastTime;
     pollutantLastTime[O3] = Time(0, 0, 0, 0, 0, 0);
@@ -274,9 +278,12 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
             }
         }
     }
+    // cout << "first pollutantMaxValues: " << pollutantMaxValues[O3][0] << endl;
+
 
     // Get maximum values for pollutants
     double avgO3 = !pollutantMaxValues[O3].empty() ? average(pollutantMaxValues[O3]) : 0;
+    // cout << "avgO3: " << avgO3 << endl;
     double avgNO2 = !pollutantMaxValues[NO2].empty() ? average(pollutantMaxValues[NO2]) : 0;
     double avgSO2 = !pollutantMaxValues[SO2].empty() ? average(pollutantMaxValues[SO2]) : 0;
     double avgPM10 = !pollutantMaxValues[PM10].empty() ? average(pollutantMaxValues[PM10]) : 0;
