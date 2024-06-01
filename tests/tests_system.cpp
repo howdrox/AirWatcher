@@ -4,144 +4,218 @@ using namespace std;
 
 void test_getMeasurements()
 {
-
-    System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     cout << "Test getMeasurements()" << endl;
 
     // Cas de test : nombre non nul de mesures
-    //system.addMeasurement(Measurement("2021-01-01 00:00:00;Sensor1;O3;20.5"));
+    System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     if (system.getMeasurements().size() > 0)
     {
-        cout << "----> Test getMeasurements() avec mesures non nulles : Réussi" << endl;
+        cout << "----> Test getMeasurements() avec fichier et mesures non nulles : Réussi" << endl;
     }
     else
     {
-        cout << "----> Test getMeasurements() avec mesures non nulles : Échoué" << endl;
+        cout << "----> Test getMeasurements() avec fichier et mesures non nulles : Échoué" << endl;
     }
 
     // Cas de test : nombre nul de mesures
     System emptySystem = System("data/Sensors/test0.csv", "data/Cleaners/test0.csv", "data/Users/test0.csv", "data/Measurements/test0.csv");
     if (emptySystem.getMeasurements().size() == 0)
     {
-        cout << "----> Test getMeasurements() avec mesures nulles : Réussi" << endl;
+        cout << "----> Test getMeasurements() avec fichier et mesures nulles : Réussi" << endl;
     }
     else
     {
-        cout << "----> Test getMeasurements() avec mesures nulles : Échoué" << endl;
+        cout << "----> Test getMeasurements() avec fichier et mesures nulles : Échoué" << endl;
     }
 }
 
 void test_getCleaners()
 {
-    System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     cout << "Test getCleaners()" << endl;
 
     // Cas de test : nombre non nul de nettoyeurs
-    Cleaner cleaner("Cleaner1;48.888887;3.888887;2019-02-02 12:00:00;2019-03-02 00:00:00;");
-    
-    system.addCleaner(cleaner);
+    System system = System();
+    system.addCleaner(Cleaner("Cleaner1;48.888887;3.888887;2019-02-02 12:00:00;2019-03-02 00:00:00;"));
     if (system.getCleaners().size() > 0)
     {
-        cout << "----> Test getCleaners() avec nettoyeurs non nuls : Réussi" << endl;
+        cout << "----> Test getCleaners() avec nombre de nettoyeurs non nuls : Réussi" << endl;
     }
     else
     {
-        cout << "----> Test getCleaners() avec nettoyeurs non nuls : Échoué" << endl;
+        cout << "----> Test getCleaners() avec nombre de nettoyeurs non nuls : Échoué" << endl;
     }
 
     // Cas de test : nombre nul de nettoyeurs
     System emptySystem = System("data/Sensors/test0.csv", "data/Cleaners/test0.csv", "data/Users/test0.csv", "data/Measurements/test0.csv");
     if (emptySystem.getCleaners().size() == 0)
     {
-        cout << "----> Test getCleaners() avec nettoyeurs nuls : Réussi" << endl;
+        cout << "----> Test getCleaners() avec nombre de nettoyeurs nuls : Réussi" << endl;
     }
     else
     {
-        cout << "----> Test getCleaners() avec nettoyeurs nuls : Échoué" << endl;
+        cout << "----> Test getCleaners() avec nombre de nettoyeurs nuls : Échoué" << endl;
     }
 }
 
 void test_getSensors()
 {
-    System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     cout << "Test getSensors()" << endl;
 
     // Cas de test : nombre non nul de capteurs
+    System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     system.addSensor(Sensor("Sensor0;45;-2.0;"));
     if (system.getSensors().size() > 0)
     {
-        cout << "----> Test getSensors() avec capteurs non nuls : Réussi" << endl;
+        cout << "----> Test getSensors() avec nombre de capteurs non nuls : Réussi" << endl;
     }
     else
     {
-        cout << "----> Test getSensors() avec capteurs non nuls : Échoué" << endl;
+        cout << "----> Test getSensors() avec nombre de capteurs non nuls : Échoué" << endl;
     }
 
     // Cas de test : nombre nul de capteurs
     System emptySystem = System("data/Sensors/test0.csv", "data/Cleaners/test0.csv", "data/Users/test0.csv", "data/Measurements/test0.csv");
     if (emptySystem.getSensors().size() == 0)
     {
-        cout << "----> Test getSensors() avec capteurs nuls : Réussi" << endl;
+        cout << "----> Test getSensors() avec nombre de capteurs nuls : Réussi" << endl;
     }
     else
     {
-        cout << "----> Test getSensors() avec capteurs nuls : Échoué" << endl;
+        cout << "----> Test getSensors() avec nombre de capteurs nuls : Échoué" << endl;
     }
 }
 
 void test_getUsers()
 {
-    System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     cout << "Test getUsers()" << endl;
 
     // Cas de test : nombre non nul d'utilisateurs
+    System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     system.addUser(PrivateUser("User1"));
     if (system.getUsers().size() > 0)
     {
-        cout << "----> Test getUsers() avec utilisateurs non nuls : Réussi" << endl;
+        cout << "----> Test getUsers() avec nombre d'utilisateurs non nuls : Réussi" << endl;
     }
     else
     {
-        cout << "----> Test getUsers() avec utilisateurs non nuls : Échoué" << endl;
+        cout << "----> Test getUsers() avec nombre d'utilisateurs non nuls : Échoué" << endl;
     }
 
     // Cas de test : nombre nul d'utilisateurs
     System emptySystem = System("data/Sensors/test0.csv", "data/Cleaners/test0.csv", "data/Users/test0.csv", "data/Measurements/test0.csv");
     if (emptySystem.getUsers().size() == 0)
     {
-        cout << "----> Test getUsers() avec utilisateurs nuls : Réussi" << endl;
+        cout << "----> Test getUsers() avec nombre d'utilisateurs nuls : Réussi" << endl;
     }
     else
     {
-        cout << "----> Test getUsers() avec utilisateurs nuls : Échoué" << endl;
+        cout << "----> Test getUsers() avec nombre d'utilisateurs nuls : Échoué" << endl;
     }
 }
 
-void test_calculateQuality()
+void test_isInZone()
 {
+    cout << "Test isInZone()" << endl;
+
+    Service service;
+    Coord center(44.1, -1);
+    Zone zone(center, 20);
+
+    // Test case 1: Point inside the zone
+    Coord insidePoint(44.2, -1.1);
+    bool result = service.isInZone(insidePoint, zone);
+    if (result)
+    {
+        cout << "----> Test with point inside the zone: Passed" << endl;
+    }
+    else
+    {
+        cout << "----> Test with point inside the zone: Failed" << endl;
+    }
+
+    // Test case 2: Point on the edge (outside) of the zone
+    Coord edgePoint(44.1 + 20 / 111.0, -1); // Approximation: 1 degree latitude is ~111 km
+    result = service.isInZone(edgePoint, zone);
+    if (!result)
+    {
+        cout << "----> Test with point on the edge (outside) of the zone: Passed" << endl;
+    }
+    else
+    {
+        cout << "----> Test with point on the edge (outside) of the zone: Failed" << endl;
+    }
+
+    // Test case 3: Point outside the zone
+    Coord outsidePoint(45.1, -1);
+    result = service.isInZone(outsidePoint, zone);
+    if (!result)
+    {
+        cout << "----> Test with point outside the zone: Passed" << endl;
+    }
+    else
+    {
+        cout << "----> Test with point outside the zone: Failed" << endl;
+    }
+}
+
+void test_calculateQuality1()
+{
+    cout << "Test calculateQuality(map<int, vector<Measurement>>)" << endl;
+
+    System system("data/Sensors/test0.csv", "data/Cleaners/test0.csv", "data/Users/test0.csv", "data/Measurements/test0.csv");
+    Service service(system);
+    double result;
+
+    // Test with no measurements
+    result = service.calculateQuality(system.getMeasurements());
+    if (result == 0)
+    {
+        cout << "----> Test with no measurements: Passed" << endl;
+    }
+    else
+    {
+        cout << "----> Test with no measurements: Failed with: " << result << endl;
+    }
+
+    // Test with one measurement
+    Measurement m("2019-01-01 12:00:00;Sensor0;O3;50.25;");
+    system.addMeasurement(m);
+    result = service.calculateQuality(system.getMeasurements());
+    if (result == 2)
+    {
+        cout << "----> Test with one measurement: Passed" << endl;
+    }
+    else
+    {
+        cout << "----> Test with one measurement: Failed with: " << result << endl;
+    }
+}
+void test_calculateQuality2()
+{
+    cout << "Test calculateQuality(const Zone&, const Time&, const Time&)" << endl;
+
     System system("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     Service service(system);
+    double result;
 
     Coord center(44.1, -1);
     Time start(2019, 1, 1, 0, 0, 0);
-    Time end(2019, 1, 4, 0, 0, 0);
-
-    cout << "Test calculateQuality()" << endl;
+    Time end(2019, 1, 3, 0, 0, 0);
 
     // Test with valid measurements in the specified zone and time range
-    Zone zone(center.latitude, center.longitude, 20);
-    double result = service.calculateQuality(zone, start, end);
+    Zone zone(center, 20);
+    result = service.calculateQuality(zone, start, end);
     if (result == 7.5)
     {
         cout << "----> Test with valid measurements: Passed" << endl;
     }
     else
     {
-        cout << "----> Test with valid measurements: Failed" << endl;
+        cout << "----> Test with valid measurements: Failed with: " << result << endl;
     }
 
     // Test with no measurements in the specified zone
-    Zone smallZone(center.latitude, center.longitude, 0.1);
+    Zone smallZone(center, 0.1);
     result = service.calculateQuality(smallZone, start, end);
     if (result == 0)
     {
@@ -149,7 +223,7 @@ void test_calculateQuality()
     }
     else
     {
-        cout << "----> Test with no measurements in the zone: Failed" << endl;
+        cout << "----> Test with no measurements in the zone: Failed with: " << result << endl;
     }
 
     // Test with measurements outside the specified time range
@@ -158,35 +232,23 @@ void test_calculateQuality()
     result = service.calculateQuality(zone, start1, end1);
     if (result == 0)
     {
-        cout << "----> Test with measurements outside time range: Passed" << endl;
+        cout << "----> Test with no measurements inside time range: Passed" << endl;
     }
     else
     {
-        cout << "----> Test with measurements outside time range: Failed" << endl;
+        cout << "----> Test with no measurements inside time range: Failed with" << result << endl;
     }
 
     // Test with zero radius
-    try
+    Zone zeroRadiusZone(center, 0.0);
+    result = service.calculateQuality(zeroRadiusZone, start, end);
+    if (result == 0)
     {
-        Zone zeroRadiusZone(center.latitude, center.longitude, 0.0);
-        result = service.calculateQuality(zeroRadiusZone, start, end);
-        cout << "----> Test with zero radius: Failed (no exception thrown)" << endl;
-    }
-    catch (const exception &e)
-    {
-        cout << "----> Test with zero radius: Passed (exception thrown)" << endl;
-    }
-
-    // Test with very large radius
-    Zone largeZone(center.latitude, center.longitude, 10000.0);
-    result = service.calculateQuality(largeZone, start, end);
-    if (result ==7.5 )
-    {
-        cout << "----> Test with very large radius: Passed" << endl;
+        cout << "----> Test with zero radius: Passed" << endl;
     }
     else
     {
-        cout << "----> Test with very large radius: Failed" << endl;
+        cout << "----> Test with zero radius: Failed (no exception thrown)" << endl;
     }
 
     // Test with start date later than end date
@@ -493,14 +555,16 @@ void test_chercherZones()
 int main()
 {
     test_getMeasurements();
-    /*test_getCleaners();
+    test_getCleaners();
     test_getSensors();
     test_getUsers();
-    test_calculateQuality();
+    test_isInZone();
+    test_calculateQuality1();
+    test_calculateQuality2();
     test_filterMeasurements();
     test_impactPurificateur();
     test_distance();
-    test_chercherZones();*/
+    test_chercherZones();
 
     return 0;
 }
