@@ -201,7 +201,7 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
     // A map where:
     // - Key: Represents the day
     // - Value: map of measurements done during the day corresponding to the key
-    map<int, map<int, vector<Measurement>>> filteredMeasurements;
+    map<Date, map<int,vector<Measurement>>> filteredMeasurements;
 
     for (const auto &sensorData : system.getMeasurements())
     {
@@ -214,7 +214,7 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
                 map<int, Sensor> s = system.getSensors();
                 if (isInZone(s[measurement.getSensorID()].getLocation(), zone))
                 {
-                    filteredMeasurements[measurement.getTimestamp().getDay()][sensorData.first].push_back(measurement);
+                    filteredMeasurements[measurement.getTimestamp().getDate()][sensorData.first].push_back(measurement);
                 }
             }
         }
