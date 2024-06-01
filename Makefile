@@ -9,8 +9,8 @@ CXXFLAGS := -Wall -Wextra -std=c++11
 LDFLAGS := 
 
 # Define target executable
-APP_TARGET := $(TARGET_DIR)/airwalker
-TEST_TARGET := $(TARGET_DIR)/test_airwalker
+APP_TARGET := $(TARGET_DIR)/airwatcher
+TEST_TARGET := $(TARGET_DIR)/test_airwatcher
 
 # Define source and object files
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
