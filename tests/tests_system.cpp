@@ -262,7 +262,7 @@ void test_calculateQuality2()
         cout << "----> Test with start date later than end date: Passed (exception thrown)" << endl;
     }
 }
-/*
+
 void test_filterMeasurements()
 {
     System system("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
@@ -550,7 +550,7 @@ void test_chercherZones()
     {
         cout << "----> Test with invalid delta: Passed (exception thrown)" << endl;
     }
-}*/
+}
 
 int main()
 {
