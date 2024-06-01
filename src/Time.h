@@ -15,16 +15,18 @@ public:
     int getHour() const;
     int getMinute() const;
     int getSecond() const;
-    Time zeroOutHour() ;
 
-    // Méthode pour vérifier si deux objets Time ont la même heure et date
+    // Other functions
     bool isSameHour(const Time &time) const;
+    Time zeroOutHour();
+    Time addDays(int);
 
     // Surcharge des opérateurs de comparaison
-    bool operator<(const Time &date) const;
-    bool operator>(const Time &date) const;
-    bool operator<=(const Time &date) const;
-    bool operator>=(const Time &date) const;
+    bool operator<(const Time &) const;
+    bool operator>(const Time &) const;
+    bool operator<=(const Time &) const;
+    bool operator>=(const Time &) const;
+    bool operator==(const Time &) const;
 
     // Surcharge de l'opérateur d'affectation
     Time &operator=(const Time &other);

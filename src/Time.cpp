@@ -35,11 +35,11 @@ int Time::getSecond() const
 {
     return second;
 }
-Time Time::zeroOutHour() 
+Time Time::zeroOutHour()
 {
     hour = 0;
-    minute =0;
-    second=0;
+    minute = 0;
+    second = 0;
     return *this;
 }
 // Méthode pour vérifier si deux objets Time ont la même heure et date
@@ -49,6 +49,12 @@ bool Time::isSameHour(const Time &time) const
            getMonth() == time.getMonth() &&
            getDay() == time.getDay() &&
            getHour() == time.getHour();
+}
+
+Time Time::addDays(int numDays)
+{
+    day += numDays;
+    return *this;
 }
 
 // Surcharge des opérateurs de comparaison
@@ -82,6 +88,10 @@ bool Time::operator>=(const Time &date) const
     return !(*this < date);
 }
 
+bool Time::operator==(const Time &t) const {
+    return year == t.year && month == t.month && day == t.day && hour == t.hour && minute == t.minute && second == t.second;
+}
+
 Time &Time::operator=(const Time &other)
 {
     if (this != &other)
@@ -97,7 +107,8 @@ Time &Time::operator=(const Time &other)
 }
 
 // Surcharge de l'opérateur d'insertion
-ostream& operator<<(ostream &out, const Time &time) {
+ostream &operator<<(ostream &out, const Time &time)
+{
     out << setw(4) << setfill('0') << time.year << "-"
         << setw(2) << setfill('0') << time.month << "-"
         << setw(2) << setfill('0') << time.day << " "
