@@ -5,7 +5,9 @@
 #include "Time.h"
 
 using namespace std;
-enum PollutantType {
+
+enum PollutantType
+{
     O3,
     NO2,
     SO2,
