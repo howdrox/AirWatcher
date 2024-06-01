@@ -5,21 +5,6 @@
 
 using namespace std;
 
-typedef struct
-{
-    int year;
-    int month;
-    int day;
-} Date;
-
-// Declare comparison operators for the Date struct
-bool operator==(const Date &lhs, const Date &rhs);
-bool operator!=(const Date &lhs, const Date &rhs);
-bool operator<(const Date &lhs, const Date &rhs);
-bool operator<=(const Date &lhs, const Date &rhs);
-bool operator>(const Date &lhs, const Date &rhs);
-bool operator>=(const Date &lhs, const Date &rhs);
-
 class Time
 {
 public:

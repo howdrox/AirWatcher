@@ -56,9 +56,12 @@ TEST_F(SystemTest, GetSensors)
 TEST_F(SystemTest, GetUsers)
 {
     // Check non-empty system
-    system.addUser(PrivateUser("User1"));
+    system.addUser(PrivateUser("User1;Sensor99"));
     EXPECT_GT(system.getUsers().size(), 0);
 
     // Check empty system
     EXPECT_EQ(emptySystem.getUsers().size(), 0);
 }
+
+
+// print measurements

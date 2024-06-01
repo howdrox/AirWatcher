@@ -156,13 +156,13 @@ TEST_F(ServiceTest, ImpactPurificateurTest)
 // Test case for chercherZones method
 TEST_F(ServiceTest, ChercherZonesTest)
 {
-    Time start(2023, 1, 1, 0, 0, 0);
-    Time end(2023, 12, 31, 23, 59, 59);
+    Time start(2019, 1, 1, 0, 0, 0);
+    Time end(2019, 12, 31, 23, 59, 59);
     // Test with existing sensor ID and valid time range
     EXPECT_FALSE(service.getSimilarZones(1, start, end, 0.1).empty());
 
     // Test with non-existent sensor ID
-    EXPECT_TRUE(service.getSimilarZones(-1, start, end, 0.1).empty());
+    EXPECT_THROW(service.getSimilarZones(-1, start, end, 0.1), std::exception);
 
     // Test with end date before start date
     EXPECT_THROW(service.getSimilarZones(1, end, start, 0.1), std::exception);

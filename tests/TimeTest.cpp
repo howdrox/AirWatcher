@@ -96,16 +96,6 @@ TEST(TimeTest, OutputOperator)
     EXPECT_EQ(oss.str(), "2024-06-01 12:30:45");
 }
 
-// Test getDate method
-TEST(TimeTest, GetDate)
-{
-    Time time(2024, 6, 1, 12, 30, 45);
-    Date date = time.getDate();
-    EXPECT_EQ(date.year, 2024);
-    EXPECT_EQ(date.month, 6);
-    EXPECT_EQ(date.day, 1);
-}
-
 // Test destructor (no specific test needed, just ensure no memory leaks)
 TEST(TimeTest, Destructor)
 {
