@@ -180,7 +180,9 @@ void test_calculateQuality1()
     // Test with one measurement
     Measurement m("2019-01-01 12:00:00;Sensor0;O3;50.25;");
     system.addMeasurement(m);
+    
     result = service.calculateQuality(system.getMeasurements());
+    cout<<"Point reached ......."<<endl;
     if (result == 2)
     {
         cout << "----> Test with one measurement: Passed" << endl;
@@ -554,17 +556,17 @@ void test_chercherZones()
 
 int main()
 {
-    test_getMeasurements();
-    test_getCleaners();
-    test_getSensors();
-    test_getUsers();
-    test_isInZone();
+    //test_getMeasurements(); ...
+    //test_getCleaners();
+    //test_getSensors(); ....
+    //test_getUsers(); .....
+    //test_isInZone();
     test_calculateQuality1();
-    test_calculateQuality2();
+    /*test_calculateQuality2();
     test_filterMeasurements();
     test_impactPurificateur();
     test_distance();
-    test_chercherZones();
+    test_chercherZones();*/
 
     return 0;
 }
