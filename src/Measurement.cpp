@@ -28,6 +28,10 @@ Measurement::Measurement(const string &ligne)
         else if (elements[2] == "PM10") attributeID = PM10;
         
         value = stod(elements[3]);
+        if (value < 0) {
+            cout << "Attention the measured value is negative and was changed to 0" << endl;
+            value = 0;
+        }
         blacklisted = false;
     }
     else
