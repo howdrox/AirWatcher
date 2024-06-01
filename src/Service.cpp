@@ -78,7 +78,10 @@ map<int, vector<Measurement>> Service::filterMeasurements(const Time &start, con
         {
             Measurement m = measurementList[i];
             Time measureTime = m.getTimestamp();
-            if (start <= measureTime && measureTime < end)
+            // if (measureTime == start) {
+            //     cout << measureTime << endl;
+            // }
+            if (measureTime >= start && measureTime < end)
             {
                 filteredList.push_back(m);
             }
@@ -112,14 +115,16 @@ multimap<double, int> Service ::getSimilarZones(const int &sensorID, const Time 
     {
         throw invalid_argument("Sensor ID not found");
     }
-    if (delta <= 0) {
+    if (delta <= 0)
+    {
         throw invalid_argument("Delta invalid");
     }
 
     map<int, vector<Measurement>> measurements = system.getMeasurements();
     map<int, vector<Measurement>> filteredMeasurements = filterMeasurements(start, end, measurements);
     map<int, vector<Measurement>> parameterSensorMeasurements;
-    if (filteredMeasurements.empty()) {
+    if (filteredMeasurements.empty())
+    {
         return similarSensors;
     }
     parameterSensorMeasurements[sensorID] = filteredMeasurements[sensorID];
@@ -143,9 +148,8 @@ multimap<double, int> Service ::getSimilarZones(const int &sensorID, const Time 
     return similarSensors;
 }
 
-multimap<double, Sensor> Service::sortSensors(map<int, Sensor> sensors, const Coord &coord)
+multimap<double, Sensor> Service::sortSensors(const map<int, Sensor> &sensors, const Coord &coord)
 {
-    System system;
     multimap<double, Sensor> sortedSensors;
 
     for (auto it = sensors.begin(); it != sensors.end(); ++it)
@@ -156,60 +160,62 @@ multimap<double, Sensor> Service::sortSensors(map<int, Sensor> sensors, const Co
     return sortedSensors;
 }
 
-double Service::calculateImpactRadius(const int &cleanerId)
+double Service::calculateImpactRadius(int cleanerId)
 {
     const vector<Cleaner> &cleaners = system.getCleaners();
-
-    // Vérifier si cleanerId est dans la liste des nettoyeurs
     Coord cleanerCoord;
-    Time start;
-    Time end;
-    bool cleanerFound = false;
-    for (const Cleaner &c : cleaners)
+    Time start, end;
+
+    auto it = cleaners.begin();
+    while (it != cleaners.end())
     {
-        if (c.getCleanerId() == cleanerId)
+        if (it->getCleanerId() == cleanerId)
         {
-            cleanerCoord = c.getCoord();
-            start = c.getStartTime();
-            end = c.getEndTime();
-            cleanerFound = true;
+            cleanerCoord = it->getCoord();
+            start = it->getStartTime();
+            end = it->getEndTime();
             break;
         }
+        ++it;
     }
 
-    if (!cleanerFound)
+    if (it == cleaners.end())
     {
-        throw invalid_argument("Cleaner ID not found");
+        throw std::invalid_argument("Cleaner ID not found");
     }
+    cout << "Cleaner ID: " << cleanerId << " Coord: " << cleanerCoord.latitude << ", " << cleanerCoord.longitude << endl;
 
-    map<int, Sensor> sensors = system.getSensors();
-    map<int, vector<Measurement>> measurements = system.getMeasurements();
+    // Sort sensors by distance from the cleaner
+    multimap<double, Sensor> sortedSensors = sortSensors(system.getSensors(), cleanerCoord);
 
-    // Trier les capteurs par distance par rapport aux coordonnées du cleaner
-    multimap<double, Sensor> sortedSensors = sortSensors(sensors, cleanerCoord);
+    Time before_start = start.addDays(-1);
+    Time before_end = end.addDays(-1);
 
-    Time before_start(start.getYear(), start.getMonth(), start.getDay() - 1, start.getHour(), start.getMinute(), start.getSecond());
-    Time before_end(end.getYear(), end.getMonth(), end.getDay() - 1, end.getHour(), end.getMinute(), end.getSecond());
-    ;
+    cout << "before start: " << before_start << endl;
+    cout << "before end: " << before_end << endl;
 
     double impactRadius = 0.0;
 
     for (const auto &pair : sortedSensors)
     {
         double distance = pair.first;
-        Sensor sensor = pair.second;
+        const Sensor &sensor = pair.second;
 
-        // Filtrer les mesures pour ce capteur particulier
-        map<int, vector<Measurement>> sensorMeasurements;
-        sensorMeasurements[sensor.getSensorID()] = sensor.getMeasurements();
+        auto sensorMeasurements = sensor.getMeasurements();
+        auto beforeMeasurements = filterMeasurements(before_start, start, {{sensor.getSensorID(), sensorMeasurements}});
+        auto afterMeasurements = filterMeasurements(before_end, end, {{sensor.getSensorID(), sensorMeasurements}});
 
-        map<int, vector<Measurement>> beforeMeasurements = filterMeasurements(before_start, start, sensorMeasurements);
-        map<int, vector<Measurement>> afterMeasurements = filterMeasurements(before_end, end, sensorMeasurements);
+        cout << "beforeMeasurements: " << beforeMeasurements.size() << endl;
+        cout << "afterMeasurements: " << afterMeasurements.size() << endl;
 
         double qualityBeforeCleaner = calculateQuality(beforeMeasurements);
         double qualityAfterCleaner = calculateQuality(afterMeasurements);
 
-        if (qualityAfterCleaner >= qualityBeforeCleaner)
+        cout << "Quality before cleaner: " << qualityBeforeCleaner << endl;
+        cout << "Quality after cleaner: " << qualityAfterCleaner << endl;
+        cout << "Distance: " << distance << endl;
+
+        if (qualityAfterCleaner > qualityBeforeCleaner)
         {
             impactRadius = distance;
         }
@@ -241,7 +247,7 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
     // A map where:
     // - Key: Represents the day
     // - Value: map of measurements done during the day corresponding to the key
-    map<Time, map<int,vector<Measurement>>> filteredMeasurements;
+    map<Time, map<int, vector<Measurement>>> filteredMeasurements;
 
     for (const auto &sensorData : system.getMeasurements())
     {
@@ -279,6 +285,8 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
  * @details For each pollutant, stores the maximum value for each hour, then caculates the average to get the sub index
  * The ATMO index is the maximum of all the sub indexes
  *
+ * @pre The function does group up the measurements per day
+ *
  * @param measurements
  * @return double
  */
@@ -300,7 +308,6 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
     {
         for (const auto &measurement : sensorData.second)
         {
-            // Only consider non-blacklisted measurements
             if (!measurement.isBlacklisted())
             {
                 PollutantType attr = measurement.getAttributeID();
