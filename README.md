@@ -24,7 +24,7 @@ make test && target/test_airwatcher
 
 ## GoogleTest linux install
 ```
-sudo apt-get install libgtest-dev
+sudo apt install libgtest-dev
 cd /usr/src/gtest
 sudo cmake CMakeLists.txt
 sudo make
