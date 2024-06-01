@@ -71,7 +71,8 @@ map<int, vector<Measurement>> Service::filterMeasurements(const Time &start, con
                 filteredList.push_back(m);
             }
         }
-        res[itr->first] = filteredList;
+        if (filteredList.size() > 0)
+            res[itr->first] = filteredList;
     }
     return res;
 }
@@ -80,9 +81,32 @@ multimap<double, int> Service ::getSimilarZones(const int &sensorID, const Time 
 
     multimap<double, int> similarSensors;
     map<int, Sensor> sensors = system.getSensors();
+    // Vérifier si sensorId est dans la liste des sensors
+    bool sensorFound = false;
+    for (const auto &pair : sensors)
+    {
+        Sensor s = pair.second;
+        if (s.getSensorID() == sensorID)
+        {
+            sensorFound = true;
+            break;
+        }
+    }
+
+    if (!sensorFound)
+    {
+        throw invalid_argument("Sensor ID not found");
+    }
+    if (delta <= 0) {
+        throw invalid_argument("Delta invalid");
+    }
+
     map<int, vector<Measurement>> measurements = system.getMeasurements();
     map<int, vector<Measurement>> filteredMeasurements = filterMeasurements(start, end, measurements);
     map<int, vector<Measurement>> parameterSensorMeasurements;
+    if (filteredMeasurements.empty()) {
+        return similarSensors;
+    }
     parameterSensorMeasurements[sensorID] = filteredMeasurements[sensorID];
     double parameterQuality = this->calculateQuality(parameterSensorMeasurements);
 
