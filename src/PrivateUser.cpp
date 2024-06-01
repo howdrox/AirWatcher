@@ -22,12 +22,12 @@ PrivateUser::PrivateUser(const std::string &userInfo) : User(Role::PRIVATE_USER)
 
     // Extract sensor IDs
     std::string sensorIDString;
-    while (std::getline(ss, sensorIDString, ';'))
-    {
-        // Assuming sensor ID is prefixed with "Sensor"
-        int sensorID = std::stoi(sensorIDString.substr(6));
-        sensorsID.push_back(sensorID);
-    }
+    getline(ss, sensorIDString, ';');
+    
+    // Assuming sensor ID is prefixed with "Sensor"
+    int sensorID = std::stoi(sensorIDString.substr(6));
+    sensorsID.push_back(sensorID);
+    
 }
 
 PrivateUser& PrivateUser::operator=(const PrivateUser& p)

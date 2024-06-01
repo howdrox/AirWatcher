@@ -5,13 +5,8 @@
 
 using namespace std;
 
-typedef struct{
-    int year;
-    int month;
-    int day;
-}Date;
-
-class Time {
+class Time
+{
 public:
     // Getters
     int getYear() const;
@@ -35,7 +30,7 @@ public:
     Time &operator=(const Time &other);
 
     // Surcharge de l'opérateur d'insertion
-    friend ostream& operator<<(ostream &out, const Time &time);
+    friend ostream &operator<<(ostream &out, const Time &time);
 
     // Constructeurs
     Time(int yy = 0, int MM = 0, int dd = 0, int hh = 0, int mm = 0, int ss = 0);

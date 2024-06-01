@@ -6,9 +6,7 @@ struct Coord
     double latitude;
     double longitude;
 
-    Coord() : latitude(0), longitude(0) {}
-    Coord(double lat, double lng) : latitude(lat), longitude(lng) {}
-    // Coord(const Coord &coord) : latitude(coord.latitude), longitude(coord.longitude) {}
+    Coord(double lat = 0, double lng = 0) : latitude(lat), longitude(lng) {}
 };
 
 #endif // COORD_H
