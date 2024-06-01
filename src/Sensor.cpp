@@ -46,20 +46,6 @@ Sensor::~Sensor()
     cout << "Appel au destructeur de <Sensor>" << endl;
 #endif
 }
-
-
-
-
-void Sensor::setSensorID(const int &id)
-{
-    sensorID = id;
-}
-
-void Sensor::setLocation(const Coord &loc)
-{
-    location = loc;
-}
-
 void Sensor::addMeasurement(const Measurement &measurement)
 {
     measurements.push_back(measurement);
@@ -69,7 +55,7 @@ std::ostream& operator<<(std::ostream& os, const Sensor& sensor) {
         os << "Sensor ID: " << sensor.sensorID << endl;
         os << "Latitude: " << sensor.location.latitude << endl;
         os << "Longitude: " << sensor.location.longitude << endl;;
-        os << "Measurements: ";
+        os << "Measurements: " << endl;
         /*for (const auto& measurement : sensor.measurements) {
             os << measurement << " ";
         }*/

@@ -16,10 +16,9 @@ public:
     int getSensorID() const { return sensorID; }
     const Coord getLocation() const { return location; }
     const vector<Measurement> &getMeasurements() const { return measurements; }
-
-    void setSensorID(const int &id);
-    void setLocation(const Coord &loc);
+    
     void addMeasurement(const Measurement &measurement);
+
     friend std::ostream& operator<<(std::ostream& os, const Sensor& sensor);
     ~Sensor();
 
