@@ -28,7 +28,7 @@ Measurement::Measurement(const string &ligne)
         
         value = stod(elements[3]);
         if (value < 0) {
-            cout << "Attention the measured value is negative and was changed to 0" << endl;
+            cerr << "Attention the measured value is negative and was changed to 0" << endl;
             value = 0;
         }
         blacklisted = false;
