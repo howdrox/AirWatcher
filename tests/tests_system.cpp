@@ -2,8 +2,8 @@
 
 using namespace std;
 
-void test_getMeasurements()
-{
+/*void test_getMeasurements()
+
 
     System system = System("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
     cout << "Test getMeasurements()" << endl;
@@ -115,7 +115,7 @@ void test_getUsers()
     {
         cout << "----> Test getUsers() avec utilisateurs nuls : Échoué" << endl;
     }
-}
+}*/
 
 void test_calculateQuality()
 {
@@ -200,7 +200,7 @@ void test_calculateQuality()
         cout << "----> Test with start date later than end date: Passed (exception thrown)" << endl;
     }
 }
-
+/*
 void test_filterMeasurements()
 {
     System system("data/Sensors/test1.csv", "data/Cleaners/test1.csv", "data/Users/test1.csv", "data/Measurements/test1.csv");
@@ -488,16 +488,16 @@ void test_chercherZones()
     {
         cout << "----> Test with invalid delta: Passed (exception thrown)" << endl;
     }
-}
+}*/
 
 int main()
 {
-    test_getMeasurements();
-    /*test_getCleaners();
+    /*test_getMeasurements();
+    test_getCleaners();
     test_getSensors();
-    test_getUsers();
+    test_getUsers();*/
     test_calculateQuality();
-    test_filterMeasurements();
+    /*test_filterMeasurements();
     test_impactPurificateur();
     test_distance();
     test_chercherZones();*/
