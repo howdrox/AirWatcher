@@ -17,22 +17,6 @@ System::System(const string &sensorsFilePath, const string &cleanersFilePath, co
     cout << "Appel au constructeur de <System>" << endl;
 #endif
 
-    ifstream sensorsFile(sensorsFilePath);
-    if (!sensorsFile.is_open())
-    {
-        cerr << "Unable to open sensorsFile: " << sensorsFilePath << endl;
-        return;
-    }
-
-    string sensorLine;
-    while (getline(sensorsFile, sensorLine))
-    {
-        Sensor sensor(sensorLine);
-        sensors[sensor.getSensorID()] = sensor;
-    }
-
-    sensorsFile.close();
-
     ifstream cleanersFile(cleanersFilePath);
     if (!cleanersFile.is_open())
     {
@@ -65,6 +49,22 @@ System::System(const string &sensorsFilePath, const string &cleanersFilePath, co
 
     usersFile.close();
 
+    ifstream sensorsFile(sensorsFilePath);
+    if (!sensorsFile.is_open())
+    {
+        cerr << "Unable to open sensorsFile: " << sensorsFilePath << endl;
+        return;
+    }
+
+    string sensorLine;
+    while (getline(sensorsFile, sensorLine))
+    {
+        Sensor sensor(sensorLine);
+        sensors[sensor.getSensorID()] = sensor;
+    }
+
+    sensorsFile.close();
+
     ifstream measurementsFile(measurementsFilePath);
     if (!measurementsFile.is_open())
     {
@@ -77,9 +77,12 @@ System::System(const string &sensorsFilePath, const string &cleanersFilePath, co
     {
         Measurement measurement(measurementLine);
         measurements[measurement.getSensorID()].push_back(measurement);
+        sensors[measurement.getSensorID()].addMeasurement(measurement);
     }
 
-    usersFile.close();
+    measurementsFile.close();
+
+    
 }
 
 System::~System() {}
