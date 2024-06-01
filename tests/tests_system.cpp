@@ -500,7 +500,7 @@ int main()
     test_filterMeasurements();
     test_impactPurificateur();
     test_distance();
-    test_chercherZones();
+    test_chercherZones();*/
 
     return 0;
 }

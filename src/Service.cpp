@@ -197,8 +197,8 @@ double Service::calculateImpactRadius(const int &cleanerId)
  */
 double Service::calculateQuality(const Zone &zone, const Time &start, const Time &end)
 {
-    vector<vector<double>> pollutantMaxValues;
-    vector<Time> pollutantLastTime;
+    map<PollutantType,vector<double>> pollutantMaxValues;
+    map<PollutantType,Time> pollutantLastTime;
     pollutantLastTime[O3] = Time(0, 0, 0, 0, 0, 0);
     pollutantLastTime[NO2] = Time(0, 0, 0, 0, 0, 0);
     pollutantLastTime[SO2] = Time(0, 0, 0, 0, 0, 0);
@@ -238,8 +238,8 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
 
 double Service::calculateQuality(const map<int, vector<Measurement>> &measurements)
 {
-    vector<vector<double>> pollutantMaxValues;
-    vector< Time> pollutantLastTime;
+    map<PollutantType,vector<double>> pollutantMaxValues;
+    map<PollutantType,Time> pollutantLastTime;
     pollutantLastTime[O3] = Time(0, 0, 0, 0, 0, 0);
     pollutantLastTime[NO2] = Time(0, 0, 0, 0, 0, 0);
     pollutantLastTime[SO2] = Time(0, 0, 0, 0, 0, 0);
@@ -283,7 +283,7 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
     int indexPM10 = calculateSubIndex(avgPM10, PM10);
 
     // Calculate the Atmo index as the maximum of sub-indices
-    return max({avgO3, avgNO2, avgSO2, avgPM10});
+    return max({indexO3, indexNO2, indexSO2, indexPM10});
 }
 
 /**
