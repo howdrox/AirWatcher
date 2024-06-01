@@ -5,6 +5,12 @@
 
 using namespace std;
 
+typedef struct{
+    int year;
+    int month;
+    int day;
+}Date;
+
 class Time {
 public:
     // Getters
@@ -14,6 +20,7 @@ public:
     int getHour() const;
     int getMinute() const;
     int getSecond() const;
+    int getDate() const;
 
     // Méthode pour vérifier si deux objets Time ont la même heure et date
     bool isSameHour(const Time &time) const;

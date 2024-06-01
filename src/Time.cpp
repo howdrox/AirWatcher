@@ -35,7 +35,14 @@ int Time::getSecond() const
 {
     return second;
 }
-
+Date Time::getDate() const
+{
+    Date date;
+    date.year = year;
+    date.month = month;
+    date.day = day;
+    return date;
+}
 // Méthode pour vérifier si deux objets Time ont la même heure et date
 bool Time::isSameHour(const Time &time) const
 {
