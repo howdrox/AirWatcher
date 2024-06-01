@@ -20,7 +20,7 @@ public:
     int getHour() const;
     int getMinute() const;
     int getSecond() const;
-    int getDate() const;
+    Date getDate() const;
 
     // Méthode pour vérifier si deux objets Time ont la même heure et date
     bool isSameHour(const Time &time) const;
