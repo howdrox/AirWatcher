@@ -126,3 +126,33 @@ Time::Time(const Time &date)
 
 // Destructeur
 Time::~Time() {}
+
+// Define comparison operators for the Date struct
+
+bool operator==(const Date &lhs, const Date &rhs) {
+    return lhs.year == rhs.year && lhs.month == rhs.month && lhs.day == rhs.day;
+}
+
+bool operator!=(const Date &lhs, const Date &rhs) {
+    return !(lhs == rhs);
+}
+
+bool operator<(const Date &lhs, const Date &rhs) {
+    if (lhs.year < rhs.year) return true;
+    if (lhs.year > rhs.year) return false;
+    if (lhs.month < rhs.month) return true;
+    if (lhs.month > rhs.month) return false;
+    return lhs.day < rhs.day;
+}
+
+bool operator<=(const Date &lhs, const Date &rhs) {
+    return lhs < rhs || lhs == rhs;
+}
+
+bool operator>(const Date &lhs, const Date &rhs) {
+    return !(lhs <= rhs);
+}
+
+bool operator>=(const Date &lhs, const Date &rhs) {
+    return !(lhs < rhs);
+}
