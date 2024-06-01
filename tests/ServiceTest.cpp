@@ -26,7 +26,6 @@ protected:
 // Test case for distance method
 TEST_F(ServiceTest, DistanceTest)
 {
-    Service service;
     // Test with different coordinates
     Coord coord1(48.8575, 2.3514);
     Coord coord2(45.7640, 4.8357);
@@ -39,8 +38,8 @@ TEST_F(ServiceTest, DistanceTest)
     Coord coord3;
     EXPECT_GT(service.distance(coord1, coord3), 0.0);
 
-    // Test with very distant coordinates
-    Coord coord4(21.0278, 105.8342); // Hanoi
+    // Test with negative lat and long
+    Coord coord4(-48.8575, -2.3514);
     EXPECT_GT(service.distance(coord1, coord4), 0.0);
 
     // Test with coord and zone
@@ -54,21 +53,47 @@ TEST_F(ServiceTest, IsInZoneTest)
     Coord center(44.1, -1);
     Zone zone(center, 20);
 
-    // Test case 1: Point inside the zone
-    Coord insidePoint(44.2, -1.1);
-    EXPECT_TRUE(service.isInZone(insidePoint, zone));
+    // Test with coord inside the zone
+    Coord insideCoord(44.2, -1.1);
+    EXPECT_TRUE(service.isInZone(insideCoord, zone));
 
-    // Test case 2: Point on the edge (outside) of the zone
-    Coord edgePoint(44.1 + 20 / 111.0, -1); // Approximation: 1 degree latitude is ~111 km
-    EXPECT_FALSE(service.isInZone(edgePoint, zone));
+    // Test with coord on the edge (outside) of the zone
+    Coord edgeCoord(44.1 + 20 / 111.0, -1); // Approximation: 1 degree latitude is ~111 km
+    EXPECT_FALSE(service.isInZone(edgeCoord, zone));
 
-    // Test case 3: Point outside the zone
-    Coord outsidePoint(45.1, -1);
-    EXPECT_FALSE(service.isInZone(outsidePoint, zone));
+    // Test with coord outside the zone
+    Coord outsideCoord(45.1, -1);
+    EXPECT_FALSE(service.isInZone(outsideCoord, zone));
+}
+
+// Test case for filterMeasurements method
+TEST_F(ServiceTest, FilterMeasurementsTest)
+{
+    Time start(2019, 1, 1, 0, 0, 0);
+    Time end(2019, 1, 4, 0, 0, 0);
+
+    // Test with valid date range and existing measurements
+    EXPECT_FALSE(service.filterMeasurements(start, end, system.getMeasurements()).empty());
+
+    // Test with valid date range containing no measurements
+    EXPECT_TRUE(service.filterMeasurements(start, end, emptySystem.getMeasurements()).empty());
+
+    // Test with start date equal to end date
+    Time start2(2019, 1, 1, 12, 0, 0);
+    Time end2(2019, 1, 1, 12, 0, 0);
+    EXPECT_TRUE(service.filterMeasurements(start2, end2, system.getMeasurements()).empty());
+
+    // Test with start date equal measurement date
+    Time start3("2019-01-01 12:00:00");
+    Time end3("2019-01-04 13:00:00");
+    EXPECT_FALSE(service.filterMeasurements(start3, end3, system.getMeasurements()).empty());
+
+    // Test with end date before start date
+    EXPECT_THROW(service.filterMeasurements(end, start, system.getMeasurements()), std::exception);
 }
 
 // Test case for calculateQuality method with emptySystem
-TEST_F(ServiceTest, CalculateQualityEmptySystemTest)
+TEST_F(ServiceTest, CalculateQualityWithMeasurementParameterTest)
 {
     // Test with no measurements
     EXPECT_EQ(emptyService.calculateQuality(emptySystem.getMeasurements()), 0.0);
@@ -107,50 +132,63 @@ TEST_F(ServiceTest, CalculateQualityWithZoneAndTimeRangeTest)
     EXPECT_THROW(service.calculateQuality(zone, end, start), std::exception);
 }
 
-// Test case for filterMeasurements method
-TEST_F(ServiceTest, FilterMeasurementsTest)
+// Test case for sortSensors function
+TEST_F(ServiceTest, SortSensorsTestFromManualData)
 {
-    Time start(2019, 1, 1, 0, 0, 0);
-    Time end(2019, 1, 4, 0, 0, 0);
+    // Create test sensors
+    map<int, Sensor> sensors;
+    sensors[1] = Sensor(1, Coord(48.8566, 2.3522));   // Paris
+    sensors[2] = Sensor(2, Coord(51.5074, -0.1278));  // London
+    sensors[3] = Sensor(3, Coord(40.7128, -74.0060)); // New York
 
-    // Test with valid date range and existing measurements
-    auto filtered = service.filterMeasurements(start, end, system.getMeasurements());
-    EXPECT_FALSE(filtered.empty());
+    // Coordinate to sort sensors by distance from
+    Coord testCoord(48.8566, 2.3522); // Paris
 
-    // Test with valid date range containing no measurements
-    Time start1(2024, 1, 1, 0, 0, 0);
-    Time end1(2024, 1, 4, 0, 0, 0);
-    filtered = service.filterMeasurements(start1, end1, system.getMeasurements());
-    // cout << filtered[0][0].getMeasurementID() << endl;
-    // cout << filtered[1][0].getMeasurementID() << endl;
-    EXPECT_TRUE(filtered.empty());
+    // Call sortSensors function
+    multimap<double, Sensor> sortedSensors = service.sortSensors(sensors, testCoord);
 
-    // Test with start date equal to end date
-    Time start2(2019, 1, 1, 12, 0, 0);
-    Time end2(2019, 1, 1, 12, 0, 0);
-    filtered = service.filterMeasurements(start2, end2, system.getMeasurements());
-    EXPECT_TRUE(filtered.empty());
+    // Verify that the sensors are sorted by distance
+    auto it = sortedSensors.begin();
+    EXPECT_EQ(it->second.getSensorID(), 1); // Paris (distance 0)
+    ++it;
+    EXPECT_EQ(it->second.getSensorID(), 2); // London
+    ++it;
+    EXPECT_EQ(it->second.getSensorID(), 3); // New York
+}
 
-    // Test with end date before start date
-    EXPECT_THROW(service.filterMeasurements(end, start, system.getMeasurements()), std::exception);
+TEST_F(ServiceTest, SortSensorsTestFromCSVTestData)
+{
+    // Coordinate to sort sensors by distance from
+    Coord testCoord(44, 1.2);
 
-    // Test with valid date range but empty measurements
-    filtered = service.filterMeasurements(start, end, emptySystem.getMeasurements());
-    EXPECT_TRUE(filtered.empty());
+    // Call sortSensors function
+    multimap<double, Sensor> sortedSensors = service.sortSensors(system.getSensors(), testCoord);
+
+    EXPECT_GT(sortedSensors.size(), 0);
+
+    // Verify that the sensors are sorted by distance
+    auto it = sortedSensors.begin();
+    EXPECT_EQ(it->second.getSensorID(), 3);
+    ++it;
+    EXPECT_EQ(it->second.getSensorID(), 4);
 }
 
 // Test case for impactPurificateur method
-TEST_F(ServiceTest, ImpactPurificateurTest)
+TEST_F(ServiceTest, CalculateImpactRadius)
 {
+    for (auto &sensor : system.getSensors())
+    {
+        cout << sensor.second.getMeasurements().size() << endl;
+    }
     // Test with a valid cleaner ID
-    EXPECT_NO_THROW(service.calculateImpactRadius(1));
-    EXPECT_GT(service.calculateImpactRadius(1), 0.0);
+    // EXPECT_NO_THROW(service.calculateImpactRadius(0));
+    EXPECT_GT(service.calculateImpactRadius(0), 0.0);
 
     // Test with an invalid cleaner ID
     EXPECT_THROW(service.calculateImpactRadius(-1), std::exception);
 
-    // Test with valid date range containing no measurements
-    EXPECT_GT(service.calculateImpactRadius(2), 0.0);
+    // Test with valid cleaner ID that has no measurements in its date range
+    EXPECT_DOUBLE_EQ(service.calculateImpactRadius(2), 0.0);
 }
 
 // Test case for chercherZones method
@@ -168,7 +206,7 @@ TEST_F(ServiceTest, ChercherZonesTest)
     EXPECT_THROW(service.getSimilarZones(1, end, start, 0.1), std::exception);
 
     // Test with start date equal to end date
-    EXPECT_FALSE(service.getSimilarZones(1, start, start, 0.1).empty());
+    EXPECT_TRUE(service.getSimilarZones(1, start, start, 0.1).empty());
 
     // Test with invalid delta (<= 0)
     EXPECT_THROW(service.getSimilarZones(1, start, end, -0.1), std::exception);

@@ -84,7 +84,10 @@ TEST(TimeTest, ComparisonOperators)
     EXPECT_TRUE(time1 <= time2);
     EXPECT_TRUE(time1 >= time2);
     EXPECT_TRUE(time1 < time3);
+    EXPECT_TRUE(time1 <= time3);
     EXPECT_TRUE(time3 > time1);
+    EXPECT_TRUE(time3 >= time1);
+    EXPECT_FALSE(time1 < time2);
 }
 
 // Test output operator
