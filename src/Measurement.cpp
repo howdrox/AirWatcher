@@ -17,11 +17,10 @@ Measurement::Measurement(const string &ligne)
     {
         elements.push_back(item);
     }
-
-    if (elements.size() == 4)
-    {
-        timestamp = elements[0];
-        sensorID = stoi(elements[1].substr(6));
+    
+   
+        timestamp = Time(elements[0]);
+        sensorID = std::stoi(elements[1].substr(6));
         if (elements[2] == "O3") attributeID = O3;
         else if (elements[2] == "NO2") attributeID = NO2;
         else if (elements[2] == "SO2") attributeID = SO2;
@@ -33,9 +32,15 @@ Measurement::Measurement(const string &ligne)
             value = 0;
         }
         blacklisted = false;
-    }
-    else
-    {
-        cerr << "Erreur : ligne mal formée." << endl;
-    }
+    
+}
+
+std::ostream& operator<<(std::ostream& os, const Measurement& measurement) {
+    os << " , Measurement ID: " << measurement.measurementID 
+       << " , Timestamp: " << measurement.timestamp 
+       << " , Sensor ID: " << measurement.sensorID 
+       << " , Attribute ID: " << static_cast<int>(measurement.attributeID) 
+       << " , Value: " << measurement.value 
+       << " , Blacklisted: " << (measurement.blacklisted ? "Yes" : "No");
+    return os;
 }

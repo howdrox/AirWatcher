@@ -95,8 +95,33 @@ multimap<double, int> Service ::getSimilarZones(const int &sensorID, const Time 
 {
 
     multimap<double, int> similarSensors;
-    map<int, vector<Measurement>> filteredMeasurements = filterMeasurements(start, end, system.getMeasurements());
+    map<int, Sensor> sensors = system.getSensors();
+    // Vérifier si sensorId est dans la liste des sensors
+    bool sensorFound = false;
+    for (const auto &pair : sensors)
+    {
+        Sensor s = pair.second;
+        if (s.getSensorID() == sensorID)
+        {
+            sensorFound = true;
+            break;
+        }
+    }
+
+    if (!sensorFound)
+    {
+        throw invalid_argument("Sensor ID not found");
+    }
+    if (delta <= 0) {
+        throw invalid_argument("Delta invalid");
+    }
+
+    map<int, vector<Measurement>> measurements = system.getMeasurements();
+    map<int, vector<Measurement>> filteredMeasurements = filterMeasurements(start, end, measurements);
     map<int, vector<Measurement>> parameterSensorMeasurements;
+    if (filteredMeasurements.empty()) {
+        return similarSensors;
+    }
     parameterSensorMeasurements[sensorID] = filteredMeasurements[sensorID];
     double parameterQuality = this->calculateQuality(parameterSensorMeasurements);
 
@@ -216,7 +241,7 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
     // A map where:
     // - Key: Represents the day
     // - Value: map of measurements done during the day corresponding to the key
-    map<Date, map<int, vector<Measurement>>> filteredMeasurements;
+    map<Time, map<int,vector<Measurement>>> filteredMeasurements;
 
     for (const auto &sensorData : system.getMeasurements())
     {
@@ -229,7 +254,9 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
                 map<int, Sensor> s = system.getSensors();
                 if (isInZone(s[measurement.getSensorID()].getLocation(), zone))
                 {
-                    filteredMeasurements[measurement.getTimestamp().getDate()][sensorData.first].push_back(measurement);
+                    Time timestamp = measurement.getTimestamp();
+                    Time date = timestamp.zeroOutHour();
+                    filteredMeasurements[date][sensorData.first].push_back(measurement);
                 }
             }
         }

@@ -31,6 +31,8 @@ public:
     double getValue() const { return value; }
     bool isBlacklisted() const { return blacklisted; }
 
+    friend std::ostream& operator<<(std::ostream& os, const Measurement& measurement);
+
 protected:
     int measurementID;
     Time timestamp;
