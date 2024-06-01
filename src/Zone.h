@@ -8,7 +8,7 @@ struct Zone : public Coord
     double radius;
 
     Zone(double lat, double lng, double rad) : Coord(lat, lng), radius(rad) {}
-
+    Zone(const Coord& c, double rad) : Coord(c), radius(rad) {}
     Zone(const Zone &zone) : Coord(zone), radius(zone.radius) {}
 };
 
