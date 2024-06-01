@@ -52,8 +52,20 @@ double Service::distance(const Coord &coord1, const Coord &coord2)
     return distance;
 }
 
+/**
+ * @brief Returns a `map` of measurements that fall within the specified time range
+ *
+ * @param start
+ * @param end
+ * @param measurements
+ * @return map<int, vector<Measurement>>
+ */
 map<int, vector<Measurement>> Service::filterMeasurements(const Time &start, const Time &end, map<int, vector<Measurement>> measurements)
 {
+    if (start > end)
+    {
+        throw invalid_argument("Start time must be before end time");
+    }
     map<int, vector<Measurement>> res;
     map<int, vector<Measurement>>::iterator itr;
     for (itr = measurements.begin(); itr != measurements.end(); ++itr)
@@ -66,22 +78,24 @@ map<int, vector<Measurement>> Service::filterMeasurements(const Time &start, con
         {
             Measurement m = measurementList[i];
             Time measureTime = m.getTimestamp();
-            if (start < measureTime && measureTime < end)
+            if (start <= measureTime && measureTime < end)
             {
                 filteredList.push_back(m);
             }
         }
-        res[itr->first] = filteredList;
+        if (!filteredList.empty())
+        {
+            res[itr->first] = filteredList;
+        }
     }
     return res;
 }
+
 multimap<double, int> Service ::getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta)
 {
 
     multimap<double, int> similarSensors;
-    map<int, Sensor> sensors = system.getSensors();
-    map<int, vector<Measurement>> measurements = system.getMeasurements();
-    map<int, vector<Measurement>> filteredMeasurements = filterMeasurements(start, end, measurements);
+    map<int, vector<Measurement>> filteredMeasurements = filterMeasurements(start, end, system.getMeasurements());
     map<int, vector<Measurement>> parameterSensorMeasurements;
     parameterSensorMeasurements[sensorID] = filteredMeasurements[sensorID];
     double parameterQuality = this->calculateQuality(parameterSensorMeasurements);
@@ -181,9 +195,6 @@ double Service::calculateImpactRadius(const int &cleanerId)
     }
 
     return impactRadius;
-
-    // Si cleanerId n'est pas trouvé, lancer une exception
-    throw invalid_argument("Cleaner ID not found");
 }
 
 /**
@@ -198,10 +209,14 @@ double Service::calculateImpactRadius(const int &cleanerId)
  */
 double Service::calculateQuality(const Zone &zone, const Time &start, const Time &end)
 {
+    if (start > end)
+    {
+        throw invalid_argument("Start time must be before end time");
+    }
     // A map where:
     // - Key: Represents the day
     // - Value: map of measurements done during the day corresponding to the key
-    map<Date, map<int,vector<Measurement>>> filteredMeasurements;
+    map<Date, map<int, vector<Measurement>>> filteredMeasurements;
 
     for (const auto &sensorData : system.getMeasurements())
     {
@@ -279,7 +294,6 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
         }
     }
     // cout << "first pollutantMaxValues: " << pollutantMaxValues[O3][0] << endl;
-
 
     // Get maximum values for pollutants
     double avgO3 = !pollutantMaxValues[O3].empty() ? average(pollutantMaxValues[O3]) : 0;
