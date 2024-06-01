@@ -32,8 +32,8 @@ Cleaner::Cleaner(const std::string& data) {
     cleanerID = std::stoi(idStr);
 
     // Location
-    double lng = std::stod(values[1]);
-    double lat = std::stod(values[2]);
+    double lat = std::stod(values[1]);
+    double lng = std::stod(values[2]);
     location = Coord(lat, lng);
 
     // Start + end Timestamp
