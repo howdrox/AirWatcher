@@ -340,6 +340,29 @@ double Service::calculateImpactRadius(int cleanerId)
         auto beforeMeasurements = filterMeasurements(before_start, start, {{sensor.getSensorID(), sensorMeasurements}});
         auto afterMeasurements = filterMeasurements(before_end, end, {{sensor.getSensorID(), sensorMeasurements}});
 
+        // Incrémenter les points des utilisateurs privés
+        auto privateUsers = system.getUsers();
+
+        for (const auto &measurement : beforeMeasurements) {
+            int sensorID = measurement.first;
+            for (auto &user : privateUsers) {
+                if (std::find(user.getSensorsID().begin(), user.getSensorsID().end(), sensorID) != user.getSensorsID().end() && !user.isBlacklisted() ) {
+                    user.addPoints(measurement.second.size()); // Ajoute un point pour chaque mesure avant le nettoyage
+                    break;
+                }
+            }
+        }
+
+        for (const auto &measurement : afterMeasurements) {
+            int sensorID = measurement.first;
+            for (auto &user : privateUsers) {
+                if (std::find(user.getSensorsID().begin(), user.getSensorsID().end(), sensorID) != user.getSensorsID().end() && !user.isBlacklisted()) {
+                    user.addPoints(measurement.second.size()); // Ajoute un point pour chaque mesure après le nettoyage
+                    break;
+                }
+            }
+        }
+
         double qualityBeforeCleaner = calculateQuality(beforeMeasurements);
         double qualityAfterCleaner = calculateQuality(afterMeasurements);
 
