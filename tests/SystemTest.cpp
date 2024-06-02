@@ -63,7 +63,7 @@ TEST_F(SystemTest, GetUsers)
 // Test addMeasurement() method
 TEST_F(SystemTest, AddMeasurement)
 {
-    Measurement measurement("2019-01-02 12:00:00;Sensor0;O3;50.5;");
+    Measurement measurement("2029-01-02 12:00:00;Sensor0;O3;50.5;");
 
     // Check on empty system
     emptySystem.addMeasurement(measurement);
@@ -74,6 +74,39 @@ TEST_F(SystemTest, AddMeasurement)
     system.addMeasurement(measurement);
     EXPECT_EQ(system.getMeasurements().at(0).at(0).getSensorID(), 0);
     EXPECT_EQ(system.getMeasurements().at(0).back().getValue(), 50.5);
+}
+
+// Test load measurements in chronological order
+TEST_F(SystemTest, LoadMeasurementsChronologicalTest)
+{
+    vector<Measurement> measurements = system.getMeasurements()[5];
+    Measurement last = Measurement("0000-00-00 00:00:00;Sensor1;SO2;9999;");
+    for (auto &m : measurements)
+    {
+        EXPECT_TRUE(last < m);
+    }
+}
+
+// Test addMeasurement for chronological order
+TEST_F(SystemTest, AddMeasurementChronologicalTest)
+{
+    Measurement m1("2019-01-02 12:00:00;Sensor0;O3;1;");
+    Measurement m2("2018-01-01 12:00:00;Sensor0;O3;2;");
+    Measurement m3("2019-01-03 12:00:00;Sensor0;O3;3;");
+    // Measurement m4("2019-01-02 12:00:00;Sensor0;O3;4;");
+    // Measurement m5("2019-01-02 12:00:00;Sensor0;O3;5;");
+
+    emptySystem.addMeasurement(m1);
+    EXPECT_DOUBLE_EQ(emptySystem.getMeasurements().at(0).back().getValue(), 1);
+
+    emptySystem.addMeasurement(m2);
+    EXPECT_DOUBLE_EQ(emptySystem.getMeasurements().at(0).at(0).getValue(), 2);
+    EXPECT_DOUBLE_EQ(emptySystem.getMeasurements().at(0).back().getValue(), 1);
+
+    emptySystem.addMeasurement(m3);
+    EXPECT_DOUBLE_EQ(emptySystem.getMeasurements().at(0).at(0).getValue(), 2);
+    EXPECT_DOUBLE_EQ(emptySystem.getMeasurements().at(0).at(1).getValue(), 1);
+    EXPECT_DOUBLE_EQ(emptySystem.getMeasurements().at(0).back().getValue(), 3);
 }
 
 // Test addCleaner() method
