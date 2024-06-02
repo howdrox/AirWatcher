@@ -40,7 +40,7 @@ public:
     double calculateQuality(const Zone &zone, const Time &start, const Time &end);
     double calculateQuality(const map<int, vector<Measurement>> &measurements);
     double calculateImpactRadius(int cleanerId);
-    multimap<double, int> getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta);
+    map<double, vector<int>> rankSimilarSensors(int sensorID, const Time &start, const Time &end);
 
 private:
     System system;

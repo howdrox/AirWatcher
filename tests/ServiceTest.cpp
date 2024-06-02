@@ -146,8 +146,10 @@ TEST_F(ServiceTest, FilterMeasurementsTest)
 
     // Test with start date equal measurement date
     Time start3("2019-01-01 12:00:00");
-    Time end3("2019-01-04 13:00:00");
+    Time end3("2019-01-03 13:00:00");
     EXPECT_FALSE(service.filterMeasurements(start3, end3, system.getMeasurements()).empty());
+    EXPECT_EQ(service.filterMeasurements(start3, end3, system.getMeasurements()).size(), 2);
+    EXPECT_EQ(service.filterMeasurements(start3, end3, system.getMeasurements()).at(0).size(), 12);
 
     // Test with end date before start date
     EXPECT_THROW(service.filterMeasurements(end, start, system.getMeasurements()), std::exception);
@@ -290,31 +292,44 @@ TEST_F(ServiceTest, CalculateImpactRadius)
     EXPECT_DOUBLE_EQ(service.calculateImpactRadius(2), 0.0);
 }
 
-// Test case for GetSimilarZones method exceptions
-TEST_F(ServiceTest, GetSimilarZonesExceptions)
+// Test rankSimilarSensors method
+TEST_F(ServiceTest, RankSimilarSensorsTest)
 {
     Time start(2019, 1, 1, 0, 0, 0);
-    Time end(2019, 12, 31, 23, 59, 59);
+    Time end(2019, 2, 2, 0, 0, 0);
 
-    // Test with non-existent sensor ID
-    EXPECT_THROW(service.getSimilarZones(-1, start, end, 0.1), std::exception);
+    // Test with valid sensor ID and time range with measurements
+    EXPECT_GT(service.rankSimilarSensors(0, start, end).size(), 0);
 
-    // Test with end date before start date
-    EXPECT_THROW(service.getSimilarZones(1, end, start, 0.1), std::exception);
-
-    // Test with invalid delta (<= 0)
-    EXPECT_THROW(service.getSimilarZones(1, start, end, -0.1), std::exception);
+    // Test with valid sensor ID and time range without measurements
+    EXPECT_GT(service.rankSimilarSensors(2, start, end).size(), 0);
 }
 
-// Test case for GetSimilarZones method with valid data
-TEST_F(ServiceTest, GetSimilarZonesTest)
-{
-    Time start(2019, 1, 1, 0, 0, 0);
-    Time end(2019, 12, 31, 23, 59, 59);
+// // Test case for GetSimilarZones method exceptions
+// TEST_F(ServiceTest, GetSimilarZonesExceptions)
+// {
+//     Time start(2019, 1, 1, 0, 0, 0);
+//     Time end(2019, 12, 31, 23, 59, 59);
 
-    // Test with valid sensor ID and time range
-    EXPECT_GT(service.getSimilarZones(1, start, end, 0.1).size(), 0);
+//     // Test with non-existent sensor ID
+//     EXPECT_THROW(service.getSimilarZones(-1, start, end, 0.1), std::exception);
 
-    // Test with start date equal to end date
-    EXPECT_TRUE(service.getSimilarZones(1, start, start, 0.1).empty());
-}
+//     // Test with end date before start date
+//     EXPECT_THROW(service.getSimilarZones(1, end, start, 0.1), std::exception);
+
+//     // Test with invalid delta (<= 0)
+//     EXPECT_THROW(service.getSimilarZones(1, start, end, -0.1), std::exception);
+// }
+
+// // Test case for GetSimilarZones method with valid data
+// TEST_F(ServiceTest, GetSimilarZonesTest)
+// {
+//     Time start(2019, 1, 1, 0, 0, 0);
+//     Time end(2019, 12, 31, 23, 59, 59);
+
+//     // Test with valid sensor ID and time range
+//     EXPECT_GT(service.getSimilarZones(1, start, end, 0.1).size(), 0);
+
+//     // Test with start date equal to end date
+//     EXPECT_TRUE(service.getSimilarZones(1, start, start, 0.1).empty());
+// }
