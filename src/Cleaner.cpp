@@ -1,29 +1,16 @@
-#include "Cleaner.h"
 #include <sstream>
 #include <vector>
 
-int Cleaner::getCleanerId() const {
-    return cleanerID;
-}
+#include "Cleaner.h"
 
-Coord Cleaner::getCoord() const {
-    return location;
-}
-
-const Time& Cleaner::getStartTime() const {
-    return startTime;
-}
-
-const Time& Cleaner::getEndTime() const {
-    return endTime;
-}
-
-Cleaner::Cleaner(const std::string& data) {
+Cleaner::Cleaner(const std::string &data)
+{
     std::vector<std::string> values;
     std::stringstream ss(data);
     std::string item;
 
-    while (std::getline(ss, item, ';')) {
+    while (std::getline(ss, item, ';'))
+    {
         values.push_back(item);
     }
 
@@ -40,5 +27,3 @@ Cleaner::Cleaner(const std::string& data) {
     startTime = Time(values[3]);
     endTime = Time(values[4]);
 }
-
-Cleaner::~Cleaner() {}

@@ -9,25 +9,32 @@
 class PrivateUser : public User
 {
 public:
-    PrivateUser();
-    PrivateUser(const std::string &userInfo); // Constructeur prenant une chaîne de caractères en entrée
-    PrivateUser(const PrivateUser& p);
-    PrivateUser& operator=(const PrivateUser& p);
-    ~PrivateUser();                           // Destructeur
+    // Constructors
+    PrivateUser() : User(Role::PRIVATE_USER), userID(-1), sensorsID({}), points(0), blacklisted(false){};
+    PrivateUser(const PrivateUser &p) : User(Role::PRIVATE_USER), userID(p.userID), sensorsID(p.sensorsID), points(p.points), blacklisted(p.blacklisted){};
+    PrivateUser(const std::string &userInfo);
 
-    int getUserID() const;                        // Getter pour récupérer l'ID de l'utilisateur privé
-    const std::vector<int> &getSensorsID() const; // Getter pour récupérer la liste des IDs des capteurs
-    int getPoints() const;                        // Getter pour récupérer le nombre de points
-    bool isBlacklisted() const;                   // Getter pour vérifier si l'utilisateur est sur liste noire
+    // Destructor
+    ~PrivateUser() {};
 
-    void setBlacklisted(bool isBlacklisted); // Méthode pour blacklister ou déblacklister
-    void addPoints(int nbPoints);            // Méthode pour incrémenter le nombre de points
+    // Overloaded operators
+    PrivateUser &operator=(const PrivateUser &p);
+
+    // Getters
+    int getUserID() const { return userID; };
+    const std::vector<int> &getSensorsID() const { return sensorsID; };
+    int getPoints() const { return points; };
+    bool isBlacklisted() const { return blacklisted; };
+
+    // Methods
+    void setBlacklisted(bool isBlacklisted);
+    void addPoints(int nbPoints);
 
 private:
-    int userID;                 // Attribut privé pour l'ID de l'utilisateur privé
-    std::vector<int> sensorsID; // Attribut privé pour la liste des IDs des capteurs
-    int points;                 // Attribut privé pour le nombre de points
-    bool blacklisted;           // Attribut privé pour indiquer si l'utilisateur est sur liste noire
+    int userID;
+    std::vector<int> sensorsID;
+    int points;
+    bool blacklisted;
 };
 
 #endif // PRIVATEUSER_H

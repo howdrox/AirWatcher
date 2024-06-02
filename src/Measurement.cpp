@@ -40,7 +40,7 @@ Measurement::Measurement(const string &ligne)
 
 std::ostream &operator<<(std::ostream &os, const Measurement &measurement)
 {
-    os << " , Measurement ID: " << measurement.measurementID
+    os << "Measurement ID: " << measurement.measurementID
        << " , Timestamp: " << measurement.timestamp
        << " , Sensor ID: " << measurement.sensorID
        << " , Attribute ID: " << static_cast<int>(measurement.attributeID)

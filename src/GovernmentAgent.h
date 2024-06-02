@@ -1,13 +1,16 @@
 #ifndef GOVERNMENTAGENT_H
 #define GOVERNMENTAGENT_H
 
-#include "User.h" // Pour hériter de la classe User
+#include "User.h"
 
 class GovernmentAgent : public User
 {
 public:
-    GovernmentAgent();  // Constructeur par défaut
-    ~GovernmentAgent(); // Destructeur
+    // Constructors
+    GovernmentAgent() : User(Role::GOVERNMENT_AGENT){};
+
+    // Destructor
+    ~GovernmentAgent(){};
 };
 
 #endif // GOVERNMENTAGENT_H

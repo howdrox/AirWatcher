@@ -17,13 +17,17 @@ enum PollutantType
 class Measurement
 {
 public:
-    Measurement(const string &);
+    // Constructors
     Measurement(int id, const Time &time, int sensor, const PollutantType &attrID, double val, bool black)
         : measurementID(id), timestamp(time), sensorID(sensor), attributeID(attrID), value(val), blacklisted(black) {}
     Measurement(const Measurement &m)
         : measurementID(m.measurementID), timestamp(m.timestamp), sensorID(m.sensorID), attributeID(m.attributeID), value(m.value), blacklisted(m.blacklisted) {}
+    Measurement(const string &);
+
+    // Destructor
     virtual ~Measurement() {}
 
+    // Getters
     int getMeasurementID() const { return measurementID; }
     Time getTimestamp() const { return timestamp; }
     int getSensorID() const { return sensorID; }
@@ -31,7 +35,8 @@ public:
     double getValue() const { return value; }
     bool isBlacklisted() const { return blacklisted; }
 
-    friend std::ostream& operator<<(std::ostream& os, const Measurement& measurement);
+    // Operators
+    friend std::ostream &operator<<(std::ostream &os, const Measurement &measurement);
 
 protected:
     int measurementID;

@@ -5,15 +5,20 @@
 #include "Time.h"
 #include "Coord.h"
 
-class Cleaner {
+class Cleaner
+{
 public:
-    int getCleanerId() const;
-    Coord getCoord() const;
-    const Time& getStartTime() const; // Use const reference
-    const Time& getEndTime() const;   // Use const reference
+    // Constructors
+    Cleaner(const std::string &data);
 
-    Cleaner(const std::string& data);
-    virtual ~Cleaner();
+    // Destructor
+    virtual ~Cleaner(){};
+
+    // Getters
+    int getCleanerId() const { return cleanerID; };
+    Coord getCoord() const { return location; };
+    const Time &getStartTime() const { return startTime; };
+    const Time &getEndTime() const { return endTime; };
 
 protected:
     int cleanerID;

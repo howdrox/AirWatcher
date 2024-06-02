@@ -1,29 +1,13 @@
 #include <iostream>
 #include <string>
-#include <cstring>
 #include <sstream>
 
 #include "Sensor.h"
-#include "Coord.h"
 
 using namespace std;
 
-Sensor::Sensor(const int id, const Coord loc)
-{
-#ifdef MAP
-    cout << "Appel au constructeur de <Sensor>" << endl;
-#endif
-    sensorID = id;
-    location.latitude = loc.latitude;
-    location.longitude = loc.longitude;
-}
-
 Sensor::Sensor(const string &sensorLine)
 {
-#ifdef MAP
-    cout << "Appel au constructeur de <Sensor>" << endl;
-#endif
-
     stringstream ss(sensorLine);
     string item;
     vector<string> elements;
@@ -38,22 +22,12 @@ Sensor::Sensor(const string &sensorLine)
     location.longitude = stod(elements[2]);
 }
 
-Sensor::Sensor(const Sensor &sensor)
-{
-    sensorID = sensor.sensorID;
-    location = sensor.location;
-    measurements = sensor.measurements;
-}
-
-Sensor::~Sensor()
-{
-#ifdef MAP
-    cout << "Appel au destructeur de <Sensor>" << endl;
-#endif
-}
-
 void Sensor::addMeasurement(const Measurement &measurement)
 {
+    if (measurement.getSensorID() != sensorID)
+    {
+        throw invalid_argument("Measurement sensor ID does not match sensor ID");
+    }
     measurements.push_back(measurement);
 }
 
@@ -70,13 +44,6 @@ Sensor &Sensor::operator=(const Sensor &sensor)
 
 std::ostream &operator<<(std::ostream &os, const Sensor &sensor)
 {
-    os << "Sensor ID: " << sensor.sensorID << endl;
-    os << "Latitude: " << sensor.location.latitude << endl;
-    os << "Longitude: " << sensor.location.longitude << endl;
-    ;
-    os << "Measurements: " << endl;
-    /*for (const auto& measurement : sensor.measurements) {
-        os << measurement << " ";
-    }*/
+    os << "Sensor " << sensor.sensorID << " at (" << sensor.location.latitude << ", " << sensor.location.longitude << ") with " << sensor.measurements.size() << " measurements";
     return os;
 }

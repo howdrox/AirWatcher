@@ -10,19 +10,25 @@
 class Sensor
 {
 public:
-    Sensor(int sensorID = 0, Coord location = Coord());
-    Sensor(const Sensor &sensor);
+    // Constructors
+    Sensor(int sensorID = 0, Coord location = Coord()) : sensorID(sensorID), location(location){};
+    Sensor(const Sensor &sensor) : sensorID(sensor.sensorID), location(sensor.location), measurements(sensor.measurements){};
     Sensor(const string &sensorLine);
-    ~Sensor();
 
+    // Destructor
+    ~Sensor(){};
+
+    // Operators
+    Sensor &operator=(const Sensor &sensor);
+    friend std::ostream &operator<<(std::ostream &os, const Sensor &sensor);
+
+    // Getters
     int getSensorID() const { return sensorID; }
     const Coord getLocation() const { return location; }
     const vector<Measurement> &getMeasurements() const { return measurements; }
 
+    // Methods
     void addMeasurement(const Measurement &measurement);
-
-    Sensor &operator=(const Sensor &sensor);
-    friend std::ostream &operator<<(std::ostream &os, const Sensor &sensor);
 
 protected:
     int sensorID;

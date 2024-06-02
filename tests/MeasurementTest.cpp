@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include "../src/Measurement.h"
-#include "../src/Time.h"
 
-// Test default constructor
-TEST(MeasurementTest, ConstructorTest) {
+// Test parameterized constructor
+TEST(MeasurementTest, ParameterizedConstructorTest)
+{
     Time time(2024, 5, 31, 12, 30, 45);
     Measurement m(1, time, 100, NO2, 42.0, false);
 
@@ -16,7 +16,8 @@ TEST(MeasurementTest, ConstructorTest) {
 }
 
 // Test copy constructor
-TEST(MeasurementTest, CopyConstructorTest) {
+TEST(MeasurementTest, CopyConstructorTest)
+{
     Time time(2024, 5, 31, 12, 30, 45);
     Measurement m1(1, time, 100, NO2, 42.0, true);
     Measurement m2(m1);
@@ -29,8 +30,9 @@ TEST(MeasurementTest, CopyConstructorTest) {
     EXPECT_TRUE(m2.isBlacklisted());
 }
 
-// Test string-based constructor
-TEST(MeasurementTest, StringConstructorTest) {
+// Test string-based constructor with valid input
+TEST(MeasurementTest, StringConstructorTest)
+{
     // Test valid input string
     string validInput = "2019-01-01 12:00:00;Sensor0;O3;50.25;";
     Measurement m(validInput);
@@ -41,14 +43,33 @@ TEST(MeasurementTest, StringConstructorTest) {
     EXPECT_EQ(m.getAttributeID(), O3);
     EXPECT_DOUBLE_EQ(m.getValue(), 50.25);
     EXPECT_FALSE(m.isBlacklisted());
+}
 
-    // Test with negative value (should be changed to 0)
-    string negativeValueInput = "2019-01-01 12:00:00;Sensor101;PM10;-10.0";
-    Measurement m2(negativeValueInput);
+// Test string-based constructor with negative value
+TEST(MeasurementTest, StringConstructorNegativeValueTest)
+{
+    // Test negative value
+    string negativeValue = "2019-01-01 12:00:00;Sensor0;O3;-50.25;";
+    Measurement m(negativeValue);
+    Time expectedTime(2019, 1, 1, 12, 0, 0);
 
-    EXPECT_EQ(m2.getTimestamp(), expectedTime);
-    EXPECT_EQ(m2.getSensorID(), 101);
-    EXPECT_EQ(m2.getAttributeID(), PM10);
-    EXPECT_DOUBLE_EQ(m2.getValue(), 0.0); // value should be set to 0
-    EXPECT_FALSE(m2.isBlacklisted());
+    EXPECT_EQ(m.getTimestamp(), expectedTime);
+    EXPECT_EQ(m.getSensorID(), 0);
+    EXPECT_EQ(m.getAttributeID(), O3);
+    EXPECT_DOUBLE_EQ(m.getValue(), 0);
+    EXPECT_FALSE(m.isBlacklisted());
+}
+
+// Test output stream operator
+TEST(MeasurementTest, OutputOperatorTest)
+{
+    Time time(2024, 5, 31, 12, 30, 45);
+    Measurement m(1, time, 100, NO2, 42.0, false);
+
+    std::ostringstream os;
+    os << m;
+    std::cout << m << std::endl;
+
+    std::string expectedOutput = "Measurement ID: 1 , Timestamp: 2024-05-31 12:30:45 , Sensor ID: 100 , Attribute ID: 1 , Value: 42 , Blacklisted: No";
+    EXPECT_EQ(os.str(), expectedOutput);
 }

@@ -8,39 +8,37 @@ using namespace std;
 class Time
 {
 public:
-    // Getters
-    int getYear() const;
-    int getMonth() const;
-    int getDay() const;
-    int getHour() const;
-    int getMinute() const;
-    int getSecond() const;
+    // Constructors
+    Time(int yy = 0, int MM = 0, int dd = 0, int hh = 0, int mm = 0, int ss = 0) : year(yy), month(MM), day(dd), hour(hh), minute(mm), second(ss){};
+    Time(const Time &t): year(t.year), month(t.month), day(t.day), hour(t.hour), minute(t.minute), second(t.second){};
+    Time(const string &data);
 
-    // Other functions
-    bool isSameHour(const Time &time) const;
-    Time zeroOutHour();
-    Time addDays(int) const;
+    // Desctructor
+    virtual ~Time(){};
 
-    // Surcharge des opérateurs de comparaison
+    // Operator overload
     bool operator<(const Time &) const;
     bool operator>(const Time &) const;
     bool operator<=(const Time &) const;
     bool operator>=(const Time &) const;
     bool operator==(const Time &) const;
 
-    // Surcharge de l'opérateur d'affectation
     Time &operator=(const Time &other);
 
-    // Surcharge de l'opérateur d'insertion
     friend ostream &operator<<(ostream &out, const Time &time);
 
-    // Constructeurs
-    Time(int yy = 0, int MM = 0, int dd = 0, int hh = 0, int mm = 0, int ss = 0);
-    Time(const string &data);
-    Time(const Time &date);
+    // Getters
+    int getYear() const { return year; };
+    int getMonth() const { return month; };
+    int getDay() const { return day; };
+    int getHour() const { return hour; };
+    int getMinute() const { return minute; };
+    int getSecond() const { return second; };
 
-    // Destructeur
-    virtual ~Time();
+    // Methods
+    bool isSameHour(const Time &time) const;
+    Time zeroOutHour();
+    Time addDays(int) const;
 
 private:
     int year, month, day, hour, minute, second;

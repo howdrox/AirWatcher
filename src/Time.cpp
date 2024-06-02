@@ -5,36 +5,6 @@
 
 using namespace std;
 
-// Getters
-int Time::getYear() const
-{
-    return year;
-}
-
-int Time::getMonth() const
-{
-    return month;
-}
-
-int Time::getDay() const
-{
-    return day;
-}
-
-int Time::getHour() const
-{
-    return hour;
-}
-
-int Time::getMinute() const
-{
-    return minute;
-}
-
-int Time::getSecond() const
-{
-    return second;
-}
 Time Time::zeroOutHour()
 {
     hour = 0;
@@ -120,10 +90,6 @@ ostream &operator<<(ostream &out, const Time &time)
     return out;
 }
 
-// Constructeur avec paramètres
-Time::Time(int yy, int MM, int dd, int hh, int mm, int ss)
-    : year(yy), month(MM), day(dd), hour(hh), minute(mm), second(ss) {}
-
 // Constructeur à partir d'une chaîne de caractères
 Time::Time(const string &data)
 {
@@ -131,10 +97,3 @@ Time::Time(const string &data)
     stringstream ss(data);
     ss >> year >> delim >> month >> delim >> day >> hour >> delim >> minute >> delim >> second;
 }
-
-// Constructeur de copie
-Time::Time(const Time &date)
-    : year(date.year), month(date.month), day(date.day), hour(date.hour), minute(date.minute), second(date.second) {}
-
-// Destructeur
-Time::~Time() {}

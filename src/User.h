@@ -8,12 +8,18 @@ using namespace std;
 class User
 {
 public:
-    Role getRole() const;
+    // Constructors
+    User(const Role &r) : role(r) {};
+    User(const User &user) : role(user.role) {};
 
-    User(const Role &r);
-    User(const User &user);
-    User &operator=(const User &user);
+    // Destructor
     virtual ~User();
+
+    // Operator overload
+    User &operator=(const User &user);
+
+    // Getters
+    Role getRole() const { return role; };
 
 protected:
     Role role;

@@ -4,20 +4,25 @@
 #include <string>
 #include <vector>
 
-#include "User.h" // Pour hériter de la classe User
+#include "User.h"
 
-class Provider : public User {
+class Provider : public User
+{
 public:
-    Provider();
-    Provider(const std::string& providerInfo); // Constructeur prenant une chaîne de caractères en entrée
-    ~Provider(); // Destructeur
+    // Constructors
+    Provider(int pID = -1, std::vector<int> c = {}) : User(Role::PROVIDER), providerID(pID), cleanersID(c){};
+    Provider(const std::string &providerInfo);
 
-    int getProviderID() const; // Getter pour récupérer l'ID du fournisseur
-    const std::vector<int>& getCleanersID() const; // Getter pour récupérer la liste des IDs des nettoyeurs
+    // Destructor
+    ~Provider(){};
+
+    // Getters
+    int getProviderID() const { return providerID; };
+    const std::vector<int> &getCleanersID() const { return cleanersID; };
 
 private:
-    int providerID; // Attribut privé pour l'ID du fournisseur
-    std::vector<int> cleanersID; // Attribut privé pour la liste des IDs des nettoyeurs
+    int providerID;
+    std::vector<int> cleanersID;
 };
 
 #endif // PROVIDER_H

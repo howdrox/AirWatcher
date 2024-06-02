@@ -11,6 +11,15 @@ protected:
     double radius = 1000.0;      // Example radius
 };
 
+// Test default consturctor
+TEST_F(ZoneTest, DefaultConstructor)
+{
+    Zone zone;
+    EXPECT_EQ(zone.latitude, 0);
+    EXPECT_EQ(zone.longitude, 0);
+    EXPECT_EQ(zone.radius, 0);
+}
+
 // Test constructor with latitude, longitude, and radius
 TEST_F(ZoneTest, ConstructorWithLatLongRad)
 {

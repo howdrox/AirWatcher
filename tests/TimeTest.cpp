@@ -42,7 +42,7 @@ TEST(TimeTest, StringConstructor)
 TEST(TimeTest, CopyConstructor)
 {
     Time time1(2024, 6, 1, 12, 30, 45);
-    Time time2 = time1;
+    Time time2(time1);
     EXPECT_EQ(time2.getYear(), 2024);
     EXPECT_EQ(time2.getMonth(), 6);
     EXPECT_EQ(time2.getDay(), 1);
@@ -63,16 +63,6 @@ TEST(TimeTest, AssignmentOperator)
     EXPECT_EQ(time2.getHour(), 12);
     EXPECT_EQ(time2.getMinute(), 30);
     EXPECT_EQ(time2.getSecond(), 45);
-}
-
-// Test isSameHour method
-TEST(TimeTest, IsSameHour)
-{
-    Time time1(2024, 6, 1, 12, 30, 45);
-    Time time2(2024, 6, 1, 12, 15, 30);
-    Time time3(2024, 6, 1, 13, 30, 45);
-    EXPECT_TRUE(time1.isSameHour(time2));
-    EXPECT_FALSE(time1.isSameHour(time3));
 }
 
 // Test comparison operators
@@ -100,6 +90,18 @@ TEST(TimeTest, EqualityOperator)
     EXPECT_FALSE(time1 == time3);
 }
 
+// Test isSameHour method
+TEST(TimeTest, IsSameHour)
+{
+    Time time1(2024, 6, 1, 12, 30, 45);
+    Time time2(2024, 6, 1, 12, 15, 30);
+    Time time3(2024, 6, 1, 13, 30, 45);
+    Time time4(2019, 6, 1, 12, 30, 45);
+    EXPECT_TRUE(time1.isSameHour(time2));
+    EXPECT_FALSE(time1.isSameHour(time3));
+    EXPECT_FALSE(time1.isSameHour(time4));
+}
+
 // Test addDays method
 TEST(TimeTest, addDays)
 {
@@ -108,6 +110,17 @@ TEST(TimeTest, addDays)
     Time time3 = time1.addDays(5);
     EXPECT_TRUE(time2 == time3);
     EXPECT_TRUE(time1 < time3);
+}
+
+// Test zeroOutHour method
+TEST(TimeTest, ZeroOutHour)
+{
+    Time time1(2024, 6, 1, 12, 30, 45);
+    Time time2(2024, 6, 1, 0, 0, 0);
+    Time time3 = time1.zeroOutHour();
+    Time time4 = time2.zeroOutHour();
+    EXPECT_TRUE(time2 == time3);
+    EXPECT_TRUE(time2 == time4);
 }
 
 // Test output operator
