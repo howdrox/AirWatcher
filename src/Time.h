@@ -19,7 +19,7 @@ public:
     // Other functions
     bool isSameHour(const Time &time) const;
     Time zeroOutHour();
-    Time addDays(int);
+    Time addDays(int) const;
 
     // Surcharge des opérateurs de comparaison
     bool operator<(const Time &) const;

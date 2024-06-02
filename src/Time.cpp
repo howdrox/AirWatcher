@@ -51,10 +51,11 @@ bool Time::isSameHour(const Time &time) const
            getHour() == time.getHour();
 }
 
-Time Time::addDays(int numDays)
+Time Time::addDays(int numDays) const
 {
-    day += numDays;
-    return *this;
+    Time newTime(*this);
+    newTime.day += numDays;
+    return newTime;
 }
 
 // Surcharge des opérateurs de comparaison
@@ -88,7 +89,8 @@ bool Time::operator>=(const Time &date) const
     return !(*this < date);
 }
 
-bool Time::operator==(const Time &t) const {
+bool Time::operator==(const Time &t) const
+{
     return year == t.year && month == t.month && day == t.day && hour == t.hour && minute == t.minute && second == t.second;
 }
 
