@@ -38,6 +38,10 @@ Measurement::Measurement(const string &ligne)
     blacklisted = false;
 }
 
+bool Measurement::operator<(const Measurement &m) const {
+    return timestamp < m.getTimestamp();
+}
+
 std::ostream &operator<<(std::ostream &os, const Measurement &measurement)
 {
     os << "Timestamp: " << measurement.timestamp

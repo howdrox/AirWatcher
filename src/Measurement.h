@@ -38,6 +38,8 @@ public:
     void setBlacklisted(bool isBlacklisted) { blacklisted = isBlacklisted; };
 
     // Operators
+    bool operator<(const Measurement &) const;
+
     friend std::ostream &operator<<(std::ostream &os, const Measurement &measurement);
 
     
