@@ -47,11 +47,6 @@ PrivateUser &PrivateUser::operator=(const PrivateUser &p)
     return *this;
 }
 
-void PrivateUser::setBlacklisted(bool isBlacklisted)
-{
-    blacklisted = isBlacklisted;
-}
-
 void PrivateUser::addPoints(int nbPoints)
 {
     points += nbPoints;

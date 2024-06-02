@@ -15,7 +15,7 @@ public:
     PrivateUser(const std::string &userInfo);
 
     // Destructor
-    ~PrivateUser() {};
+    ~PrivateUser(){};
 
     // Overloaded operators
     PrivateUser &operator=(const PrivateUser &p);
@@ -26,8 +26,10 @@ public:
     int getPoints() const { return points; };
     bool isBlacklisted() const { return blacklisted; };
 
+    // Setters
+    void setBlacklisted(bool isBlacklisted) { blacklisted = isBlacklisted; };
+
     // Methods
-    void setBlacklisted(bool isBlacklisted);
     void addPoints(int nbPoints);
 
 private:
