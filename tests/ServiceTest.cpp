@@ -259,7 +259,6 @@ TEST_F(ServiceTest, SortSensorsTestFromCSVTestData)
 
     // Call sortSensors function
     auto sensors = system.getSensors();
-    sensors[4].addMeasurement(Measurement("2019-01-01 12:00:00;Sensor4;SO2;49.96;"));
     multimap<double, Sensor> sortedSensors = service.sortSensors(sensors, testCoord);
 
     EXPECT_GT(sortedSensors.size(), 0);
@@ -267,7 +266,7 @@ TEST_F(ServiceTest, SortSensorsTestFromCSVTestData)
     // Verify that the sensors are sorted by distance
     auto it = sortedSensors.begin();
     EXPECT_EQ(it->second.getSensorID(), 4);
-    EXPECT_GT(it->second.getMeasurements().size(), 0);
+    EXPECT_GT(system.getMeasurements().at(it->second.getSensorID()).size(), 0);
     ++it;
     EXPECT_EQ(it->second.getSensorID(), 2);
 }

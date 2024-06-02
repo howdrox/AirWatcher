@@ -22,28 +22,18 @@ Sensor::Sensor(const string &sensorLine)
     location.longitude = stod(elements[2]);
 }
 
-void Sensor::addMeasurement(const Measurement &measurement)
-{
-    if (measurement.getSensorID() != sensorID)
-    {
-        throw invalid_argument("Measurement sensor ID does not match sensor ID");
-    }
-    measurements.push_back(measurement);
-}
-
 Sensor &Sensor::operator=(const Sensor &sensor)
 {
     if (this != &sensor)
     {
         sensorID = sensor.sensorID;
         location = sensor.location;
-        measurements = sensor.measurements;
     }
     return *this;
 }
 
 std::ostream &operator<<(std::ostream &os, const Sensor &sensor)
 {
-    os << "Sensor " << sensor.sensorID << " at (" << sensor.location.latitude << ", " << sensor.location.longitude << ") with " << sensor.measurements.size() << " measurements";
+    os << "Sensor " << sensor.sensorID << " at (" << sensor.location.latitude << ", " << sensor.location.longitude << ")";
     return os;
 }

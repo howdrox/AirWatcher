@@ -12,7 +12,7 @@ class Sensor
 public:
     // Constructors
     Sensor(int sensorID = 0, Coord location = Coord()) : sensorID(sensorID), location(location){};
-    Sensor(const Sensor &sensor) : sensorID(sensor.sensorID), location(sensor.location), measurements(sensor.measurements){};
+    Sensor(const Sensor &sensor) : sensorID(sensor.sensorID), location(sensor.location){};
     Sensor(const string &sensorLine);
 
     // Destructor
@@ -25,15 +25,10 @@ public:
     // Getters
     int getSensorID() const { return sensorID; }
     const Coord getLocation() const { return location; }
-    const vector<Measurement> &getMeasurements() const { return measurements; }
-
-    // Methods
-    void addMeasurement(const Measurement &measurement);
 
 private:
     int sensorID;
     Coord location;
-    vector<Measurement> measurements;
 };
 
 #endif // SENSOR_H

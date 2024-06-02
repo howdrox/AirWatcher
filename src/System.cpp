@@ -71,7 +71,6 @@ System::System(const string &sensorsFilePath, const string &cleanersFilePath, co
     {
         Measurement measurement(measurementLine);
         measurements[measurement.getSensorID()].push_back(measurement);
-        sensors[measurement.getSensorID()].addMeasurement(measurement);
     }
 
     measurementsFile.close();
