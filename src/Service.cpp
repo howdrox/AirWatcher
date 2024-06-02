@@ -156,11 +156,9 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
     // Calculates average index
     double sum_indexes = 0.0;
     int count_days = 0;
-    cout << "numdays: " << filteredMeasurements.size() << endl;
     for (const auto &measurementsPerDay : filteredMeasurements)
     {
         double temp = calculateQuality(measurementsPerDay.second);
-        cout << "index per day: " << temp << endl;
         sum_indexes += temp;
         count_days += 1;
     }
