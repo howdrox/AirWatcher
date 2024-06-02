@@ -155,7 +155,7 @@ TEST_F(ServiceTest, FilterMeasurementsTest)
     EXPECT_THROW(service.filterMeasurements(end, start, system.getMeasurements()), std::exception);
 }
 
-// Test case for calculateQuality method with emptySystem
+// Test case for calculateQuality method with map of measurements
 TEST_F(ServiceTest, CalculateQualityWithMeasurementParameterTest)
 {
     // Test with no measurements
@@ -165,6 +165,21 @@ TEST_F(ServiceTest, CalculateQualityWithMeasurementParameterTest)
     Measurement m("2019-01-01 12:00:00;Sensor0;O3;50.25;");
     emptySystem.addMeasurement(m);
     EXPECT_EQ(emptyService.calculateQuality(emptySystem.getMeasurements()), 2.0);
+
+    // Test with multiple measurements
+    EXPECT_GT(service.calculateQuality(system.getMeasurements()), 0);
+}
+
+// Test calculateQUality with measurements not in chronological order
+TEST_F(ServiceTest, CalculateQUalityWithNonChronologicalMeasurements)
+{
+    // Test with O3
+    EXPECT_DOUBLE_EQ(service.calculateQuality({{5, system.getMeasurements()[5]}}), 7);
+    // Test with PM10
+    EXPECT_DOUBLE_EQ(service.calculateQuality({{6, system.getMeasurements()[6]}}), 8);
+
+    // Test with zone and time range
+    EXPECT_DOUBLE_EQ(service.calculateQuality(Zone(44, 2.85, 30), Time("2019-02-01 00:00:00"), Time("2019-02-03 00:00:00")), 7.5);
 }
 
 // Test case for calculateQuality method with Zone, start time, and end time

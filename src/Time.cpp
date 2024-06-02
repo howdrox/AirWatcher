@@ -5,12 +5,13 @@
 
 using namespace std;
 
-Time Time::zeroOutHour()
+Time Time::zeroOutHour() const
 {
-    hour = 0;
-    minute = 0;
-    second = 0;
-    return *this;
+    Time newTime(*this);
+    newTime.hour = 0;
+    newTime.minute = 0;
+    newTime.second = 0;
+    return newTime;
 }
 
 bool Time::isSameHour(const Time &time) const

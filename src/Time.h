@@ -51,14 +51,14 @@ public:
     bool isSameHour(const Time &time) const;
 
     /**
-     * @brief Sets the hour, minute and second to 0
+     * @brief Returns a new `Time` with hours, seconds and minutes set to 0
      *
      * @return Time
      */
-    Time zeroOutHour();
+    Time zeroOutHour() const;
 
     /**
-     * @brief Adds a number of days to the current date
+     * @brief Returns a new `Time` with the new date
      *
      * @param int
      * @return Time

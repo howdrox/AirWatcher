@@ -1,11 +1,9 @@
+#include <algorithm>
 #include <iostream>
 #include <cstring>
 #include <fstream>
 
 #include "System.h"
-#include "Cleaner.h"
-#include "PrivateUser.h"
-#include "Measurement.h"
 
 using namespace std;
 
@@ -72,6 +70,11 @@ System::System(const string &sensorsFilePath, const string &cleanersFilePath, co
         Measurement measurement(measurementLine);
         measurements[measurement.getSensorID()].push_back(measurement);
     }
+    // sorts all measurements in each vector in chronological time
+    for (auto &s : measurements)
+    {
+        sort(s.second.begin(), s.second.end());
+    }
 
     measurementsFile.close();
 }
@@ -79,6 +82,9 @@ System::System(const string &sensorsFilePath, const string &cleanersFilePath, co
 void System::addMeasurement(const Measurement &m)
 {
     measurements[m.getSensorID()].push_back(m);
+    // sorts all measurements in each vector in chronological time
+    vector<Measurement> &mVector = measurements[m.getSensorID()];
+    sort(mVector.begin(), mVector.end());
 }
 
 void System::addCleaner(const Cleaner &cleaner)
