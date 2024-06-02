@@ -15,7 +15,7 @@ public:
     virtual ~Cleaner(){};
 
     // Getters
-    int getCleanerId() const { return cleanerID; };
+    int getCleanerID() const { return cleanerID; };
     Coord getCoord() const { return location; };
     const Time &getStartTime() const { return startTime; };
     const Time &getEndTime() const { return endTime; };
