@@ -65,6 +65,16 @@ TEST(MeasurementTest, StringConstructorInvalidPollutantTypeTest)
     EXPECT_THROW(Measurement("2019-01-01 12:00:00;Sensor0;O4;50.25;"), std::invalid_argument);
 }
 
+// Test less than operator
+TEST(MeasurementTest, LessThanOperator) {
+    Measurement m1("2019-01-01 12:00:00;Sensor0;O3;50;");
+    Measurement m2("2019-01-01 12:00:01;Sensor0;O3;40;");
+    EXPECT_TRUE(m1 < m2);
+
+    Measurement m3("2019-01-01 12:00:00;Sensor0;O3;40;");
+    EXPECT_FALSE(m1 < m3);
+}
+
 // Test output stream operator
 TEST(MeasurementTest, OutputOperatorTest)
 {
