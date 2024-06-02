@@ -163,7 +163,7 @@ TEST_F(ServiceTest, SortSensorsTestFromCSVTestData)
 
     // Call sortSensors function
     auto sensors = system.getSensors();
-    sensors[4].addMeasurement(Measurement("2019-01-01 12:00:00;4;O3;50.25;"));
+    sensors[4].addMeasurement(Measurement("2019-01-01 12:00:00;Sensor4;SO3;49.96;"));
     multimap<double, Sensor> sortedSensors = service.sortSensors(sensors, testCoord);
 
     EXPECT_GT(sortedSensors.size(), 0);
