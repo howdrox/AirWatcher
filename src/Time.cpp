@@ -12,7 +12,7 @@ Time Time::zeroOutHour()
     second = 0;
     return *this;
 }
-// Méthode pour vérifier si deux objets Time ont la même heure et date
+
 bool Time::isSameHour(const Time &time) const
 {
     return getYear() == time.getYear() &&
@@ -28,7 +28,6 @@ Time Time::addDays(int numDays) const
     return newTime;
 }
 
-// Surcharge des opérateurs de comparaison
 bool Time::operator<(const Time &date) const
 {
     if (year != date.year)
@@ -78,7 +77,6 @@ Time &Time::operator=(const Time &other)
     return *this;
 }
 
-// Surcharge de l'opérateur d'insertion
 ostream &operator<<(ostream &out, const Time &time)
 {
     out << setw(4) << setfill('0') << time.year << "-"
@@ -90,7 +88,6 @@ ostream &operator<<(ostream &out, const Time &time)
     return out;
 }
 
-// Constructeur à partir d'une chaîne de caractères
 Time::Time(const string &data)
 {
     char delim;
