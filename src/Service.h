@@ -31,16 +31,16 @@ public:
     System &getSystem() { return system; }
 
     // Methods
-    double calculateQuality(const Zone &zone, const Time &start, const Time &end);
-    map<int, vector<Measurement>> filterMeasurements(const Time &start, const Time &end, map<int, vector<Measurement>> measurements); // a voir si `measurements` est en const
-    double calculateImpactRadius(int cleanerId);
     double distance(const Coord &coord1, const Coord &coord2);
-    multimap<double, int> getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta);
-    double calculateQuality(const map<int, vector<Measurement>> &measurements);
-    multimap<double, Sensor> sortSensors(const map<int, Sensor> &sensors, const Coord &coord); // a voir si `sensors` peut être en const
-    int calculateSubIndex(const double &value, const PollutantType &pollutant) const;
-    double average(const vector<double> &v);
     bool isInZone(const Coord c, const Zone z);
+    double average(const vector<double> &v);
+    map<int, vector<Measurement>> filterMeasurements(const Time &start, const Time &end, map<int, vector<Measurement>> measurements);
+    multimap<double, Sensor> sortSensors(const map<int, Sensor> &sensors, const Coord &coord);
+    int calculateSubIndex(const double &value, const PollutantType &pollutant) const;
+    double calculateQuality(const Zone &zone, const Time &start, const Time &end);
+    double calculateQuality(const map<int, vector<Measurement>> &measurements);
+    double calculateImpactRadius(int cleanerId);
+    multimap<double, int> getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta);
 
 private:
     System system;

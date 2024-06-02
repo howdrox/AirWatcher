@@ -45,6 +45,20 @@ double Service::distance(const Coord &coord1, const Coord &coord2)
 }
 
 /**
+ * @brief Checks if the coord is inside the zone
+ *
+ * @param c
+ * @param z
+ * @return true
+ * @return false
+ */
+bool Service::isInZone(const Coord c, const Zone z)
+{
+    double d = distance(c, z);
+    return d < z.radius;
+}
+
+/**
  * @brief Returns a `map` of measurements that fall within the specified time range
  *
  * @param start
@@ -70,9 +84,6 @@ map<int, vector<Measurement>> Service::filterMeasurements(const Time &start, con
         {
             Measurement m = measurementList[i];
             Time measureTime = m.getTimestamp();
-            // if (measureTime == start) {
-            //     cout << measureTime << endl;
-            // }
             if (measureTime >= start && measureTime < end)
             {
                 filteredList.push_back(m);
@@ -86,60 +97,13 @@ map<int, vector<Measurement>> Service::filterMeasurements(const Time &start, con
     return res;
 }
 
-multimap<double, int> Service ::getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta)
-{
-
-    multimap<double, int> similarSensors;
-    map<int, Sensor> sensors = system.getSensors();
-    // Vérifier si sensorId est dans la liste des sensors
-    bool sensorFound = false;
-    for (const auto &pair : sensors)
-    {
-        Sensor s = pair.second;
-        if (s.getSensorID() == sensorID)
-        {
-            sensorFound = true;
-            break;
-        }
-    }
-
-    if (!sensorFound)
-    {
-        throw invalid_argument("Sensor ID not found");
-    }
-    if (delta <= 0)
-    {
-        throw invalid_argument("Delta invalid");
-    }
-
-    map<int, vector<Measurement>> measurements = system.getMeasurements();
-    map<int, vector<Measurement>> filteredMeasurements = filterMeasurements(start, end, measurements);
-    map<int, vector<Measurement>> parameterSensorMeasurements;
-    if (filteredMeasurements.empty())
-    {
-        return similarSensors;
-    }
-    parameterSensorMeasurements[sensorID] = filteredMeasurements[sensorID];
-    double parameterQuality = this->calculateQuality(parameterSensorMeasurements);
-
-    for (auto it = filteredMeasurements.begin(); it != filteredMeasurements.end(); ++it)
-    {
-        map<int, vector<Measurement>> filteredMeasurementsSensor;
-        filteredMeasurementsSensor[sensorID] = filteredMeasurements[it->first];
-        double sensorQuality = this->calculateQuality(filteredMeasurementsSensor);
-        if (sensorQuality <= parameterQuality + delta && sensorQuality >= parameterQuality - delta)
-        {
-            double qualityDifference = sensorQuality - parameterQuality;
-            if (sensorQuality < parameterQuality)
-            {
-                qualityDifference = parameterQuality - sensorQuality;
-            }
-            similarSensors.insert(pair<double, int>(qualityDifference, it->first));
-        }
-    }
-    return similarSensors;
-}
-
+/**
+ * @brief Sorts the sensors by distance from a specified coordinate
+ *
+ * @param sensors
+ * @param coord
+ * @return multimap<double, Sensor>
+ */
 multimap<double, Sensor> Service::sortSensors(const map<int, Sensor> &sensors, const Coord &coord)
 {
     multimap<double, Sensor> sortedSensors;
@@ -150,78 +114,6 @@ multimap<double, Sensor> Service::sortSensors(const map<int, Sensor> &sensors, c
         sortedSensors.insert(pair<double, Sensor>(distance, it->second));
     }
     return sortedSensors;
-}
-
-double Service::calculateImpactRadius(int cleanerId)
-{
-    const vector<Cleaner> &cleaners = system.getCleaners();
-    Coord cleanerCoord;
-    Time start, end;
-
-    auto it = cleaners.begin();
-    while (it != cleaners.end())
-    {
-        if (it->getCleanerId() == cleanerId)
-        {
-            cleanerCoord = it->getCoord();
-            start = it->getStartTime();
-            end = it->getEndTime();
-            break;
-        }
-        ++it;
-    }
-
-    if (it == cleaners.end())
-    {
-        throw std::invalid_argument("Cleaner ID not found");
-    }
-    cout << "Cleaner ID: " << cleanerId << " Coord: " << cleanerCoord.latitude << ", " << cleanerCoord.longitude << endl;
-
-    // Sort sensors by distance from the cleaner
-    multimap<double, Sensor> sortedSensors = sortSensors(system.getSensors(), cleanerCoord);
-
-    Time before_start = start.addDays(-1);
-    Time before_end = end.addDays(-1);
-
-    cout << "before start: " << before_start << " start: " << start << endl;
-    cout << "before end: " << before_end << " end: " << end << endl;
-
-    double impactRadius = 0.0;
-
-    for (const auto &pair : sortedSensors)
-    {
-        double distance = pair.first;
-        const Sensor &sensor = pair.second;
-
-        auto sensorMeasurements = sensor.getMeasurements();
-        map<int, vector<Measurement>> measurements;
-        measurements[sensor.getSensorID()] = sensorMeasurements;
-        cout << "Measurements: " << sensorMeasurements.size() << endl;
-
-        auto beforeMeasurements = filterMeasurements(before_start, start, measurements);
-        auto afterMeasurements = filterMeasurements(before_end, end, measurements);
-
-        cout << "beforeMeasurements: " << beforeMeasurements.size() << endl;
-        cout << "afterMeasurements: " << afterMeasurements.size() << endl;
-
-        double qualityBeforeCleaner = calculateQuality(beforeMeasurements);
-        double qualityAfterCleaner = calculateQuality(afterMeasurements);
-
-        cout << "Quality before cleaner: " << qualityBeforeCleaner << endl;
-        cout << "Quality after cleaner: " << qualityAfterCleaner << endl;
-        cout << "Distance: " << distance << endl;
-
-        if (qualityAfterCleaner > qualityBeforeCleaner)
-        {
-            impactRadius = distance;
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    return impactRadius;
 }
 
 /**
@@ -342,6 +234,138 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
     return max({indexO3, indexNO2, indexSO2, indexPM10});
 }
 
+multimap<double, int> Service ::getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta)
+{
+
+    multimap<double, int> similarSensors;
+    map<int, Sensor> sensors = system.getSensors();
+    // Vérifier si sensorId est dans la liste des sensors
+    bool sensorFound = false;
+    for (const auto &pair : sensors)
+    {
+        Sensor s = pair.second;
+        if (s.getSensorID() == sensorID)
+        {
+            sensorFound = true;
+            break;
+        }
+    }
+
+    if (!sensorFound)
+    {
+        throw invalid_argument("Sensor ID not found");
+    }
+    if (delta <= 0)
+    {
+        throw invalid_argument("Delta invalid");
+    }
+
+    map<int, vector<Measurement>> measurements = system.getMeasurements();
+    map<int, vector<Measurement>> filteredMeasurements = filterMeasurements(start, end, measurements);
+    map<int, vector<Measurement>> parameterSensorMeasurements;
+    if (filteredMeasurements.empty())
+    {
+        return similarSensors;
+    }
+    parameterSensorMeasurements[sensorID] = filteredMeasurements[sensorID];
+    double parameterQuality = this->calculateQuality(parameterSensorMeasurements);
+
+    for (auto it = filteredMeasurements.begin(); it != filteredMeasurements.end(); ++it)
+    {
+        map<int, vector<Measurement>> filteredMeasurementsSensor;
+        filteredMeasurementsSensor[sensorID] = filteredMeasurements[it->first];
+        double sensorQuality = this->calculateQuality(filteredMeasurementsSensor);
+        if (sensorQuality <= parameterQuality + delta && sensorQuality >= parameterQuality - delta)
+        {
+            double qualityDifference = sensorQuality - parameterQuality;
+            if (sensorQuality < parameterQuality)
+            {
+                qualityDifference = parameterQuality - sensorQuality;
+            }
+            similarSensors.insert(pair<double, int>(qualityDifference, it->first));
+        }
+    }
+    return similarSensors;
+}
+
+/**
+ * @brief Calculates the impact radius of a cleaner
+ *
+ * @param cleanerId
+ * @return double
+ */
+double Service::calculateImpactRadius(int cleanerId)
+{
+    const vector<Cleaner> &cleaners = system.getCleaners();
+    Coord cleanerCoord;
+    Time start, end;
+
+    auto it = cleaners.begin();
+    while (it != cleaners.end())
+    {
+        if (it->getCleanerId() == cleanerId)
+        {
+            cleanerCoord = it->getCoord();
+            start = it->getStartTime();
+            end = it->getEndTime();
+            break;
+        }
+        ++it;
+    }
+
+    if (it == cleaners.end())
+    {
+        throw std::invalid_argument("Cleaner ID not found");
+    }
+    cout << "Cleaner ID: " << cleanerId << " Coord: " << cleanerCoord.latitude << ", " << cleanerCoord.longitude << endl;
+
+    // Sort sensors by distance from the cleaner
+    multimap<double, Sensor> sortedSensors = sortSensors(system.getSensors(), cleanerCoord);
+
+    Time before_start = start.addDays(-1);
+    Time before_end = end.addDays(-1);
+
+    cout << "before start: " << before_start << " start: " << start << endl;
+    cout << "before end: " << before_end << " end: " << end << endl;
+
+    double impactRadius = 0.0;
+
+    for (const auto &pair : sortedSensors)
+    {
+        double distance = pair.first;
+        const Sensor &sensor = pair.second;
+
+        auto sensorMeasurements = sensor.getMeasurements();
+        map<int, vector<Measurement>> measurements;
+        measurements[sensor.getSensorID()] = sensorMeasurements;
+        cout << "Measurements: " << sensorMeasurements.size() << endl;
+
+        auto beforeMeasurements = filterMeasurements(before_start, start, measurements);
+        auto afterMeasurements = filterMeasurements(before_end, end, measurements);
+
+        cout << "beforeMeasurements: " << beforeMeasurements.size() << endl;
+        cout << "afterMeasurements: " << afterMeasurements.size() << endl;
+
+        double qualityBeforeCleaner = calculateQuality(beforeMeasurements);
+        double qualityAfterCleaner = calculateQuality(afterMeasurements);
+
+        cout << "Quality before cleaner: " << qualityBeforeCleaner << endl;
+        cout << "Quality after cleaner: " << qualityAfterCleaner << endl;
+        cout << "Distance: " << distance << endl;
+
+        if (qualityAfterCleaner > qualityBeforeCleaner)
+        {
+            impactRadius = distance;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return impactRadius;
+}
+
 /**
  * @brief Calculates the sub index for a particular pollutant
  *
@@ -456,19 +480,5 @@ double Service::average(const vector<double> &v)
     {
         sum += i;
     }
-    return sum / v.size();
-}
-
-/**
- * @brief Checks if the coord is inside the zone
- *
- * @param c
- * @param z
- * @return true
- * @return false
- */
-bool Service::isInZone(const Coord c, const Zone z)
-{
-    double d = distance(c, z);
-    return d < z.radius;
+    return v.size() > 0 ? sum / v.size() : 0;
 }
