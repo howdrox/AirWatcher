@@ -25,6 +25,21 @@ Time Time::addDays(int numDays) const
 {
     Time newTime(*this);
     newTime.day += numDays;
+
+    if (newTime.day == 0) {
+        newTime.month -= 1;
+        if (newTime.month == 0 || newTime.month == 1 || newTime.month == 3 || newTime.month == 5 || newTime.month == 7 || newTime.month == 8 || newTime.month == 10) {
+            newTime.day = 31;
+        } 
+        else if (newTime.month == 2) newTime.day = 29;
+        else newTime.day = 30;
+
+        if (newTime.month == 0) {
+            newTime.month = 12;
+            newTime.year -= 1;
+        }
+    }
+
     return newTime;
 }
 

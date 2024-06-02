@@ -334,11 +334,13 @@ double Service::calculateImpactRadius(int cleanerId)
     {
         double distance = pair.first;
         const Sensor &sensor = pair.second;
-
+        
         auto sensorMeasurements = sensor.getMeasurements();
         map<int, vector<Measurement>> measurements;
         measurements[sensor.getSensorID()] = sensorMeasurements;
-        cout << "Measurements: " << sensorMeasurements.size() << endl;
+        cout << "SensorID = " << sensor.getSensorID() << "Measurements: " << sensorMeasurements.size() << endl;
+
+        if (sensorMeasurements.size() == 0) continue;
 
         auto beforeMeasurements = filterMeasurements(before_start, start, measurements);
         auto afterMeasurements = filterMeasurements(before_end, end, measurements);
@@ -353,7 +355,7 @@ double Service::calculateImpactRadius(int cleanerId)
         cout << "Quality after cleaner: " << qualityAfterCleaner << endl;
         cout << "Distance: " << distance << endl;
 
-        if (qualityAfterCleaner > qualityBeforeCleaner)
+        if (qualityAfterCleaner < qualityBeforeCleaner)
         {
             impactRadius = distance;
         }
