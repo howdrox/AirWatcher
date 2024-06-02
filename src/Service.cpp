@@ -303,7 +303,7 @@ double Service::calculateImpactRadius(int cleanerId)
     auto it = cleaners.begin();
     while (it != cleaners.end())
     {
-        if (it->getCleanerId() == cleanerId)
+        if (it->getCleanerID() == cleanerId)
         {
             cleanerCoord = it->getCoord();
             start = it->getStartTime();

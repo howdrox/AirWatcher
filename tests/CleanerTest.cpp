@@ -9,7 +9,7 @@ TEST(CleanerTest, ConstructorTest)
     Time endTime("2019-01-05 00:00:00");
 
     Cleaner cleaner(data);
-    EXPECT_EQ(cleaner.getCleanerId(), 0);
+    EXPECT_EQ(cleaner.getCleanerID(), 0);
     EXPECT_EQ(cleaner.getCoord().latitude, 45.333333);
     EXPECT_EQ(cleaner.getCoord().longitude, 1.333333);
     EXPECT_EQ(cleaner.getStartTime(), startTime);
