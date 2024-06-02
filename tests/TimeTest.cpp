@@ -90,6 +90,26 @@ TEST(TimeTest, ComparisonOperators)
     EXPECT_FALSE(time1 < time2);
 }
 
+// Test equality operator
+TEST(TimeTest, EqualityOperator)
+{
+    Time time1(2024, 6, 1, 12, 30, 45);
+    Time time2(2024, 6, 1, 12, 30, 45);
+    Time time3(2024, 6, 1, 13, 30, 45);
+    EXPECT_TRUE(time1 == time2);
+    EXPECT_FALSE(time1 == time3);
+}
+
+// Test addDays method
+TEST(TimeTest, addDays)
+{
+    Time time1(2024, 6, 1, 12, 30, 45);
+    Time time2(2024, 6, 6, 12, 30, 45);
+    Time time3 = time1.addDays(5);
+    EXPECT_TRUE(time2 == time3);
+    EXPECT_TRUE(time1 < time3);
+}
+
 // Test output operator
 TEST(TimeTest, OutputOperator)
 {

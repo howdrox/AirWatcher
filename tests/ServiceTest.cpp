@@ -162,7 +162,9 @@ TEST_F(ServiceTest, SortSensorsTestFromCSVTestData)
     Coord testCoord(44, 1.2);
 
     // Call sortSensors function
-    multimap<double, Sensor> sortedSensors = service.sortSensors(system.getSensors(), testCoord);
+    auto sensors = system.getSensors();
+    sensors[4].addMeasurement(Measurement("2019-01-01 12:00:00;4;O3;50.25;"));
+    multimap<double, Sensor> sortedSensors = service.sortSensors(sensors, testCoord);
 
     EXPECT_GT(sortedSensors.size(), 0);
 
@@ -171,6 +173,9 @@ TEST_F(ServiceTest, SortSensorsTestFromCSVTestData)
     EXPECT_EQ(it->second.getSensorID(), 3);
     ++it;
     EXPECT_EQ(it->second.getSensorID(), 4);
+
+    // Verify that sensors have measurements
+    EXPECT_GT(it->second.getMeasurements().size(), 0);
 }
 
 // Test case for impactPurificateur method
