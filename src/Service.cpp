@@ -139,27 +139,29 @@ double Service::calculateQuality(const Zone &zone, const Time &start, const Time
 
     for (const auto &sensorData : system.getMeasurements())
     {
-        for (const auto &measurement : sensorData.second)
+        Sensor s = system.getSensors().at(sensorData.first);
+        if (isInZone(s.getLocation(), zone))
         {
-            // Check if measurement falls within the specified time range
-            if (measurement.getTimestamp() >= start && measurement.getTimestamp() <= end && !measurement.isBlacklisted())
+            for (const auto &measurement : sensorData.second)
             {
-                // Check if measurement falls within the specified zone
-                map<int, Sensor> s = system.getSensors();
-                if (isInZone(s[measurement.getSensorID()].getLocation(), zone))
+                // Check if measurement falls within the specified time range
+                if (measurement.getTimestamp() >= start && measurement.getTimestamp() <= end && !measurement.isBlacklisted())
                 {
-                    Time timestamp = measurement.getTimestamp();
-                    Time date = timestamp.zeroOutHour();
-                    filteredMeasurements[date][sensorData.first].push_back(measurement);
+                    filteredMeasurements[measurement.getTimestamp().zeroOutHour()][sensorData.first].push_back(measurement);
                 }
             }
         }
     }
+
+    // Calculates average index
     double sum_indexes = 0.0;
     int count_days = 0;
+    cout << "numdays: " << filteredMeasurements.size() << endl;
     for (const auto &measurementsPerDay : filteredMeasurements)
     {
-        sum_indexes += calculateQuality(measurementsPerDay.second);
+        double temp = calculateQuality(measurementsPerDay.second);
+        cout << "index per day: " << temp << endl;
+        sum_indexes += temp;
         count_days += 1;
     }
     double average_indexes = (count_days > 0) ? (sum_indexes / count_days) : 0;
@@ -190,7 +192,6 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
     pollutantLastTime[O3] = Time(0, 0, 0, 0, 0, 0);
     pollutantLastTime[NO2] = Time(0, 0, 0, 0, 0, 0);
     pollutantLastTime[SO2] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime[PM10] = Time(0, 0, 0, 0, 0, 0);
 
     for (const auto &sensorData : measurements)
     {
@@ -198,29 +199,39 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
         {
             if (!measurement.isBlacklisted())
             {
-                PollutantType attr = measurement.getAttributeID();
                 double val = measurement.getValue();
-
-                if (pollutantLastTime[attr].isSameHour(measurement.getTimestamp()))
+                PollutantType attr = measurement.getAttributeID();
+                Time timestamp = measurement.getTimestamp();
+                if (attr == PM10)
                 {
-                    if (val > pollutantMaxValues[attr].back())
-                    {
-                        pollutantMaxValues[attr].back() = val;
-                    }
+                    pollutantMaxValues[PM10].push_back(val);
                 }
                 else
                 {
-                    pollutantMaxValues[attr].push_back(val);
+                    if (pollutantLastTime[attr].isSameHour(timestamp) && val > pollutantMaxValues[attr].back())
+                    {
+                        pollutantMaxValues[attr].back() = val;
+                    }
+                    else if (!pollutantLastTime[attr].isSameHour(timestamp))
+                    {
+                        pollutantMaxValues[attr].push_back(val);
+                    }
+                    pollutantLastTime[attr] = timestamp;
                 }
             }
         }
     }
 
-    // Get maximum values for pollutants
-    double avgO3 = !pollutantMaxValues[O3].empty() ? average(pollutantMaxValues[O3]) : 0;
-    double avgNO2 = !pollutantMaxValues[NO2].empty() ? average(pollutantMaxValues[NO2]) : 0;
-    double avgSO2 = !pollutantMaxValues[SO2].empty() ? average(pollutantMaxValues[SO2]) : 0;
-    double avgPM10 = !pollutantMaxValues[PM10].empty() ? average(pollutantMaxValues[PM10]) : 0;
+    // Get average values for pollutants
+    double avgO3 = average(pollutantMaxValues[O3]);
+    double avgNO2 = average(pollutantMaxValues[NO2]);
+    double avgSO2 = average(pollutantMaxValues[SO2]);
+    double avgPM10 = average(pollutantMaxValues[PM10]);
+    // if no values added (all blacklisted)
+    if (max({avgO3, avgNO2, avgSO2, avgPM10}) == 0)
+    {
+        return 0;
+    }
 
     // Calculate sub-indices
     int indexO3 = calculateSubIndex(avgO3, O3);
@@ -394,7 +405,7 @@ void Service::blacklistPrivateUser(int userID)
  */
 int Service::calculateSubIndex(const double &value, const PollutantType &pollutant) const
 {
-    if (value == 0)
+    if (value < 0)
     {
         return 0;
     }
