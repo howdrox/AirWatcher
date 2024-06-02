@@ -20,7 +20,7 @@ public:
     const Time &getStartTime() const { return startTime; };
     const Time &getEndTime() const { return endTime; };
 
-protected:
+private:
     int cleanerID;
     Coord location;
     Time startTime;

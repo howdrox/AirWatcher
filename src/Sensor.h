@@ -30,7 +30,7 @@ public:
     // Methods
     void addMeasurement(const Measurement &measurement);
 
-protected:
+private:
     int sensorID;
     Coord location;
     vector<Measurement> measurements;
