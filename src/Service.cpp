@@ -184,43 +184,25 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
     {
         return 0; // Return a default value, such as 0, when there are no measurements
     }
-
-    map<PollutantType, vector<double>> pollutantMaxValues;
-    map<PollutantType, Time> pollutantLastTime;
-    pollutantLastTime[O3] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime[NO2] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime[SO2] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime[PM10] = Time(0, 0, 0, 0, 0, 0);
+    // A map where:
+    // - Key: Represents the pollutant name
+    // - Value: a pair where the first element represents the sum of the concentrations of the pollutant and the value is the number of measures
+    map<PollutantType,pair<double,int>> measurementsSumPerPollutant;
 
     for (const auto &sensorData : measurements)
     {
         for (const auto &measurement : sensorData.second)
         {
-            if (!measurement.isBlacklisted())
-            {
-                PollutantType attr = measurement.getAttributeID();
-                double val = measurement.getValue();
-
-                if (pollutantLastTime[attr].isSameHour(measurement.getTimestamp()))
-                {
-                    if (val > pollutantMaxValues[attr].back())
-                    {
-                        pollutantMaxValues[attr].back() = val;
-                    }
-                }
-                else
-                {
-                    pollutantMaxValues[attr].push_back(val);
-                }
-            }
+            measurementsSumPerPollutant[measurement.getAttributeID()].first += measurement.getValue();
+            measurementsSumPerPollutant[measurement.getAttributeID()].second += 1;
         }
     }
 
     // Get maximum values for pollutants
-    double avgO3 = !pollutantMaxValues[O3].empty() ? average(pollutantMaxValues[O3]) : 0;
-    double avgNO2 = !pollutantMaxValues[NO2].empty() ? average(pollutantMaxValues[NO2]) : 0;
-    double avgSO2 = !pollutantMaxValues[SO2].empty() ? average(pollutantMaxValues[SO2]) : 0;
-    double avgPM10 = !pollutantMaxValues[PM10].empty() ? average(pollutantMaxValues[PM10]) : 0;
+    double avgO3 = !(measurementsSumPerPollutant[O3].second ==0) ? (measurementsSumPerPollutant[O3].first/measurementsSumPerPollutant[O3].second) : 0;
+    double avgNO2 = !(measurementsSumPerPollutant[NO2].second ==0) ? (measurementsSumPerPollutant[NO2].first/measurementsSumPerPollutant[NO2].second) : 0;
+    double avgSO2 = !(measurementsSumPerPollutant[SO2].second ==0) ? (measurementsSumPerPollutant[SO2].first/measurementsSumPerPollutant[SO2].second) : 0;
+    double avgPM10 = !(measurementsSumPerPollutant[PM10].second ==0) ? (measurementsSumPerPollutant[PM10].first/measurementsSumPerPollutant[PM10].second) : 0; 
 
     // Calculate sub-indices
     int indexO3 = calculateSubIndex(avgO3, O3);
