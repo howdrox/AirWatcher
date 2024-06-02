@@ -191,8 +191,8 @@ double Service::calculateImpactRadius(int cleanerId)
     Time before_start = start.addDays(-1);
     Time before_end = end.addDays(-1);
 
-    cout << "before start: " << before_start << endl;
-    cout << "before end: " << before_end << endl;
+    cout << "before start: " << before_start << " start: " << start << endl;
+    cout << "before end: " << before_end << " end: " << end << endl;
 
     double impactRadius = 0.0;
 
@@ -202,8 +202,12 @@ double Service::calculateImpactRadius(int cleanerId)
         const Sensor &sensor = pair.second;
 
         auto sensorMeasurements = sensor.getMeasurements();
-        auto beforeMeasurements = filterMeasurements(before_start, start, {{sensor.getSensorID(), sensorMeasurements}});
-        auto afterMeasurements = filterMeasurements(before_end, end, {{sensor.getSensorID(), sensorMeasurements}});
+        map<int, vector<Measurement>> measurements;
+        measurements[sensor.getSensorID()] = sensorMeasurements;
+        cout << "Measurements: " << sensorMeasurements.size() << endl;
+        
+        auto beforeMeasurements = filterMeasurements(before_start, start, measurements);
+        auto afterMeasurements = filterMeasurements(before_end, end, measurements);
 
         cout << "beforeMeasurements: " << beforeMeasurements.size() << endl;
         cout << "afterMeasurements: " << afterMeasurements.size() << endl;
