@@ -193,8 +193,10 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
     {
         for (const auto &measurement : sensorData.second)
         {
-            measurementsSumPerPollutant[measurement.getAttributeID()].first += measurement.getValue();
-            measurementsSumPerPollutant[measurement.getAttributeID()].second += 1;
+            if (!measurement.isBlacklisted()){
+                measurementsSumPerPollutant[measurement.getAttributeID()].first += measurement.getValue();
+                measurementsSumPerPollutant[measurement.getAttributeID()].second += 1;
+            }
         }
     }
 
