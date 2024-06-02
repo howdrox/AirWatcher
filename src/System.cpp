@@ -89,7 +89,7 @@ void System::addCleaner(const Cleaner &cleaner)
 
 void System::addSensor(const Sensor &sensor)
 {
-    (void)sensor;
+    sensors[sensor.getSensorID()] = sensor;
 }
 
 void System::addUser(const PrivateUser &p)
