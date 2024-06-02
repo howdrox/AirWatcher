@@ -318,7 +318,7 @@ TEST_F(ServiceTest, BlacklistPrivateUserTest)
     EXPECT_THROW(service.blacklistPrivateUser(-1), std::invalid_argument);
 
     // Test with user ID that does not have measurements
-    EXPECT_THROW(service.blacklistPrivateUser(1), std::invalid_argument);
+    EXPECT_NO_THROW(service.blacklistPrivateUser(1));
 
     // Test with valid user ID
     EXPECT_NO_THROW(service.blacklistPrivateUser(0));

@@ -375,7 +375,7 @@ void Service::blacklistPrivateUser(int userID)
             }
             else
             {
-                throw invalid_argument("Sensor ID from User not found");
+                continue;
             }
         }
     }
