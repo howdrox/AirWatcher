@@ -8,7 +8,6 @@ using namespace std;
 
 Measurement::Measurement(const string &ligne)
 {
-
     stringstream ss(ligne);
     string item;
     vector<string> elements;
@@ -41,8 +40,7 @@ Measurement::Measurement(const string &ligne)
 
 std::ostream &operator<<(std::ostream &os, const Measurement &measurement)
 {
-    os << "Measurement ID: " << measurement.measurementID
-       << " , Timestamp: " << measurement.timestamp
+    os << "Timestamp: " << measurement.timestamp
        << " , Sensor ID: " << measurement.sensorID
        << " , Attribute ID: " << static_cast<int>(measurement.attributeID)
        << " , Value: " << measurement.value
