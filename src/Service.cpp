@@ -232,6 +232,17 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
     return max({indexO3, indexNO2, indexSO2, indexPM10});
 }
 
+/**
+ * @brief Ranks the sensors based on the quality difference between the specified sensor and the other sensors
+ *
+ * @details Returns the ranking as a map with key: quality difference and value:vector of sensor IDs
+ * If no measurements for a sensors are found, the sensor's quality is set to 0
+ *
+ * @param sensorID
+ * @param start
+ * @param end
+ * @return map<double, vector<int>>
+ */
 map<double, vector<int>> Service::rankSimilarSensors(int sensorID, const Time &start, const Time &end)
 {
     // Key: sensorID, Value: Sensor
@@ -295,16 +306,12 @@ double Service::calculateImpactRadius(int cleanerId)
     {
         throw std::invalid_argument("Cleaner ID not found");
     }
-    cout << "Cleaner ID: " << cleanerId << " Coord: " << cleanerCoord.latitude << ", " << cleanerCoord.longitude << endl;
 
     // Sort sensors by distance from the cleaner
     multimap<double, Sensor> sortedSensors = sortSensors(system.getSensors(), cleanerCoord);
 
     Time before_start = start.addDays(-1);
     Time before_end = end.addDays(-1);
-
-    cout << "before start: " << before_start << " start: " << start << endl;
-    cout << "before end: " << before_end << " end: " << end << endl;
 
     double impactRadius = 0.0;
 
@@ -313,26 +320,19 @@ double Service::calculateImpactRadius(int cleanerId)
         double distance = pair.first;
         const Sensor &sensor = pair.second;
 
-        auto sensorMeasurements = sensor.getMeasurements();
-        map<int, vector<Measurement>> measurements;
-        measurements[sensor.getSensorID()] = sensorMeasurements;
-        cout << "SensorID = " << sensor.getSensorID() << "Measurements: " << sensorMeasurements.size() << endl;
-
-        if (sensorMeasurements.size() == 0)
+        auto measurements = system.getMeasurements();
+        if (measurements[sensor.getSensorID()].empty())
+        {
             continue;
+        }
 
-        auto beforeMeasurements = filterMeasurements(before_start, start, measurements);
-        auto afterMeasurements = filterMeasurements(before_end, end, measurements);
+        auto sensorMeasurements = measurements[sensor.getSensorID()];
 
-        cout << "beforeMeasurements: " << beforeMeasurements.size() << endl;
-        cout << "afterMeasurements: " << afterMeasurements.size() << endl;
+        auto beforeMeasurements = filterMeasurements(before_start, start, {{sensor.getSensorID(), sensorMeasurements}});
+        auto afterMeasurements = filterMeasurements(before_end, end, {{sensor.getSensorID(), sensorMeasurements}});
 
         double qualityBeforeCleaner = calculateQuality(beforeMeasurements);
         double qualityAfterCleaner = calculateQuality(afterMeasurements);
-
-        cout << "Quality before cleaner: " << qualityBeforeCleaner << endl;
-        cout << "Quality after cleaner: " << qualityAfterCleaner << endl;
-        cout << "Distance: " << distance << endl;
 
         if (qualityAfterCleaner < qualityBeforeCleaner)
         {
@@ -348,6 +348,44 @@ double Service::calculateImpactRadius(int cleanerId)
 }
 
 /**
+ * @brief Blacklists a private user and all of his measurements
+ *
+ * @param userID
+ */
+void Service::blacklistPrivateUser(int userID)
+{
+    vector<PrivateUser> &users = system.getUsers();
+    auto userIt = find_if(users.begin(), users.end(), [userID](PrivateUser &user)
+                          { return user.getUserID() == userID; });
+
+    if (userIt != users.end())
+    {
+        userIt->setBlacklisted(true);
+
+        for (const auto &sensorID : userIt->getSensorsID())
+        {
+            auto sensorIt = system.getSensors().find(sensorID);
+            if (sensorIt != system.getSensors().end())
+            {
+                auto &measurements = system.getMeasurements().at(sensorID);
+                for (auto &measurement : measurements)
+                {
+                    measurement.setBlacklisted(true);
+                }
+            }
+            else
+            {
+                throw invalid_argument("Sensor ID from User not found");
+            }
+        }
+    }
+    else
+    {
+        throw invalid_argument("User ID not found");
+    }
+}
+
+/**
  * @brief Calculates the sub index for a particular pollutant
  *
  * @param value
@@ -356,6 +394,10 @@ double Service::calculateImpactRadius(int cleanerId)
  */
 int Service::calculateSubIndex(const double &value, const PollutantType &pollutant) const
 {
+    if (value == 0)
+    {
+        return 0;
+    }
     if (pollutant == O3)
     {
         if (value >= 240)

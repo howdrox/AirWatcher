@@ -20,10 +20,10 @@ public:
     ~System(){};
 
     // Getters
-    const map<int, vector<Measurement>> &getMeasurements() { return measurements; };
+    map<int, vector<Measurement>> &getMeasurements() { return measurements; };
     const vector<Cleaner> &getCleaners() { return cleaners; };
     const map<int, Sensor> &getSensors() { return sensors; };
-    const vector<PrivateUser> &getUsers() { return privateUsers; };
+    vector<PrivateUser> &getUsers() { return privateUsers; };
 
     // Methods
     void addMeasurement(const Measurement &measurement);

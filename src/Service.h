@@ -41,6 +41,7 @@ public:
     double calculateQuality(const map<int, vector<Measurement>> &measurements);
     double calculateImpactRadius(int cleanerId);
     map<double, vector<int>> rankSimilarSensors(int sensorID, const Time &start, const Time &end);
+    void blacklistPrivateUser(int userID);
 
 private:
     System system;

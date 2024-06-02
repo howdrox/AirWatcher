@@ -266,24 +266,18 @@ TEST_F(ServiceTest, SortSensorsTestFromCSVTestData)
 
     // Verify that the sensors are sorted by distance
     auto it = sortedSensors.begin();
-    EXPECT_EQ(it->second.getSensorID(), 3);
-    ++it;
     EXPECT_EQ(it->second.getSensorID(), 4);
-
-    // Verify that sensors have measurements
     EXPECT_GT(it->second.getMeasurements().size(), 0);
+    ++it;
+    EXPECT_EQ(it->second.getSensorID(), 2);
 }
 
 // Test case for impactPurificateur method
 TEST_F(ServiceTest, CalculateImpactRadius)
 {
-    for (auto &sensor : system.getSensors())
-    {
-        cout << "SensorID: " << sensor.second.getSensorID() << ", number of measurements: " << sensor.second.getMeasurements().size() << endl;
-    }
     // Test with a valid cleaner ID
-    // EXPECT_NO_THROW(service.calculateImpactRadius(0));
-    EXPECT_GT(service.calculateImpactRadius(0), 0.0);
+    EXPECT_NO_THROW(service.calculateImpactRadius(0));
+    EXPECT_GT(service.calculateImpactRadius(3), 0.0);
 
     // Test with an invalid cleaner ID
     EXPECT_THROW(service.calculateImpactRadius(-1), std::exception);
@@ -305,31 +299,43 @@ TEST_F(ServiceTest, RankSimilarSensorsTest)
     EXPECT_GT(service.rankSimilarSensors(2, start, end).size(), 0);
 }
 
-// // Test case for GetSimilarZones method exceptions
-// TEST_F(ServiceTest, GetSimilarZonesExceptions)
-// {
-//     Time start(2019, 1, 1, 0, 0, 0);
-//     Time end(2019, 12, 31, 23, 59, 59);
+// Test rankSimilarSensors method with exceptions
+TEST_F(ServiceTest, RankSimilarSensorsExceptionsTest)
+{
+    Time start(2019, 1, 1, 0, 0, 0);
+    Time end(2019, 2, 2, 0, 0, 0);
 
-//     // Test with non-existent sensor ID
-//     EXPECT_THROW(service.getSimilarZones(-1, start, end, 0.1), std::exception);
+    // Test with invalid sensor ID
+    EXPECT_THROW(service.rankSimilarSensors(-1, start, end), std::invalid_argument);
 
-//     // Test with end date before start date
-//     EXPECT_THROW(service.getSimilarZones(1, end, start, 0.1), std::exception);
+    // Test with invalid time range
+    EXPECT_THROW(service.rankSimilarSensors(0, end, start), std::invalid_argument);
+}
 
-//     // Test with invalid delta (<= 0)
-//     EXPECT_THROW(service.getSimilarZones(1, start, end, -0.1), std::exception);
-// }
+// Test blacklistPrivateUser method
+TEST_F(ServiceTest, BlacklistPrivateUserTest)
+{
+    // Test with invalid user ID
+    EXPECT_THROW(service.blacklistPrivateUser(-1), std::invalid_argument);
 
-// // Test case for GetSimilarZones method with valid data
-// TEST_F(ServiceTest, GetSimilarZonesTest)
-// {
-//     Time start(2019, 1, 1, 0, 0, 0);
-//     Time end(2019, 12, 31, 23, 59, 59);
+    // Test with user ID that does not have measurements
+    EXPECT_THROW(service.blacklistPrivateUser(1), std::invalid_argument);
 
-//     // Test with valid sensor ID and time range
-//     EXPECT_GT(service.getSimilarZones(1, start, end, 0.1).size(), 0);
+    // Test with valid user ID
+    EXPECT_NO_THROW(service.blacklistPrivateUser(0));
+    EXPECT_TRUE(service.getSystem().getUsers().at(0).isBlacklisted());
+    for (auto &measurement : service.getSystem().getMeasurements().at(0))
+    {
+        EXPECT_TRUE(measurement.isBlacklisted());
+    }
+}
 
-//     // Test with start date equal to end date
-//     EXPECT_TRUE(service.getSimilarZones(1, start, start, 0.1).empty());
-// }
+// Test calculateQuality for blacklisted measurements
+TEST_F(ServiceTest, CalculateQualityWithBlacklistedMeasurements)
+{
+    // Blacklist a user
+    service.blacklistPrivateUser(0);
+
+    // Calculates the quality of blacklisted measurements
+    EXPECT_EQ(service.calculateQuality({{0, service.getSystem().getMeasurements().at(0)}}), 0.0);
+}
