@@ -51,3 +51,13 @@ clean:
 	rm -rf $(TARGET_DIR)
 
 .PHONY: all clean
+
+# Include dependencies
+Cleaner.o: Cleaner.h
+GovernmentAgent.o: GovernmentAgent.h User.h
+Measurement.o: Measurement.h Time.h
+PrivateUser.o: PrivateUser.h User.h
+Provider.o: Provider.h User.h
+Sensor.o: Sensor.h Coord.h Measurement.h
+Time.o: Time.h
+User.o: User.h Role.h
