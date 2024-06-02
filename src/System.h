@@ -33,7 +33,11 @@ public:
 
 protected:
     vector<PrivateUser> privateUsers;
+    // Key: sensorID
+    // Value: Sensor
     map<int, Sensor> sensors;
+    // Key: sensorID
+    // Value: vector of measurements
     map<int, vector<Measurement>> measurements;
     vector<Cleaner> cleaners;
 };
