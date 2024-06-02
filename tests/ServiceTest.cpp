@@ -111,6 +111,22 @@ TEST_F(ServiceTest, IsInZoneTest)
     EXPECT_FALSE(service.isInZone(outsideCoord, zone));
 }
 
+// Test average method
+TEST_F(ServiceTest, AverageTest)
+{
+    // Test with empty vector
+    vector<double> emptyVector;
+    EXPECT_DOUBLE_EQ(service.average(emptyVector), 0.0);
+
+    // Test with one element
+    vector<double> oneElementVector = {5.0};
+    EXPECT_DOUBLE_EQ(service.average(oneElementVector), 5.0);
+
+    // Test with multiple elements
+    vector<double> multipleElementsVector = {1.0, 2.0, 3.0, 4.0, 5.0};
+    EXPECT_DOUBLE_EQ(service.average(multipleElementsVector), 3.0);
+}
+
 // Test case for filterMeasurements method
 TEST_F(ServiceTest, FilterMeasurementsTest)
 {
@@ -177,6 +193,15 @@ TEST_F(ServiceTest, CalculateQualityWithZoneAndTimeRangeTest)
     EXPECT_THROW(service.calculateQuality(zone, end, start), std::exception);
 }
 
+// Test sortSensors function with empty sensors
+TEST_F(ServiceTest, SortSensorsTestWithEmptySystem)
+{
+    // Test with empty sensors
+    Coord testCoord(44, 1.2);
+    multimap<double, Sensor> sortedSensors = emptyService.sortSensors(emptySystem.getSensors(), testCoord);
+    EXPECT_TRUE(sortedSensors.empty());
+}
+
 // Test case for sortSensors function
 TEST_F(ServiceTest, SortSensorsTestFromManualData)
 {
@@ -201,6 +226,30 @@ TEST_F(ServiceTest, SortSensorsTestFromManualData)
     EXPECT_EQ(it->second.getSensorID(), 3); // New York
 }
 
+// Test sortSensors function with sensors at the same coordinates
+TEST_F(ServiceTest, SortSensorsTestWithSameCoordinates)
+{
+    // Create test sensors
+    map<int, Sensor> sensors;
+    sensors[1] = Sensor(1, Coord(44, 1.2));
+    sensors[2] = Sensor(2, Coord(44, 1.2));
+    sensors[3] = Sensor(3, Coord(44, 1.3));
+
+    // Coordinate to sort sensors by distance from
+    Coord testCoord(44, 1.2);
+
+    // Call sortSensors function
+    multimap<double, Sensor> sortedSensors = service.sortSensors(sensors, testCoord);
+
+    // Verify that the sensors are sorted by distance
+    auto it = sortedSensors.begin();
+    EXPECT_EQ(it->second.getSensorID(), 1);
+    ++it;
+    EXPECT_EQ(it->second.getSensorID(), 2);
+    ++it;
+    EXPECT_EQ(it->second.getSensorID(), 3);
+}
+
 TEST_F(ServiceTest, SortSensorsTestFromCSVTestData)
 {
     // Coordinate to sort sensors by distance from
@@ -208,7 +257,7 @@ TEST_F(ServiceTest, SortSensorsTestFromCSVTestData)
 
     // Call sortSensors function
     auto sensors = system.getSensors();
-    sensors[4].addMeasurement(Measurement("2019-01-01 12:00:00;Sensor4;SO3;49.96;"));
+    sensors[4].addMeasurement(Measurement("2019-01-01 12:00:00;Sensor4;SO2;49.96;"));
     multimap<double, Sensor> sortedSensors = service.sortSensors(sensors, testCoord);
 
     EXPECT_GT(sortedSensors.size(), 0);
@@ -228,7 +277,7 @@ TEST_F(ServiceTest, CalculateImpactRadius)
 {
     for (auto &sensor : system.getSensors())
     {
-        cout << sensor.second.getMeasurements().size() << endl;
+        cout << "SensorID: " << sensor.second.getSensorID() << ", number of measurements: " << sensor.second.getMeasurements().size() << endl;
     }
     // Test with a valid cleaner ID
     // EXPECT_NO_THROW(service.calculateImpactRadius(0));
@@ -241,13 +290,11 @@ TEST_F(ServiceTest, CalculateImpactRadius)
     EXPECT_DOUBLE_EQ(service.calculateImpactRadius(2), 0.0);
 }
 
-// Test case for chercherZones method
-TEST_F(ServiceTest, ChercherZonesTest)
+// Test case for GetSimilarZones method exceptions
+TEST_F(ServiceTest, GetSimilarZonesExceptions)
 {
     Time start(2019, 1, 1, 0, 0, 0);
     Time end(2019, 12, 31, 23, 59, 59);
-    // Test with existing sensor ID and valid time range
-    EXPECT_FALSE(service.getSimilarZones(1, start, end, 0.1).empty());
 
     // Test with non-existent sensor ID
     EXPECT_THROW(service.getSimilarZones(-1, start, end, 0.1), std::exception);
@@ -255,9 +302,19 @@ TEST_F(ServiceTest, ChercherZonesTest)
     // Test with end date before start date
     EXPECT_THROW(service.getSimilarZones(1, end, start, 0.1), std::exception);
 
-    // Test with start date equal to end date
-    EXPECT_TRUE(service.getSimilarZones(1, start, start, 0.1).empty());
-
     // Test with invalid delta (<= 0)
     EXPECT_THROW(service.getSimilarZones(1, start, end, -0.1), std::exception);
+}
+
+// Test case for GetSimilarZones method with valid data
+TEST_F(ServiceTest, GetSimilarZonesTest)
+{
+    Time start(2019, 1, 1, 0, 0, 0);
+    Time end(2019, 12, 31, 23, 59, 59);
+
+    // Test with valid sensor ID and time range
+    EXPECT_GT(service.getSimilarZones(1, start, end, 0.1).size(), 0);
+
+    // Test with start date equal to end date
+    EXPECT_TRUE(service.getSimilarZones(1, start, start, 0.1).empty());
 }

@@ -60,6 +60,13 @@ TEST(MeasurementTest, StringConstructorNegativeValueTest)
     EXPECT_FALSE(m.isBlacklisted());
 }
 
+// Test string-based constructor with invalid PollutantType
+TEST(MeasurementTest, StringConstructorInvalidPollutantTypeTest)
+{
+    // Test invalid PollutantType
+    EXPECT_THROW(Measurement("2019-01-01 12:00:00;Sensor0;O4;50.25;"), std::invalid_argument);
+}
+
 // Test output stream operator
 TEST(MeasurementTest, OutputOperatorTest)
 {
@@ -68,7 +75,6 @@ TEST(MeasurementTest, OutputOperatorTest)
 
     std::ostringstream os;
     os << m;
-    std::cout << m << std::endl;
 
     std::string expectedOutput = "Measurement ID: 1 , Timestamp: 2024-05-31 12:30:45 , Sensor ID: 100 , Attribute ID: 1 , Value: 42 , Blacklisted: No";
     EXPECT_EQ(os.str(), expectedOutput);

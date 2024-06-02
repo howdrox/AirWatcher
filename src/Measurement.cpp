@@ -28,6 +28,7 @@ Measurement::Measurement(const string &ligne)
         attributeID = SO2;
     else if (elements[2] == "PM10")
         attributeID = PM10;
+    else throw invalid_argument("Pollutant type not recognized");
 
     value = stod(elements[3]);
     if (value < 0)
