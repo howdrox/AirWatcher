@@ -215,11 +215,9 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
             }
         }
     }
-    // cout << "first pollutantMaxValues: " << pollutantMaxValues[O3][0] << endl;
 
     // Get maximum values for pollutants
     double avgO3 = !pollutantMaxValues[O3].empty() ? average(pollutantMaxValues[O3]) : 0;
-    // cout << "avgO3: " << avgO3 << endl;
     double avgNO2 = !pollutantMaxValues[NO2].empty() ? average(pollutantMaxValues[NO2]) : 0;
     double avgSO2 = !pollutantMaxValues[SO2].empty() ? average(pollutantMaxValues[SO2]) : 0;
     double avgPM10 = !pollutantMaxValues[PM10].empty() ? average(pollutantMaxValues[PM10]) : 0;
@@ -234,58 +232,38 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
     return max({indexO3, indexNO2, indexSO2, indexPM10});
 }
 
-multimap<double, int> Service ::getSimilarZones(const int &sensorID, const Time &start, const Time &end, const double &delta)
+map<double, vector<int>> Service::rankSimilarSensors(int sensorID, const Time &start, const Time &end)
 {
-
-    multimap<double, int> similarSensors;
+    // Key: sensorID, Value: Sensor
     map<int, Sensor> sensors = system.getSensors();
-    // Vérifier si sensorId est dans la liste des sensors
-    bool sensorFound = false;
-    for (const auto &pair : sensors)
-    {
-        Sensor s = pair.second;
-        if (s.getSensorID() == sensorID)
-        {
-            sensorFound = true;
-            break;
-        }
-    }
 
-    if (!sensorFound)
+    // Check if sensorID is in the list of sensors
+    if (sensors.find(sensorID) == sensors.end())
     {
         throw invalid_argument("Sensor ID not found");
     }
-    if (delta <= 0)
-    {
-        throw invalid_argument("Delta invalid");
-    }
 
-    map<int, vector<Measurement>> measurements = system.getMeasurements();
-    map<int, vector<Measurement>> filteredMeasurements = filterMeasurements(start, end, measurements);
-    map<int, vector<Measurement>> parameterSensorMeasurements;
-    if (filteredMeasurements.empty())
-    {
-        return similarSensors;
-    }
-    parameterSensorMeasurements[sensorID] = filteredMeasurements[sensorID];
-    double parameterQuality = this->calculateQuality(parameterSensorMeasurements);
+    // Key: quality difference, Value: vector of sensor IDs
+    map<double, vector<int>> ranking;
+    // Key: sensorID, Value: vector of Measurements
+    map<int, vector<Measurement>> filteredMeasurements = filterMeasurements(start, end, system.getMeasurements());
+    double sensorQuality = calculateQuality({{sensorID, filteredMeasurements[sensorID]}});
 
-    for (auto it = filteredMeasurements.begin(); it != filteredMeasurements.end(); ++it)
+    // For each sensor, calculate the quality difference
+    for (const auto &sensor : sensors)
     {
-        map<int, vector<Measurement>> filteredMeasurementsSensor;
-        filteredMeasurementsSensor[sensorID] = filteredMeasurements[it->first];
-        double sensorQuality = this->calculateQuality(filteredMeasurementsSensor);
-        if (sensorQuality <= parameterQuality + delta && sensorQuality >= parameterQuality - delta)
+        int otherSensorID = sensor.first;
+
+        if (otherSensorID != sensorID && filteredMeasurements.find(otherSensorID) != filteredMeasurements.end() && !filteredMeasurements[otherSensorID].empty())
         {
-            double qualityDifference = sensorQuality - parameterQuality;
-            if (sensorQuality < parameterQuality)
-            {
-                qualityDifference = parameterQuality - sensorQuality;
-            }
-            similarSensors.insert(pair<double, int>(qualityDifference, it->first));
+            double otherSensorQuality = calculateQuality({{otherSensorID, filteredMeasurements[otherSensorID]}});
+
+            double qualityDifference = abs(sensorQuality - otherSensorQuality);
+            ranking[qualityDifference].push_back(otherSensorID);
         }
     }
-    return similarSensors;
+
+    return ranking;
 }
 
 /**
@@ -334,13 +312,14 @@ double Service::calculateImpactRadius(int cleanerId)
     {
         double distance = pair.first;
         const Sensor &sensor = pair.second;
-        
+
         auto sensorMeasurements = sensor.getMeasurements();
         map<int, vector<Measurement>> measurements;
         measurements[sensor.getSensorID()] = sensorMeasurements;
         cout << "SensorID = " << sensor.getSensorID() << "Measurements: " << sensorMeasurements.size() << endl;
 
-        if (sensorMeasurements.size() == 0) continue;
+        if (sensorMeasurements.size() == 0)
+            continue;
 
         auto beforeMeasurements = filterMeasurements(before_start, start, measurements);
         auto afterMeasurements = filterMeasurements(before_end, end, measurements);
