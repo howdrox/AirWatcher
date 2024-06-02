@@ -28,7 +28,6 @@ public:
     virtual ~Measurement() {}
 
     // Getters
-    // int getMeasurementID() const { return measurementID; }
     Time getTimestamp() const { return timestamp; }
     int getSensorID() const { return sensorID; }
     PollutantType getAttributeID() const { return attributeID; }
@@ -44,7 +43,6 @@ public:
     
 
 protected:
-    // int measurementID;
     Time timestamp;
     int sensorID;
     PollutantType attributeID;
