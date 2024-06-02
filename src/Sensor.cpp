@@ -23,41 +23,60 @@ Sensor::Sensor(const string &sensorLine)
 #ifdef MAP
     cout << "Appel au constructeur de <Sensor>" << endl;
 #endif
-    string data = sensorLine.substr(6);
 
-    vector<string> attributes;
-    string attribute;
-    istringstream tokenStream(data);
-    while (getline(tokenStream, attribute, ';'))
+    stringstream ss(sensorLine);
+    string item;
+    vector<string> elements;
+
+    while (getline(ss, item, ';'))
     {
-        attributes.push_back(attribute);
+        elements.push_back(item);
     }
 
-    if (attributes.size() >= 3)
-    {
-        sensorID = stoi(attributes[0]);
-        location.latitude = stod(attributes[1]);
-        location.longitude = stod(attributes[2]);
-    }
+    sensorID = std::stoi(elements[0].substr(6));
+    location.latitude = stod(elements[1]);
+    location.longitude = stod(elements[2]);
 }
+
+Sensor::Sensor(const Sensor &sensor)
+{
+    sensorID = sensor.sensorID;
+    location = sensor.location;
+    measurements = sensor.measurements;
+}
+
 Sensor::~Sensor()
 {
 #ifdef MAP
     cout << "Appel au destructeur de <Sensor>" << endl;
 #endif
 }
+
 void Sensor::addMeasurement(const Measurement &measurement)
 {
     measurements.push_back(measurement);
 }
 
-std::ostream& operator<<(std::ostream& os, const Sensor& sensor) {
-        os << "Sensor ID: " << sensor.sensorID << endl;
-        os << "Latitude: " << sensor.location.latitude << endl;
-        os << "Longitude: " << sensor.location.longitude << endl;;
-        os << "Measurements: " << endl;
-        /*for (const auto& measurement : sensor.measurements) {
-            os << measurement << " ";
-        }*/
-        return os;
+Sensor &Sensor::operator=(const Sensor &sensor)
+{
+    if (this != &sensor)
+    {
+        sensorID = sensor.sensorID;
+        location = sensor.location;
+        measurements = sensor.measurements;
+    }
+    return *this;
+}
+
+std::ostream &operator<<(std::ostream &os, const Sensor &sensor)
+{
+    os << "Sensor ID: " << sensor.sensorID << endl;
+    os << "Latitude: " << sensor.location.latitude << endl;
+    os << "Longitude: " << sensor.location.longitude << endl;
+    ;
+    os << "Measurements: " << endl;
+    /*for (const auto& measurement : sensor.measurements) {
+        os << measurement << " ";
+    }*/
+    return os;
 }
