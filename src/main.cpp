@@ -91,17 +91,15 @@ int main(){
                 Time start = Time(startDate);
                 Time end = Time(endDate);
                 
-                cout<<"Please enter the tolerance level (delta) :"<<endl;
-                double delta;
-                cin>> delta;
-                cin.ignore();
                 
-                
-                multimap<double,int> sensors = service.getSimilarZones(sensorID,start,end,delta);
+                map<double, vector<int>> sensorsMap = service.rankSimilarSensors(sensorID,start,end);
                 cout<<"List of similar sensors sorted by the the level of smilarity : "<<endl;
-                for (auto it = sensors.rbegin(); it != sensors.rend(); ++it){
-                    cout<<"Sensor id : "<<it->second <<" Air quality difference : "<<it->first<<" ."<<endl;
-                    
+                for (auto it = sensorsMap.rbegin(); it != sensorsMap.rend(); ++it){
+                    cout << "Air quality difference: " << it->first << ", Sensors ID: ";
+                    for (auto &sensID: it->second){
+                        cout << sensID << ", ";
+                    }
+                    cout << endl;
                 }
                 break;
             }
