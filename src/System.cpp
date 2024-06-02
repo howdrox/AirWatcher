@@ -9,14 +9,8 @@
 
 using namespace std;
 
-System::System() {}
-
 System::System(const string &sensorsFilePath, const string &cleanersFilePath, const string &usersFilePath, const string &measurementsFilePath)
 {
-#ifdef MAP
-    cout << "Appel au constructeur de <System>" << endl;
-#endif
-
     ifstream cleanersFile(cleanersFilePath);
     if (!cleanersFile.is_open())
     {
@@ -81,28 +75,6 @@ System::System(const string &sensorsFilePath, const string &cleanersFilePath, co
     }
 
     measurementsFile.close();
-
-    
-}
-
-System::~System() {}
-
-const vector<Cleaner> &System::getCleaners()
-{
-    return cleaners;
-}
-
-const map<int, Sensor> &System::getSensors()
-{
-    return sensors;
-}
-const map<int, vector<Measurement>> &System::getMeasurements()
-{
-    return measurements;
-}
-const vector<PrivateUser> &System::getUsers()
-{
-    return privateUsers;
 }
 
 void System::addMeasurement(const Measurement &m)

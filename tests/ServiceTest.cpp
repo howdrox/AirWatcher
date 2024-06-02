@@ -23,6 +23,51 @@ protected:
     }
 };
 
+// Test default constructor
+TEST_F(ServiceTest, DefaultConstructorTest)
+{
+    system = System();
+    service = Service(system);
+    EXPECT_EQ(service.getSystem().getCleaners().size(), 0);
+    EXPECT_EQ(service.getSystem().getSensors().size(), 0);
+    EXPECT_EQ(service.getSystem().getUsers().size(), 0);
+    EXPECT_EQ(service.getSystem().getMeasurements().size(), 0);
+}
+
+// Test parameterized constructor
+TEST_F(ServiceTest, ParameterizedConstructorTest)
+{
+    // Test with empty system
+    EXPECT_EQ(emptyService.getSystem().getSensors().size(), 0);
+    EXPECT_EQ(emptyService.getSystem().getCleaners().size(), 0);
+    EXPECT_EQ(emptyService.getSystem().getUsers().size(), 0);
+    EXPECT_EQ(emptyService.getSystem().getMeasurements().size(), 0);
+
+    // Test with non-empty system
+    EXPECT_GT(service.getSystem().getSensors().size(), 0);
+    EXPECT_GT(service.getSystem().getCleaners().size(), 0);
+    EXPECT_GT(service.getSystem().getUsers().size(), 0);
+    EXPECT_GT(service.getSystem().getMeasurements().size(), 0);
+}
+
+// Test copy constructor
+TEST_F(ServiceTest, CopyConstructorTest)
+{
+    // Test with empty system
+    Service emptyServiceCopy(emptyService);
+    EXPECT_EQ(emptyServiceCopy.getSystem().getSensors().size(), 0);
+    EXPECT_EQ(emptyServiceCopy.getSystem().getCleaners().size(), 0);
+    EXPECT_EQ(emptyServiceCopy.getSystem().getUsers().size(), 0);
+    EXPECT_EQ(emptyServiceCopy.getSystem().getMeasurements().size(), 0);
+
+    // Test with non-empty system
+    Service serviceCopy(service);
+    EXPECT_GT(serviceCopy.getSystem().getSensors().size(), 0);
+    EXPECT_GT(serviceCopy.getSystem().getCleaners().size(), 0);
+    EXPECT_GT(serviceCopy.getSystem().getUsers().size(), 0);
+    EXPECT_GT(serviceCopy.getSystem().getMeasurements().size(), 0);
+}
+
 // Test case for distance method
 TEST_F(ServiceTest, DistanceTest)
 {

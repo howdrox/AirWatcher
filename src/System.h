@@ -12,15 +12,20 @@
 class System
 {
 public:
-    System();
+    // Constructors
+    System(){};
     System(const string &sensorsFilePath, const string &cleanersFilePath, const string &usersFilePath, const string &measurementsFilePath);
-    ~System();
 
-    const map<int, vector<Measurement>> &getMeasurements();
-    const vector<Cleaner> &getCleaners();
-    const map<int, Sensor> &getSensors();
-    const vector<PrivateUser> &getUsers();
+    // Destructor
+    ~System(){};
 
+    // Getters
+    const map<int, vector<Measurement>> &getMeasurements() { return measurements; };
+    const vector<Cleaner> &getCleaners() { return cleaners; };
+    const map<int, Sensor> &getSensors() { return sensors; };
+    const vector<PrivateUser> &getUsers() { return privateUsers; };
+
+    // Methods
     void addMeasurement(const Measurement &measurement);
     void addCleaner(const Cleaner &cleaner);
     void addSensor(const Sensor &sensor);

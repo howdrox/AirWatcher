@@ -10,15 +10,7 @@ using namespace std;
 #define M_PI 3.14159265358979323846
 #endif
 #include "Service.h"
-#include "Coord.h"
 #include "System.h"
-
-Service::Service() {}
-
-Service::Service(const string &sensorsFilePath, const string &cleanersFilePath, const string &usersFilePath, const string &measurementsFilePath)
-{
-    system = System(sensorsFilePath, cleanersFilePath, usersFilePath, measurementsFilePath);
-}
 
 /**
  * @brief calculates the distance between two coordinates
@@ -205,7 +197,7 @@ double Service::calculateImpactRadius(int cleanerId)
         map<int, vector<Measurement>> measurements;
         measurements[sensor.getSensorID()] = sensorMeasurements;
         cout << "Measurements: " << sensorMeasurements.size() << endl;
-        
+
         auto beforeMeasurements = filterMeasurements(before_start, start, measurements);
         auto afterMeasurements = filterMeasurements(before_end, end, measurements);
 
@@ -480,5 +472,3 @@ bool Service::isInZone(const Coord c, const Zone z)
     double d = distance(c, z);
     return d < z.radius;
 }
-
-Service::~Service(){};
