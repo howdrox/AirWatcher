@@ -1,4 +1,4 @@
-[==========] Running 70 tests from 12 test suites.
+[==========] Running 78 tests from 12 test suites.
 [----------] Global test environment set-up.
 [----------] 12 tests from TimeTest
 [ RUN      ] TimeTest.DefaultConstructor
@@ -25,71 +25,48 @@
 [       OK ] TimeTest.OutputOperator (0 ms)
 [ RUN      ] TimeTest.Destructor
 [       OK ] TimeTest.Destructor (0 ms)
-[----------] 12 tests from TimeTest (4 ms total)
+[----------] 12 tests from TimeTest (3 ms total)
 
-[----------] 16 tests from ServiceTest
+[----------] 19 tests from ServiceTest
 [ RUN      ] ServiceTest.DefaultConstructorTest
-[       OK ] ServiceTest.DefaultConstructorTest (15 ms)
+[       OK ] ServiceTest.DefaultConstructorTest (18 ms)
 [ RUN      ] ServiceTest.ParameterizedConstructorTest
-[       OK ] ServiceTest.ParameterizedConstructorTest (14 ms)
+[       OK ] ServiceTest.ParameterizedConstructorTest (17 ms)
 [ RUN      ] ServiceTest.CopyConstructorTest
-[       OK ] ServiceTest.CopyConstructorTest (16 ms)
+[       OK ] ServiceTest.CopyConstructorTest (14 ms)
 [ RUN      ] ServiceTest.DistanceTest
-[       OK ] ServiceTest.DistanceTest (18 ms)
+[       OK ] ServiceTest.DistanceTest (16 ms)
 [ RUN      ] ServiceTest.IsInZoneTest
-[       OK ] ServiceTest.IsInZoneTest (17 ms)
+[       OK ] ServiceTest.IsInZoneTest (16 ms)
 [ RUN      ] ServiceTest.AverageTest
-[       OK ] ServiceTest.AverageTest (19 ms)
+[       OK ] ServiceTest.AverageTest (15 ms)
 [ RUN      ] ServiceTest.FilterMeasurementsTest
-[       OK ] ServiceTest.FilterMeasurementsTest (14 ms)
+[       OK ] ServiceTest.FilterMeasurementsTest (20 ms)
 [ RUN      ] ServiceTest.CalculateQualityWithMeasurementParameterTest
-[       OK ] ServiceTest.CalculateQualityWithMeasurementParameterTest (17 ms)
+[       OK ] ServiceTest.CalculateQualityWithMeasurementParameterTest (15 ms)
+[ RUN      ] ServiceTest.CalculateQUalityWithNonChronologicalMeasurements
+[       OK ] ServiceTest.CalculateQUalityWithNonChronologicalMeasurements (14 ms)
 [ RUN      ] ServiceTest.CalculateQualityWithZoneAndTimeRangeTest
-[       OK ] ServiceTest.CalculateQualityWithZoneAndTimeRangeTest (18 ms)
+[       OK ] ServiceTest.CalculateQualityWithZoneAndTimeRangeTest (15 ms)
 [ RUN      ] ServiceTest.SortSensorsTestWithEmptySystem
-[       OK ] ServiceTest.SortSensorsTestWithEmptySystem (16 ms)
+[       OK ] ServiceTest.SortSensorsTestWithEmptySystem (17 ms)
 [ RUN      ] ServiceTest.SortSensorsTestFromManualData
-[       OK ] ServiceTest.SortSensorsTestFromManualData (17 ms)
+[       OK ] ServiceTest.SortSensorsTestFromManualData (15 ms)
 [ RUN      ] ServiceTest.SortSensorsTestWithSameCoordinates
 [       OK ] ServiceTest.SortSensorsTestWithSameCoordinates (14 ms)
 [ RUN      ] ServiceTest.SortSensorsTestFromCSVTestData
-[       OK ] ServiceTest.SortSensorsTestFromCSVTestData (12 ms)
+[       OK ] ServiceTest.SortSensorsTestFromCSVTestData (16 ms)
 [ RUN      ] ServiceTest.CalculateImpactRadius
-SensorID: 0, number of measurements: 14
-SensorID: 1, number of measurements: 0
-SensorID: 2, number of measurements: 0
-SensorID: 3, number of measurements: 0
-SensorID: 4, number of measurements: 1
-SensorID: 5, number of measurements: 0
-SensorID: 6, number of measurements: 0
-SensorID: 7, number of measurements: 0
-SensorID: 8, number of measurements: 0
-Cleaner ID: 0 Coord: 44, 1.3
-before start: 2019-01-01 11:00:00 start: 2019-01-02 11:00:00
-before end: 2019-01-04 11:00:00 end: 2019-01-05 11:00:00
-Measurements: 0
-beforeMeasurements: 0
-afterMeasurements: 0
-Quality before cleaner: 0
-Quality after cleaner: 0
-Distance: 15.9974
-tests/ServiceTest.cpp:284: Failure
-Expected: (service.calculateImpactRadius(0)) > (0.0), actual: 0 vs 0
-Cleaner ID: 2 Coord: 44, 3.66667
-before start: 2024-02-00 12:00:00 start: 2024-02-01 12:00:00
-before end: 2024-03-00 00:00:00 end: 2024-03-01 00:00:00
-Measurements: 0
-beforeMeasurements: 0
-afterMeasurements: 0
-Quality before cleaner: 0
-Quality after cleaner: 0
-Distance: 18.6636
-[  FAILED  ] ServiceTest.CalculateImpactRadius (15 ms)
-[ RUN      ] ServiceTest.GetSimilarZonesExceptions
-[       OK ] ServiceTest.GetSimilarZonesExceptions (13 ms)
-[ RUN      ] ServiceTest.GetSimilarZonesTest
-[       OK ] ServiceTest.GetSimilarZonesTest (12 ms)
-[----------] 16 tests from ServiceTest (248 ms total)
+[       OK ] ServiceTest.CalculateImpactRadius (14 ms)
+[ RUN      ] ServiceTest.RankSimilarSensorsTest
+[       OK ] ServiceTest.RankSimilarSensorsTest (15 ms)
+[ RUN      ] ServiceTest.RankSimilarSensorsExceptionsTest
+[       OK ] ServiceTest.RankSimilarSensorsExceptionsTest (14 ms)
+[ RUN      ] ServiceTest.BlacklistPrivateUserTest
+[       OK ] ServiceTest.BlacklistPrivateUserTest (15 ms)
+[ RUN      ] ServiceTest.CalculateQualityWithBlacklistedMeasurements
+[       OK ] ServiceTest.CalculateQualityWithBlacklistedMeasurements (14 ms)
+[----------] 19 tests from ServiceTest (300 ms total)
 
 [----------] 8 tests from PrivateUserTest
 [ RUN      ] PrivateUserTest.DefaultConstructor
@@ -110,16 +87,28 @@ Distance: 18.6636
 [       OK ] PrivateUserTest.AddPoints (0 ms)
 [----------] 8 tests from PrivateUserTest (2 ms total)
 
-[----------] 4 tests from SystemTest
+[----------] 10 tests from SystemTest
 [ RUN      ] SystemTest.GetMeasurements
-[       OK ] SystemTest.GetMeasurements (12 ms)
+[       OK ] SystemTest.GetMeasurements (14 ms)
 [ RUN      ] SystemTest.GetCleaners
-[       OK ] SystemTest.GetCleaners (11 ms)
+[       OK ] SystemTest.GetCleaners (14 ms)
 [ RUN      ] SystemTest.GetSensors
-[       OK ] SystemTest.GetSensors (11 ms)
+[       OK ] SystemTest.GetSensors (14 ms)
 [ RUN      ] SystemTest.GetUsers
-[       OK ] SystemTest.GetUsers (11 ms)
-[----------] 4 tests from SystemTest (46 ms total)
+[       OK ] SystemTest.GetUsers (14 ms)
+[ RUN      ] SystemTest.AddMeasurement
+[       OK ] SystemTest.AddMeasurement (15 ms)
+[ RUN      ] SystemTest.LoadMeasurementsChronologicalTest
+[       OK ] SystemTest.LoadMeasurementsChronologicalTest (16 ms)
+[ RUN      ] SystemTest.AddMeasurementChronologicalTest
+[       OK ] SystemTest.AddMeasurementChronologicalTest (17 ms)
+[ RUN      ] SystemTest.AddCleaner
+[       OK ] SystemTest.AddCleaner (17 ms)
+[ RUN      ] SystemTest.AddSensor
+[       OK ] SystemTest.AddSensor (17 ms)
+[ RUN      ] SystemTest.AddUser
+[       OK ] SystemTest.AddUser (16 ms)
+[----------] 10 tests from SystemTest (156 ms total)
 
 [----------] 5 tests from ProviderTest
 [ RUN      ] ProviderTest.DefaultConstructor
@@ -146,28 +135,24 @@ Distance: 18.6636
 [       OK ] UserTest.CopyConstructor (0 ms)
 [ RUN      ] UserTest.OperatorOverload
 [       OK ] UserTest.OperatorOverload (0 ms)
-[----------] 3 tests from UserTest (0 ms total)
+[----------] 3 tests from UserTest (1 ms total)
 
-[----------] 8 tests from SensorTest
+[----------] 6 tests from SensorTest
 [ RUN      ] SensorTest.DefaultConstructor
 [       OK ] SensorTest.DefaultConstructor (0 ms)
 [ RUN      ] SensorTest.ParameterizedConstructor
 [       OK ] SensorTest.ParameterizedConstructor (0 ms)
 [ RUN      ] SensorTest.StringConstructor
 [       OK ] SensorTest.StringConstructor (0 ms)
-[ RUN      ] SensorTest.AddMeasurement
-[       OK ] SensorTest.AddMeasurement (0 ms)
-[ RUN      ] SensorTest.AddMeasurementInvalidSensorID
-[       OK ] SensorTest.AddMeasurementInvalidSensorID (1 ms)
 [ RUN      ] SensorTest.CopyConstructor
 [       OK ] SensorTest.CopyConstructor (0 ms)
 [ RUN      ] SensorTest.AssignmentOperator
-[       OK ] SensorTest.AssignmentOperator (1 ms)
+[       OK ] SensorTest.AssignmentOperator (0 ms)
 [ RUN      ] SensorTest.OutputStreamOperator
 [       OK ] SensorTest.OutputStreamOperator (0 ms)
-[----------] 8 tests from SensorTest (3 ms total)
+[----------] 6 tests from SensorTest (1 ms total)
 
-[----------] 6 tests from MeasurementTest
+[----------] 7 tests from MeasurementTest
 [ RUN      ] MeasurementTest.ParameterizedConstructorTest
 [       OK ] MeasurementTest.ParameterizedConstructorTest (0 ms)
 [ RUN      ] MeasurementTest.CopyConstructorTest
@@ -178,16 +163,18 @@ Distance: 18.6636
 [       OK ] MeasurementTest.StringConstructorNegativeValueTest (0 ms)
 [ RUN      ] MeasurementTest.StringConstructorInvalidPollutantTypeTest
 [       OK ] MeasurementTest.StringConstructorInvalidPollutantTypeTest (0 ms)
+[ RUN      ] MeasurementTest.LessThanOperator
+[       OK ] MeasurementTest.LessThanOperator (0 ms)
 [ RUN      ] MeasurementTest.OutputOperatorTest
 [       OK ] MeasurementTest.OutputOperatorTest (0 ms)
-[----------] 6 tests from MeasurementTest (2 ms total)
+[----------] 7 tests from MeasurementTest (3 ms total)
 
 [----------] 2 tests from CoordTest
 [ RUN      ] CoordTest.DefaultConstructorTest
 [       OK ] CoordTest.DefaultConstructorTest (0 ms)
 [ RUN      ] CoordTest.ParameterizedConstructorTest
 [       OK ] CoordTest.ParameterizedConstructorTest (0 ms)
-[----------] 2 tests from CoordTest (0 ms total)
+[----------] 2 tests from CoordTest (1 ms total)
 
 [----------] 4 tests from ZoneTest
 [ RUN      ] ZoneTest.DefaultConstructor
@@ -206,9 +193,5 @@ Distance: 18.6636
 [----------] 1 test from GovernmentAgentTest (0 ms total)
 
 [----------] Global test environment tear-down
-[==========] 70 tests from 12 test suites ran. (309 ms total)
-[  PASSED  ] 69 tests.
-[  FAILED  ] 1 test, listed below:
-[  FAILED  ] ServiceTest.CalculateImpactRadius
-
- 1 FAILED TEST
+[==========] 78 tests from 12 test suites ran. (472 ms total)
+[  PASSED  ] 78 tests.
