@@ -184,47 +184,27 @@ double Service::calculateQuality(const map<int, vector<Measurement>> &measuremen
     {
         return 0; // Return a default value, such as 0, when there are no measurements
     }
-
-    map<PollutantType, vector<double>> pollutantMaxValues;
-    map<PollutantType, Time> pollutantLastTime;
-    pollutantLastTime[O3] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime[NO2] = Time(0, 0, 0, 0, 0, 0);
-    pollutantLastTime[SO2] = Time(0, 0, 0, 0, 0, 0);
-
+    // A map where:
+    // - Key: Represents the pollutant name
+    // - Value: a pair where the first element represents the sum of the concentrations of the pollutant and the value is the number of measures
+    map<PollutantType, pair<double, int>> measurementsSumPerPollutant;
     for (const auto &sensorData : measurements)
     {
         for (const auto &measurement : sensorData.second)
         {
             if (!measurement.isBlacklisted())
             {
-                double val = measurement.getValue();
-                PollutantType attr = measurement.getAttributeID();
-                Time timestamp = measurement.getTimestamp();
-                if (attr == PM10)
-                {
-                    pollutantMaxValues[PM10].push_back(val);
-                }
-                else
-                {
-                    if (pollutantLastTime[attr].isSameHour(timestamp) && val > pollutantMaxValues[attr].back())
-                    {
-                        pollutantMaxValues[attr].back() = val;
-                    }
-                    else if (!pollutantLastTime[attr].isSameHour(timestamp))
-                    {
-                        pollutantMaxValues[attr].push_back(val);
-                    }
-                    pollutantLastTime[attr] = timestamp;
-                }
+                measurementsSumPerPollutant[measurement.getAttributeID()].first += measurement.getValue();
+                measurementsSumPerPollutant[measurement.getAttributeID()].second += 1;
             }
         }
     }
 
-    // Get average values for pollutants
-    double avgO3 = average(pollutantMaxValues[O3]);
-    double avgNO2 = average(pollutantMaxValues[NO2]);
-    double avgSO2 = average(pollutantMaxValues[SO2]);
-    double avgPM10 = average(pollutantMaxValues[PM10]);
+    // Get maximum values for pollutants
+    double avgO3 = !(measurementsSumPerPollutant[O3].second == 0) ? (measurementsSumPerPollutant[O3].first / measurementsSumPerPollutant[O3].second) : 0;
+    double avgNO2 = !(measurementsSumPerPollutant[NO2].second == 0) ? (measurementsSumPerPollutant[NO2].first / measurementsSumPerPollutant[NO2].second) : 0;
+    double avgSO2 = !(measurementsSumPerPollutant[SO2].second == 0) ? (measurementsSumPerPollutant[SO2].first / measurementsSumPerPollutant[SO2].second) : 0;
+    double avgPM10 = !(measurementsSumPerPollutant[PM10].second == 0) ? (measurementsSumPerPollutant[PM10].first / measurementsSumPerPollutant[PM10].second) : 0;
     // if no values added (all blacklisted)
     if (max({avgO3, avgNO2, avgSO2, avgPM10}) == 0)
     {
@@ -343,20 +323,26 @@ double Service::calculateImpactRadius(int cleanerId)
         // Incrémenter les points des utilisateurs privés
         auto privateUsers = system.getUsers();
 
-        for (const auto &measurement : beforeMeasurements) {
+        for (const auto &measurement : beforeMeasurements)
+        {
             int sensorID = measurement.first;
-            for (auto &user : privateUsers) {
-                if (std::find(user.getSensorsID().begin(), user.getSensorsID().end(), sensorID) != user.getSensorsID().end() && !user.isBlacklisted() ) {
+            for (auto &user : privateUsers)
+            {
+                if (std::find(user.getSensorsID().begin(), user.getSensorsID().end(), sensorID) != user.getSensorsID().end() && !user.isBlacklisted())
+                {
                     user.addPoints(measurement.second.size()); // Ajoute un point pour chaque mesure avant le nettoyage
                     break;
                 }
             }
         }
 
-        for (const auto &measurement : afterMeasurements) {
+        for (const auto &measurement : afterMeasurements)
+        {
             int sensorID = measurement.first;
-            for (auto &user : privateUsers) {
-                if (std::find(user.getSensorsID().begin(), user.getSensorsID().end(), sensorID) != user.getSensorsID().end() && !user.isBlacklisted()) {
+            for (auto &user : privateUsers)
+            {
+                if (std::find(user.getSensorsID().begin(), user.getSensorsID().end(), sensorID) != user.getSensorsID().end() && !user.isBlacklisted())
+                {
                     user.addPoints(measurement.second.size()); // Ajoute un point pour chaque mesure après le nettoyage
                     break;
                 }
