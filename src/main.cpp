@@ -177,12 +177,15 @@ void showMenuGovernmentAgent(Service service)
     cout << "Menu Options:" << endl;
     cout << "1. Display a list of sorted sensors by air quality similarity compared to a sensor" << endl;
     cout << "2. Calculate air quality of a certain zone and time period" << endl;
-    cout << "3. Blacklist a user";
+    cout << "3. Blacklist a user"<<endl;
     cout << "4. Exit" << endl;
-    cout << "Enter your choice: ";
+    
     int choice;
-    cin>>choice;
-    switch(choice){
+    
+    do{
+        cout << "Enter your choice: ";
+        cin>>choice;
+        switch(choice){
         case 1:{
             displaySortedSensors(service);
             break;
@@ -205,6 +208,7 @@ void showMenuGovernmentAgent(Service service)
         default:
             cout << "Invalid choice, please try again." << endl;
         }
+    }while(choice!=4)
 }
 
 void showMenuPrivateUser(Service service)
@@ -214,9 +218,11 @@ void showMenuPrivateUser(Service service)
     cout << "2. Calculate air quality of a certain zone and time period" << endl;
  
     cout << "3. Exit" << endl;
-    cout << "Enter your choice: ";
+    
      int choice;
-    cin>>choice;
+    do{
+        cout << "Enter your choice: ";
+        cin>>choice;
     switch(choice){
         case 1:{
             displaySortedSensors(service);
@@ -233,7 +239,7 @@ void showMenuPrivateUser(Service service)
 
         default:
             cout << "Invalid choice, please try again." << endl;
-        }
+        }}while(choice!=3);
 }
 void showMenuProvider(Service service)
 {
@@ -242,9 +248,11 @@ void showMenuProvider(Service service)
     cout << "2. Display a list of sorted sensors by air quality similarity compared to a sensor" << endl;
     cout << "3. Calculate air quality of a certain zone and time period" << endl;
     cout << "4. Exit" << endl;
-    cout << "Enter your choice: ";
-     int choice;
-    cin>>choice;
+
+    int choice;
+    do{
+        cout << "Enter your choice: ";
+        cin>>choice;
     switch(choice){
         case 1:{
             displayCleanedZoneRadius(service);
@@ -264,7 +272,7 @@ void showMenuProvider(Service service)
 
         default:
             cout << "Invalid choice, please try again." << endl;
-        }
+        }}while(choice!=4);
 }
 
 
