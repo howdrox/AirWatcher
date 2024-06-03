@@ -12,6 +12,11 @@ public:
     // Constructors
     PrivateUser() : User(Role::PRIVATE_USER), userID(-1), sensorsID({}), points(0), blacklisted(false){};
     PrivateUser(const PrivateUser &p) : User(Role::PRIVATE_USER), userID(p.userID), sensorsID(p.sensorsID), points(p.points), blacklisted(p.blacklisted){};
+    /**
+     * @brief Construct from `string` in the format "userID;sensorID1,sensorID2,...;"
+     * 
+     * @param userInfo 
+     */
     PrivateUser(const std::string &userInfo);
 
     // Destructor

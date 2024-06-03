@@ -13,6 +13,11 @@ public:
     // Constructors
     Sensor(int sensorID = 0, Coord location = Coord()) : sensorID(sensorID), location(location){};
     Sensor(const Sensor &sensor) : sensorID(sensor.sensorID), location(sensor.location){};
+    /**
+     * @brief Construct from `string` in the format "sensorID;latitude;longitude"
+     * 
+     * @param sensorLine 
+     */
     Sensor(const string &sensorLine);
 
     // Destructor

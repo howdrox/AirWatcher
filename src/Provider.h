@@ -11,6 +11,11 @@ class Provider : public User
 public:
     // Constructors
     Provider(int pID = -1, std::vector<int> c = {}) : User(Role::PROVIDER), providerID(pID), cleanersID(c){};
+    /**
+     * @brief Construct from `string` in the format "providerID;cleanerID1,cleanerID2,...;"
+     * 
+     * @param providerInfo 
+     */
     Provider(const std::string &providerInfo);
 
     // Destructor

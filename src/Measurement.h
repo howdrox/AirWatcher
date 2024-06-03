@@ -22,6 +22,11 @@ public:
         : timestamp(time), sensorID(sensor), attributeID(attrID), value(val), blacklisted(black) {}
     Measurement(const Measurement &m)
         : timestamp(m.timestamp), sensorID(m.sensorID), attributeID(m.attributeID), value(m.value), blacklisted(m.blacklisted) {}
+    /**
+     * @brief Construct from `string` in the format "yyyy-MM-dd hh:mm:ss;sensorID;attributeID;value"
+     * 
+     * @param str
+     */
     Measurement(const string &);
 
     // Destructor

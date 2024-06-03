@@ -9,6 +9,11 @@ class Cleaner
 {
 public:
     // Constructors
+    /**
+     * @brief Construct from `String` in the format "cleanerId;latitude;longitude;start_time;end_time"
+     * 
+     * @param data 
+     */
     Cleaner(const std::string &data);
 
     // Destructor
