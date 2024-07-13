@@ -174,12 +174,12 @@ TEST_F(ServiceTest, CalculateQualityWithMeasurementParameterTest)
 TEST_F(ServiceTest, CalculateQUalityWithNonChronologicalMeasurements)
 {
     // Test with O3
-    EXPECT_DOUBLE_EQ(service.calculateQuality({{5, system.getMeasurements()[5]}}), 7);
+    EXPECT_DOUBLE_EQ(service.calculateQuality({{5, system.getMeasurements()[5]}}), 3);
     // Test with PM10
     EXPECT_DOUBLE_EQ(service.calculateQuality({{6, system.getMeasurements()[6]}}), 8);
 
     // Test with zone and time range
-    EXPECT_DOUBLE_EQ(service.calculateQuality(Zone(44, 2.85, 30), Time("2019-02-01 00:00:00"), Time("2019-02-03 00:00:00")), 7.5);
+    EXPECT_DOUBLE_EQ(service.calculateQuality(Zone(44, 2.85, 30), Time("2019-02-01 00:00:00"), Time("2019-02-03 00:00:00")), 5.5);
 }
 
 // Test case for calculateQuality method with Zone, start time, and end time

@@ -208,7 +208,7 @@ void showMenuGovernmentAgent(Service service)
         default:
             cout << "Invalid choice, please try again." << endl;
         }
-    }while(choice!=4)
+    }while(choice!=4);
 }
 
 void showMenuPrivateUser(Service service)
